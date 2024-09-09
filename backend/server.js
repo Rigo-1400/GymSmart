@@ -10,6 +10,5 @@ app.get('/', (req, res) => {
     res.send({message: "This is some json"});
 })
 
-// Add new line
 // Listen on a part
 app.listen(PORT);
