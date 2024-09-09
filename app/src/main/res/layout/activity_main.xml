@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/screenshot_2024_09_09_at_11_15_38am"
+    android:foregroundTint="#75757D"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="275dp"
+        android:layout_height="139dp"
+        android:autoText="false"
+        android:background="#74747C"
+        android:foregroundTint="#2AC631"
+        android:foregroundTintMode="screen"
+        android:text="GymSmart"
+        android:textAlignment="center"
+        android:textColor="#DCB553"
+        android:textIsSelectable="false"
+        android:textScaleX="1"
+        android:textSize="50sp"
+        app:layout_constraintBottom_toTopOf="@+id/button2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button_1"
+        app:layout_constraintVertical_bias="0.532" />
+
+    <Button
+        android:id="@+id/button_1"
+        android:layout_width="186dp"
+        android:layout_height="272dp"
+        android:layout_marginTop="35dp"
+        android:layout_marginBottom="153dp"
+        android:background="@drawable/upper"
+        android:clickable="true"
+        android:contextClickable="false"
+        android:forceHasOverlappingRendering="true"
+        android:foreground="@drawable/upper"
+        android:text="Upper Body"
+        android:textColorLink="#000000"
+        android:textCursorDrawable="@drawable/upper"
+        app:layout_constraintBottom_toTopOf="@+id/button2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="175dp"
+        android:layout_height="263dp"
+        android:clickable="true"
+        android:foreground="@drawable/lower"
+        android:text="Button"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.499"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button_1" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="294dp"
+        android:layout_height="63dp"
+        android:layout_marginTop="72dp"
+        android:text="Upper Body"
+        android:textColor="#DCB553"
+        android:textSize="35sp"
+        app:layout_constraintBottom_toTopOf="@+id/button_1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.613"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.222" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Lower Body"
+        android:textColor="#DAB454"
+        android:textSize="35sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button2"
+        app:layout_constraintVertical_bias="0.125" />
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
