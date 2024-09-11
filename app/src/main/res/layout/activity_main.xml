@@ -31,8 +31,8 @@
 
     <Button
         android:id="@+id/button_1"
-        android:layout_width="186dp"
-        android:layout_height="272dp"
+        android:layout_width="165dp"
+        android:layout_height="205dp"
         android:layout_marginTop="35dp"
         android:layout_marginBottom="153dp"
         android:background="@drawable/upper"
@@ -40,18 +40,20 @@
         android:contextClickable="false"
         android:forceHasOverlappingRendering="true"
         android:foreground="@drawable/upper"
+        android:onClick="onPress"
         android:text="Upper Body"
         android:textColorLink="#000000"
         android:textCursorDrawable="@drawable/upper"
         app:layout_constraintBottom_toTopOf="@+id/button2"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.512"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/button2"
-        android:layout_width="175dp"
-        android:layout_height="263dp"
+        android:layout_width="169dp"
+        android:layout_height="190dp"
         android:clickable="true"
         android:foreground="@drawable/lower"
         android:text="Button"
@@ -71,10 +73,10 @@
         android:textSize="35sp"
         app:layout_constraintBottom_toTopOf="@+id/button_1"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.613"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.222" />
+        app:layout_constraintVertical_bias="0.717" />
 
     <TextView
         android:id="@+id/textView4"
