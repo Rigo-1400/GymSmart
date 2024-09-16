@@ -23,8 +23,8 @@
         android:id="@+id/videoView2"
         android:layout_width="476dp"
         android:layout_height="609dp"
-        tools:layout_editor_absoluteX="4dp"
-        tools:layout_editor_absoluteY="150dp" />
+        tools:layout_editor_absoluteX="-33dp"
+        tools:layout_editor_absoluteY="147dp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
