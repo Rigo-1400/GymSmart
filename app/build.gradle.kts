@@ -73,6 +73,7 @@ dependencies {
     // Material 3
     implementation(libs.androidx.material3)
     implementation("com.google.android.material:material:1.8.0")
+    implementation ("androidx.compose.material3:material3:1.0.0")
 
     // Unit tests
     testImplementation(libs.junit)
