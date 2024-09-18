@@ -1,7 +1,6 @@
 plugins {
-    id("com.android.application")
-    id("org.jetbrains.kotlin.android")
-    alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
 }
 
 android {
@@ -14,8 +13,13 @@ android {
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
+
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        vectorDrawables {
+            useSupportLibrary = true
+        }
     }
+
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -26,42 +30,61 @@ android {
         }
     }
 
-    // Enable Jetpack Compose
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+
     buildFeatures {
         compose = true
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = libs.versions.compose.get() // Use Compose version from version catalog
+        kotlinCompilerExtensionVersion = "1.5.1" // Update this to your Compose version
     }
 
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
-    }
-    lint {
-        abortOnError = false
+    packaging {
+        resources {
+            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+        }
     }
 }
 
 dependencies {
-    implementation(libs.appcompat)
-    implementation(libs.material)
-    implementation(libs.activity)
-    implementation(libs.constraintlayout)
-    implementation("androidx.browser:browser:1.2.0")
+    // Core Android dependencies
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.activity.compose)
 
-    // Jetpack Compose dependencies
-    implementation(libs.compose.ui) // Core Compose UI library
-    implementation(libs.compose.material3) // Material3 Design system
-    implementation(libs.compose.ui.tooling.preview) // UI tooling preview in IDE
-    implementation(libs.compose.activity) // For Compose integration with Activity
+    // Jetpack Compose BOM
+    implementation(platform(libs.androidx.compose.bom))
 
-    // Debugging and testing dependencies for Compose
-    debugImplementation(libs.compose.ui.tooling)
-    androidTestImplementation(libs.compose.test.junit)
+    // Compose UI dependencies (versions managed by the BOM)
+    implementation(libs.androidx.ui)
+    implementation(libs.androidx.ui.graphics)
+    implementation(libs.androidx.ui.tooling.preview)
+    implementation("androidx.navigation:navigation-compose:2.7.0")
 
+
+    // Material 3
+    implementation(libs.androidx.material3)
+    implementation("com.google.android.material:material:1.8.0")
+    implementation ("androidx.compose.material3:material3:1.0.0")
+
+    // Unit tests
     testImplementation(libs.junit)
-    androidTestImplementation(libs.ext.junit)
-    androidTestImplementation(libs.espresso.core)
+
+    // Android Instrumentation tests
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation(platform(libs.androidx.compose.bom))
+    androidTestImplementation(libs.androidx.ui.test.junit4)
+
+    // Debugging tools
+    debugImplementation(libs.androidx.ui.tooling)
+    debugImplementation(libs.androidx.ui.test.manifest)
 }
