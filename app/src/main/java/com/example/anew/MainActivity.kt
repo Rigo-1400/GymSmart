@@ -26,7 +26,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-
+@Preview()
 @Composable
 fun MainScreen() {
     val navController = rememberNavController()
@@ -34,9 +34,14 @@ fun MainScreen() {
     // Set up NavHost for navigation
     NavHost(navController = navController, startDestination = "main") {
         composable("main") { MainPage(navController) }
-        composable("workoutA") { WorkoutAPage(navController) }
-        composable("workoutB") { WorkoutBPage() }
-        composable("randomPage") { RandomPage() }  // New Page Route
+        composable("workouts") { Workouts(navController) }
+        composable("workoutsB") { WorkoutsB(navController) }
+        composable("workout/{workoutName}") { navBackStackEntry ->
+            val name = navBackStackEntry.arguments?.getString("workoutName")
+            if (name != null) {
+                Workout(name)
+            }
+        }
     }
 }
 
@@ -50,16 +55,16 @@ fun MainPage(navController: NavController) {
             verticalArrangement = Arrangement.Center
         ) {
             Button(
-                colors = ButtonDefaults.buttonColors(containerColor = Color.Yellow),
-                onClick = { navController.navigate("workoutA") },
+                colors = ButtonDefaults.buttonColors(containerColor = Color.Black),
+                onClick = { navController.navigate("workouts") },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(8.dp)
             ) {
-                Text("Go to Workout A")
+                Text("Go to Upper Body Workouts")
             }
             Button(
-                onClick = { navController.navigate("workoutB") },
+                onClick = { navController.navigate("workoutsB") },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(8.dp)
@@ -68,63 +73,4 @@ fun MainPage(navController: NavController) {
             }
         }
     }
-}
-
-@Composable
-fun WorkoutAPage(navController: NavController) {
-    Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding),
-            verticalArrangement = Arrangement.Center
-        ) {
-            Text(text = "Workout A Page")
-            Spacer(modifier = Modifier.height(16.dp))
-            // Button to navigate to Random Page
-            Button(
-                onClick = { navController.navigate("randomPage") },
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text("Go to Random Page")
-            }
-        }
-    }
-}
-
-@Composable
-fun WorkoutBPage() {
-    Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding),
-            verticalArrangement = Arrangement.Center
-        ) {
-            Text(text = "Workout B Page")
-            // Add Workout B UI here
-        }
-    }
-}
-
-// New RandomPage Composable
-@Composable
-fun RandomPage() {
-    Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding),
-            verticalArrangement = Arrangement.Center
-        ) {
-            Text(text = "Random Page")
-            // Add UI for this random page here
-        }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun MainPagePreview() {
-    MainPage(navController = rememberNavController())
 }
