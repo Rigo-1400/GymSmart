@@ -4,25 +4,16 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
-var workoutsB = arrayOf(
-    "Hamstring",
-    "Glutes",
-    "Quadriceps",
-    "Calves",
-);
 
 @Composable
 
-fun WorkoutsB(navController: NavController) {
-
+fun WorkoutsB_2(workoutName2: String) {
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
         Column(
             modifier = Modifier
@@ -30,16 +21,7 @@ fun WorkoutsB(navController: NavController) {
                 .padding(innerPadding),
             verticalArrangement = Arrangement.spacedBy(8.dp) // Add spacing between items
         ) {
-            workoutsB.forEach { workoutName2 ->
-                Button(
-                    onClick = { navController.navigate("workout/$workoutName2") },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp) // Adjust padding for better visual appearance
-                ) {
-                    Text(workoutName2);
-                }
-            }
+            Text("This is the $workoutName2 page!");
         }
     }
 }

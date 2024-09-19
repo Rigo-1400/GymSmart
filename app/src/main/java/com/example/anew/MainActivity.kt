@@ -69,7 +69,7 @@ fun MainPage(navController: NavController) {
                     .fillMaxWidth()
                     .padding(8.dp)
             ) {
-                Text("Go to Workout B")
+                Text("Go to Lower Body Workouts")
             }
         }
     }
