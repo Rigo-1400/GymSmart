@@ -12,21 +12,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-var workouts = arrayOf(
-    "Chest",
-    "Shoulders",
-    "Biceps",
-    "Triceps",
-    "Traps",
-    "Forearm",
-    "Lats",
-    "Lower Back",
-    "Core",
-);
 
 @Composable
-
-fun Workouts(navController: NavController) {
+// TODO: Add the ability to take in the Workouts parameter that will be an interface/object
+fun Workouts(navController: NavController, workouts: Array<String>) {
 
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
         Column(
@@ -42,7 +31,7 @@ fun Workouts(navController: NavController) {
                         .fillMaxWidth()
                         .padding(8.dp) // Adjust padding for better visual appearance
                 ) {
-                    Text(workoutName);
+                    Text(workoutName)
                 }
             }
         }
