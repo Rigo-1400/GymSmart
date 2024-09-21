@@ -40,7 +40,6 @@
         android:contextClickable="false"
         android:forceHasOverlappingRendering="true"
         android:foreground="@drawable/upper"
-        android:onClick="onPress"
         android:text="Upper Body"
         android:textColorLink="#000000"
         android:textCursorDrawable="@drawable/upper"
