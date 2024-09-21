@@ -75,6 +75,8 @@ dependencies {
     // use for webview
     implementation("androidx.webkit:webkit:1.8.0")
 
+    //third parties youtube api support
+    implementation ("com.pierfrancescosoffritti.androidyoutubeplayer:core:12.1.0")
 
     // Material 3
     implementation(libs.androidx.material3)
