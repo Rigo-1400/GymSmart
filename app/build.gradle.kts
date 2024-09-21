@@ -72,6 +72,9 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation("androidx.navigation:navigation-compose:2.7.0")
 
+    // use for webview
+    implementation("androidx.webkit:webkit:1.8.0")
+
 
     // Material 3
     implementation(libs.androidx.material3)
