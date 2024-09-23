@@ -56,7 +56,7 @@ android {
         }
     }
     lint {
-        abortOnError = false;
+        abortOnError = false
     }
 }
 
@@ -108,4 +108,5 @@ dependencies {
 
     // Add the dependencies for any other desired Firebase products
     // https://firebase.google.com/docs/android/setup#available-libraries
+    implementation("io.coil-kt:coil-compose:2.7.0")
 }
