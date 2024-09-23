@@ -1,4 +1,4 @@
-package com.example.anew.Components
+package com.example.anew.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -14,7 +14,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.anew.Firebase.UserSession
+import coil.compose.AsyncImage
+import com.example.anew.firebase.UserSession
 
 @Composable
 fun HomePage(navController: NavController?, onSignOutClick: (() -> Unit)?) {
@@ -29,6 +30,7 @@ fun HomePage(navController: NavController?, onSignOutClick: (() -> Unit)?) {
             verticalArrangement = Arrangement.Center
         ) {
             Text("Hello ${UserSession.userName ?: "NULL"}!")
+            AsyncImage(UserSession.userPhotoUrl, "${UserSession.userName} Profile Picture")
 
             Button(
                 colors = ButtonDefaults.buttonColors(containerColor = Color.Black),

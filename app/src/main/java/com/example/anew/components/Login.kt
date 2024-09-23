@@ -1,4 +1,4 @@
-package com.example.anew.Components
+package com.example.anew.components
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Button

@@ -4,7 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.util.Log
 import androidx.navigation.NavController
-import com.example.anew.Firebase.UserSession
+import com.example.anew.firebase.UserSession
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions

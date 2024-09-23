@@ -9,10 +9,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.example.anew.Components.HomePage
-import com.example.anew.Components.Login
-import com.example.anew.Components.Workout
-import com.example.anew.Components.Workouts
+import com.example.anew.components.HomePage
+import com.example.anew.components.Login
+import com.example.anew.components.Workout
+import com.example.anew.components.Workouts
 
 class MainActivity : ComponentActivity() {
 
