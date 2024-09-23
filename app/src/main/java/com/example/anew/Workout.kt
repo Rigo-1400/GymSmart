@@ -8,7 +8,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 @Composable
@@ -21,7 +20,7 @@ fun Workout(workoutName: String) {
                 .padding(innerPadding),
             verticalArrangement = Arrangement.spacedBy(8.dp) // Add spacing between items
         ) {
-            Text("This is the $workoutName page!");
+            Text("This is the $workoutName page!")
         }
     }
 }
