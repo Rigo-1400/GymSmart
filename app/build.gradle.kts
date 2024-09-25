@@ -77,11 +77,18 @@ dependencies {
 
     //third parties youtube api support
     implementation ("com.pierfrancescosoffritti.androidyoutubeplayer:core:12.1.0")
+    implementation ("com.pierfrancescosoffritti.androidyoutubeplayer:custom-ui:12.1.0")
+    implementation(files("libs/core-12.1.0-javadoc.jar"))
 
     // Material 3
     implementation(libs.androidx.material3)
     implementation("com.google.android.material:material:1.8.0")
-    implementation ("androidx.compose.material3:material3:1.0.0")
+    implementation("androidx.constraintlayout:constraintlayout:2.1.4") // For ConstraintLayout
+    implementation ("com.pierfrancescosoffritti.androidyoutubeplayer:core:10.0.5") // YouTube Player
+    implementation ("androidx.appcompat:appcompat:1.4.0")
+
+
+
 
     // Unit tests
     testImplementation(libs.junit)
