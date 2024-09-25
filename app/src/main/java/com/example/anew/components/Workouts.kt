@@ -1,4 +1,4 @@
-package com.example.anew
+package com.example.anew.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -34,6 +34,11 @@ fun Workouts(navController: NavController, workouts: Array<String>) {
     var text by remember { mutableStateOf("") }
     var active by remember { mutableStateOf(false) }
 
+    // Filter the workouts based on the search query
+    val filteredWorkouts = workouts.filter {
+        it.contains(text, ignoreCase = true)
+    }
+
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
         Column(
             modifier = Modifier
@@ -41,28 +46,43 @@ fun Workouts(navController: NavController, workouts: Array<String>) {
                 .padding(innerPadding),
             verticalArrangement = Arrangement.spacedBy(8.dp) // Add spacing between items
         ) {
-            SearchBar(modifier = Modifier.fillMaxWidth(), query = text, onQueryChange = { text = it }, onSearch = { active = false }, active = active, onActiveChange = { active = it; }, placeholder = { Text("Search for workout") }, leadingIcon = { Icon(
-                Icons.Default.Search, "Search Icon") }, trailingIcon = {
-                    if(active) {
-                        Icon(modifier = Modifier.clickable {
-                            if (text.isNotEmpty()) {
-                                text = ""
-                            } else active = false
-                        }, imageVector = Icons.Default.Close, contentDescription = "Close Icon")
+            SearchBar(
+                modifier = Modifier.fillMaxWidth(),
+                query = text,
+                onQueryChange = { text = it },
+                onSearch = { active = false },
+                active = active,
+                onActiveChange = { active = it },
+                placeholder = { Text("Search for workout") },
+                leadingIcon = { Icon(Icons.Default.Search, "Search Icon") },
+                trailingIcon = {
+                    if (active) {
+                        Icon(
+                            modifier = Modifier.clickable {
+                                if (text.isNotEmpty()) {
+                                    text = ""
+                                } else active = false
+                            },
+                            imageVector = Icons.Default.Close,
+                            contentDescription = "Close Icon"
+                        )
                     }
-            }) {
-                workouts.forEach {
-                    Row(modifier = Modifier.padding(all = 14.dp)) {
-                        Text(text = it)
+                }
+            ) {
+                // Show the filtered list of workouts inside the search bar
+                filteredWorkouts.forEach { workout ->
+                    Row(modifier = Modifier.padding(all = 14.dp).clickable { navController.navigate("workout/$workout") }) {
+                        Text(text = workout)
                     }
                 }
             }
-            workouts.forEach { workoutName ->
+            // Show filtered workouts below the search bar as buttons
+            filteredWorkouts.forEach { workoutName ->
                 Button(
                     onClick = { navController.navigate("workout/$workoutName") },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(8.dp) // Adjust padding for better visual appearance
+                        .padding(8.dp)
                 ) {
                     Text(workoutName)
                 }
@@ -70,3 +90,4 @@ fun Workouts(navController: NavController, workouts: Array<String>) {
         }
     }
 }
+

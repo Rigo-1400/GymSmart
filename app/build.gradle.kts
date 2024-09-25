@@ -1,6 +1,9 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+
+    // Add the Google services Gradle plugin
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -53,7 +56,7 @@ android {
         }
     }
     lint {
-        abortOnError = false;
+        abortOnError = false
     }
 }
 
@@ -77,6 +80,7 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation("com.google.android.material:material:1.8.0")
     implementation ("androidx.compose.material3:material3:1.0.0")
+    implementation(libs.androidx.navigation.testing)
 
     // Unit tests
     testImplementation(libs.junit)
@@ -90,4 +94,19 @@ dependencies {
     // Debugging tools
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    // Import the Firebase BoM
+    implementation(platform("com.google.firebase:firebase-bom:33.3.0"))
+
+
+    // When using the BoM, don't specify versions in Firebase dependencies
+    // Firebase Auth and Google Sign-In
+    implementation ("com.google.firebase:firebase-auth:22.0.0")
+    implementation ("com.google.android.gms:play-services-auth:20.4.0")
+
+
+
+    // Add the dependencies for any other desired Firebase products
+    // https://firebase.google.com/docs/android/setup#available-libraries
+    implementation("io.coil-kt:coil-compose:2.7.0")
 }
