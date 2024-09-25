@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "518628128363",
+    "project_id": "gymsmart-1e2ce",
+    "storage_bucket": "gymsmart-1e2ce.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:518628128363:android:260764c099e8e7a883e32e",
+        "android_client_info": {
+          "package_name": "com.example.anew"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "518628128363-jn2ej5dhjfld6d1qrmuij773431akhiv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD_J9R7Us6iFS5tCalrc_PPnZ6ls0jRLQs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "518628128363-jn2ej5dhjfld6d1qrmuij773431akhiv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
