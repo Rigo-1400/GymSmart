@@ -9,10 +9,15 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.anew.components.CreateWorkout
 import com.example.anew.components.HomePage
 import com.example.anew.components.Login
 import com.example.anew.components.Workout
+import com.example.anew.components.WorkoutDetails
+import com.example.anew.components.WorkoutList
 import com.example.anew.components.Workouts
+import com.example.anew.firebase.WorkoutData
+import com.google.gson.Gson
 
 class MainActivity : ComponentActivity() {
 
@@ -22,6 +27,12 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
+            val defaultWorkout = WorkoutData(
+                id = "default",
+                name = "Default Workout",
+                muscleGroup = "No Muscle Group",
+                partOfTheBody = "Unknown"
+            )
             // Create NavController in the setContent block
             val navController = rememberNavController()
 
@@ -54,11 +65,14 @@ class MainActivity : ComponentActivity() {
                 }
 
                 composable(
-                    route = "workout/{workoutName}",
-                    arguments = listOf(navArgument("workoutName") { type = NavType.StringType })
+                    route = "workout/{partOfTheBody}/{muscleGroup}",
+                    arguments = listOf(navArgument("partOfTheBody") { type = NavType.StringType }, navArgument("muscleGroup") { NavType.StringType })
                 ) { navBackStackEntry ->
-                    val name = navBackStackEntry.arguments?.getString("workoutName")
-                    name?.let { Workout(name) }
+                    val pOfTheBody = navBackStackEntry.arguments?.getString("partOfTheBody")
+                    val mGroup = navBackStackEntry.arguments?.getString("muscleGroup")
+                    if (pOfTheBody != null && mGroup != null) {
+                        Workout(navController, pOfTheBody, mGroup)
+                    }
                 }
                 composable("login") {
                     // Login Screen
@@ -66,6 +80,20 @@ class MainActivity : ComponentActivity() {
                         firebaseAuthHelper.signIn() // Trigger Google Sign-In
                     })
                 }
+                composable("createWorkout") { CreateWorkout(navController) }
+                composable("workoutList") {
+                    WorkoutList(navController)
+                }
+                composable(
+                    route = "workoutDetail/{workoutJson}",
+                    arguments = listOf(navArgument("workoutJson") { type = NavType.StringType })
+                ) { backStackEntry ->
+                    val workoutJson = backStackEntry.arguments?.getString("workoutJson")
+                    val workout = Gson().fromJson(workoutJson, WorkoutData::class.java)
+                    WorkoutDetails(workout)
+                }
+
+
             }
         }
     }

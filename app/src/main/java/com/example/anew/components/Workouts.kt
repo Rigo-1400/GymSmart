@@ -39,10 +39,10 @@ fun Workouts(navController: NavController, workouts: Array<String>) {
         it.contains(text, ignoreCase = true)
     }
 
-    Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+    Scaffold(modifier = Modifier.fillMaxWidth()) { innerPadding ->
         Column(
             modifier = Modifier
-                .fillMaxSize()
+                .fillMaxWidth()
                 .padding(innerPadding),
             verticalArrangement = Arrangement.spacedBy(8.dp) // Add spacing between items
         ) {
@@ -70,21 +70,27 @@ fun Workouts(navController: NavController, workouts: Array<String>) {
                 }
             ) {
                 // Show the filtered list of workouts inside the search bar
-                filteredWorkouts.forEach { workout ->
-                    Row(modifier = Modifier.padding(all = 14.dp).clickable { navController.navigate("workout/$workout") }) {
-                        Text(text = workout)
+                filteredWorkouts.forEach { muscleGroup ->
+                    var partOfTheBody = if(muscleGroup.startsWith("Chest")) {
+                        "Upper Body"
+                    } else "Lower Body"
+                    Row(modifier = Modifier.padding(all = 14.dp).clickable { navController.navigate("workout/$partOfTheBody/$muscleGroup") }) {
+                        Text(text = muscleGroup)
                     }
                 }
             }
             // Show filtered workouts below the search bar as buttons
-            filteredWorkouts.forEach { workoutName ->
+            filteredWorkouts.forEach { muscleGroup ->
+                var partOfTheBody = if(muscleGroup.startsWith("Chest")) {
+                    "Upper Body"
+                } else "Lower Body"
                 Button(
-                    onClick = { navController.navigate("workout/$workoutName") },
+                    onClick = { navController.navigate("workout/$partOfTheBody/$muscleGroup") },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(8.dp)
                 ) {
-                    Text(workoutName)
+                    Text(muscleGroup)
                 }
             }
         }

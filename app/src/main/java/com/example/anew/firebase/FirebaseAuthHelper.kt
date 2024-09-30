@@ -15,15 +15,14 @@ import com.google.firebase.auth.GoogleAuthProvider
 class FirebaseAuthHelper(private val activity: Activity, private val navController: NavController) {
 
     private lateinit var googleSignInClient: GoogleSignInClient
-    private lateinit var firebaseAuth: FirebaseAuth
+    // Initialize Firebase Auth
+    private var firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
 
     companion object {
         private const val RC_SIGN_IN = 1001
     }
 
     init {
-        // Initialize Firebase Auth
-        firebaseAuth = FirebaseAuth.getInstance()
 
         // Configure Google Sign-In
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
