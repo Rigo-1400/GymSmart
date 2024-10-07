@@ -21,6 +21,7 @@ import com.example.anew.firebase.UserSession
 fun HomePage(navController: NavController?, onSignOutClick: (() -> Unit)?) {
     val upperWorkouts = arrayOf("Chest", "Biceps", "Triceps", "Shoulders", "Lats")
     val lowerWorkouts = arrayOf("Hamstring", "Glutes", "Quadriceps", "Calves")
+    val attList = arrayOf("Cable", "Rope", "V-Bar", "Straight Bar")
 
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
         Column(
@@ -50,6 +51,15 @@ fun HomePage(navController: NavController?, onSignOutClick: (() -> Unit)?) {
             ) {
                 Text("Go to Lower Body Workouts")
             }
+            
+            Button(
+                onClick = {navController?.navigate("attatchements/${attList.joinToString (",")}") },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp)
+            ) {
+                Text(text = "Go to Accessories")
+            }
 
             // Sign-out button
             if (onSignOutClick != null) {
@@ -62,6 +72,7 @@ fun HomePage(navController: NavController?, onSignOutClick: (() -> Unit)?) {
                     Text("Sign Out")
                 }
             }
+
         }
     }
 }

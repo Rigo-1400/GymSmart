@@ -1,12 +1,17 @@
 package com.example.anew.components
 
+import android.app.DatePickerDialog
+import android.content.Context
+import android.widget.DatePicker
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
@@ -21,11 +26,15 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import java.util.Calendar
+import java.util.Date
 
 @OptIn(ExperimentalMaterial3Api::class)
+
 @Composable
 // TODO: Add the ability to take in the Workouts parameter that will be an interface/object
 fun Workouts(navController: NavController, workouts: Array<String>) {
@@ -71,11 +80,14 @@ fun Workouts(navController: NavController, workouts: Array<String>) {
             ) {
                 // Show the filtered list of workouts inside the search bar
                 filteredWorkouts.forEach { workout ->
-                    Row(modifier = Modifier.padding(all = 14.dp).clickable { navController.navigate("workout/$workout") }) {
+                    Row(modifier = Modifier
+                        .padding(all = 14.dp)
+                        .clickable { navController.navigate("workout/$workout") }) {
                         Text(text = workout)
                     }
                 }
             }
+
             // Show filtered workouts below the search bar as buttons
             filteredWorkouts.forEach { workoutName ->
                 Button(
@@ -90,4 +102,8 @@ fun Workouts(navController: NavController, workouts: Array<String>) {
         }
     }
 }
+
+
+
+
 
