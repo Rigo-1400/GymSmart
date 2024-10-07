@@ -14,6 +14,83 @@
       },
       "oauth_client": [
         {
+          "client_id": "518628128363-2ct41bg8q27dnvhohsvv82feglsbdb5d.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.anew",
+            "certificate_hash": "cd8f24343bbb8f1d26b3cc7600657770ab014948"
+          }
+        },
+        {
+          "client_id": "518628128363-8askr94mq6oppgqllddsries2ifqns06.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.anew",
+            "certificate_hash": "79429f6ddbcee4008fe78fda5e15b8a95a102373"
+          }
+        },
+        {
+          "client_id": "518628128363-8ut4u9e60vktf8n56039fveqlub963fv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.anew",
+            "certificate_hash": "7adbfe6ec64add3f0147f3c7ff825843244f0b15"
+          }
+        },
+        {
+          "client_id": "518628128363-v0iihbbsek5nkoiehuau74o9p7pam08e.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.anew",
+            "certificate_hash": "4a2a1861e2bef86af922981aa1729b804f18b8f9"
+          }
+        },
+        {
+          "client_id": "518628128363-vf5dsi659h6o6sbqkibk0rkml0b6af4i.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.anew",
+            "certificate_hash": "0fa4b1e4d3b97403ef6b448f0280630ee43197d2"
+          }
+        },
+        {
+          "client_id": "518628128363-jn2ej5dhjfld6d1qrmuij773431akhiv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD_J9R7Us6iFS5tCalrc_PPnZ6ls0jRLQs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "518628128363-jn2ej5dhjfld6d1qrmuij773431akhiv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:518628128363:android:e023e460abd236c383e32e",
+        "android_client_info": {
+          "package_name": "com.example.gymsmart"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "518628128363-4ba7ai9p68kfjnefdi3hq713049fi87u.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.gymsmart",
+            "certificate_hash": "0fa4b1e4d3b97403ef6b448f0280630ee43197d2"
+          }
+        },
+        {
           "client_id": "518628128363-jn2ej5dhjfld6d1qrmuij773431akhiv.apps.googleusercontent.com",
           "client_type": 3
         }
