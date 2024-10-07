@@ -84,10 +84,7 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation("com.google.android.material:material:1.8.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4") // For ConstraintLayout
-    implementation ("com.pierfrancescosoffritti.androidyoutubeplayer:core:10.0.5") // YouTube Player
     implementation ("androidx.appcompat:appcompat:1.4.0")
-
-
 
 
     // Unit tests
