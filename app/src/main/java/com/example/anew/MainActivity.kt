@@ -113,7 +113,8 @@ class MainActivity : ComponentActivity() {
 
                 }
             }
-        }
+
+        }  //changed this
     ////////////
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
