@@ -1,4 +1,4 @@
-package com.example.anew.firebase
+package com.example.gymsmart.firebase
 
 import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore

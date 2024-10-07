@@ -1,4 +1,4 @@
-package com.example.anew.firebase
+package com.example.gymsmart.firebase
 
 object UserSession {
     var userEmail: String? = null

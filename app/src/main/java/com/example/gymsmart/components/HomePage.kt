@@ -1,24 +1,21 @@
-package com.example.anew.components
+package com.example.gymsmart.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import coil.compose.AsyncImage
+import com.example.gymsmart.firebase.UserSession
 
 @Composable
-fun CreateWorkout(navController: NavController) {
-    val upperWorkouts = arrayOf("Chest", "Biceps", "Triceps", "Shoulders", "Lats")
-    val lowerWorkouts = arrayOf("Hamstring", "Glutes", "Quadriceps", "Calves")
+fun HomePage(navController: NavController?, onSignOutClick: (() -> Unit)?) {
     Scaffold(modifier = Modifier.fillMaxWidth()) { innerPadding ->
         Column(
             modifier = Modifier
@@ -26,23 +23,38 @@ fun CreateWorkout(navController: NavController) {
                 .padding(innerPadding),
             verticalArrangement = Arrangement.Center
         ) {
-            Button(
-                colors = ButtonDefaults.buttonColors(containerColor = Color.Black),
-                onClick = { navController.navigate("workouts/${upperWorkouts.joinToString(",")}") },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp)
-            ) {
-                Text("Go to Upper Body Workouts")
-            }
+            Text("Hello ${UserSession.userName ?: "NULL"}!")
+            AsyncImage(UserSession.userPhotoUrl, "${UserSession.userName} Profile Picture")
 
             Button(
-                onClick = { navController.navigate("workouts/${lowerWorkouts.joinToString(",")}") },
+                onClick = { navController?.navigate("createWorkout") },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(8.dp)
             ) {
-                Text("Go to Lower Body Workouts")
+                Text("Create Workout")
+            }
+            // Workout Details Button
+            Button(
+                onClick = { navController?.navigate("workoutList") },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp)
+            ) {
+                Text("Workout Details")
+            }
+
+
+            // Sign-out button
+            if (onSignOutClick != null) {
+                Button(
+                    onClick = onSignOutClick, // Call the sign-out function
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp)
+                ) {
+                    Text("Sign Out")
+                }
             }
         }
     }

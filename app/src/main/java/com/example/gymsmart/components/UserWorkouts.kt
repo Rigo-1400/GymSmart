@@ -1,4 +1,4 @@
-package com.example.anew.components
+package com.example.gymsmart.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -12,7 +12,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import android.util.Log
 import androidx.navigation.NavController
-import com.example.anew.firebase.WorkoutData
+import com.example.gymsmart.firebase.WorkoutData
 import com.google.gson.Gson
 
 @Composable

@@ -7,11 +7,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.anew"
+    namespace = "com.example.gymsmart"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.anew"
+        applicationId = "com.example.gymsmart"
         minSdk = 24
         targetSdk = 34
         versionCode = 1

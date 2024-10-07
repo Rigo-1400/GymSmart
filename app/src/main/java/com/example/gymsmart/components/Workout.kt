@@ -1,4 +1,4 @@
-package com.example.anew.components
+package com.example.gymsmart.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -16,7 +16,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.anew.firebase.saveWorkoutToFirebase
+import com.example.gymsmart.firebase.saveWorkoutToFirebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 

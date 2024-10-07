@@ -1,4 +1,4 @@
-package com.example.anew
+package com.example.gymsmart
 
 import android.content.Intent
 import android.os.Bundle
@@ -9,15 +9,15 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.example.anew.components.CreateWorkout
-import com.example.anew.components.HomePage
-import com.example.anew.components.Login
-import com.example.anew.components.Workout
-import com.example.anew.components.WorkoutDetails
-import com.example.anew.components.WorkoutList
-import com.example.anew.components.Workouts
-import com.example.anew.firebase.FirebaseAuthHelper
-import com.example.anew.firebase.WorkoutData
+import com.example.gymsmart.components.CreateWorkout
+import com.example.gymsmart.components.HomePage
+import com.example.gymsmart.components.Login
+import com.example.gymsmart.components.Workout
+import com.example.gymsmart.components.WorkoutDetails
+import com.example.gymsmart.components.WorkoutList
+import com.example.gymsmart.components.Workouts
+import com.example.gymsmart.firebase.FirebaseAuthHelper
+import com.example.gymsmart.firebase.WorkoutData
 import com.google.gson.Gson
 
 class MainActivity : ComponentActivity() {
@@ -28,12 +28,6 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            val defaultWorkout = WorkoutData(
-                id = "default",
-                name = "Default Workout",
-                muscleGroup = "No Muscle Group",
-                partOfTheBody = "Unknown"
-            )
             // Create NavController in the setContent block
             val navController = rememberNavController()
 
@@ -99,6 +93,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    @Deprecated("This method has been deprecated in favor of using the Activity Result API\n      which brings increased type safety via an {@link ActivityResultContract} and the prebuilt\n      contracts for common intents available in\n      {@link androidx.activity.result.contract.ActivityResultContracts}, provides hooks for\n      testing, and allow receiving results in separate, testable classes independent from your\n      activity. Use\n      {@link #registerForActivityResult(ActivityResultContract, ActivityResultCallback)}\n      with the appropriate {@link ActivityResultContract} and handling the result in the\n      {@link ActivityResultCallback#onActivityResult(Object) callback}.")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         firebaseAuthHelper.handleSignInResult(requestCode, data)

@@ -1,4 +1,4 @@
-package com.example.anew.components
+package com.example.gymsmart.components
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Button

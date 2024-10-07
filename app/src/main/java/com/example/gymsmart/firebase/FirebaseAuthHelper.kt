@@ -1,10 +1,10 @@
-package com.example.anew.firebase
+package com.example.gymsmart.firebase
 
 import android.app.Activity
 import android.content.Intent
 import android.util.Log
 import androidx.navigation.NavController
-import com.example.anew.R
+import com.example.gymsmart.R
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
