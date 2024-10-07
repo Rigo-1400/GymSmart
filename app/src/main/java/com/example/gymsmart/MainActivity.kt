@@ -1,9 +1,10 @@
 package com.example.gymsmart
-
-import android.content.Intent
+import android.app.Activity
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -16,7 +17,7 @@ import com.example.gymsmart.components.Workout
 import com.example.gymsmart.components.WorkoutDetails
 import com.example.gymsmart.components.WorkoutList
 import com.example.gymsmart.components.Workouts
-import com.example.gymsmart.firebase.FirebaseAuthHelper
+import FirebaseAuthHelper;
 import com.example.gymsmart.firebase.WorkoutData
 import com.google.gson.Gson
 
@@ -32,7 +33,7 @@ class MainActivity : ComponentActivity() {
             val navController = rememberNavController()
 
             // Initialize FirebaseAuthHelper with the navController
-            firebaseAuthHelper = FirebaseAuthHelper(this, navController)
+            firebaseAuthHelper = FirebaseAuthHelper(this, navController, signInLauncher)
 
 
             // Set up NavHost for navigation
@@ -93,9 +94,14 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    @Deprecated("This method has been deprecated in favor of using the Activity Result API\n      which brings increased type safety via an {@link ActivityResultContract} and the prebuilt\n      contracts for common intents available in\n      {@link androidx.activity.result.contract.ActivityResultContracts}, provides hooks for\n      testing, and allow receiving results in separate, testable classes independent from your\n      activity. Use\n      {@link #registerForActivityResult(ActivityResultContract, ActivityResultCallback)}\n      with the appropriate {@link ActivityResultContract} and handling the result in the\n      {@link ActivityResultCallback#onActivityResult(Object) callback}.")
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        firebaseAuthHelper.handleSignInResult(requestCode, data)
-    }
+    // In your Activity, define the launcher using the new Activity Result API
+    private val signInLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                // Handle the result using your FirebaseAuthHelper
+                firebaseAuthHelper.handleSignInResult(result.data)
+            } else {
+                Log.w("MainActivity", "Google sign-in canceled or failed")
+            }
+        }
 }
