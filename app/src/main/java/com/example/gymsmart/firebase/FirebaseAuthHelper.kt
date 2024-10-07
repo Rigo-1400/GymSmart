@@ -1,10 +1,10 @@
-package com.example.anew
-
 import android.app.Activity
 import android.content.Intent
 import android.util.Log
+import androidx.activity.result.ActivityResultLauncher
 import androidx.navigation.NavController
-import com.example.anew.firebase.UserSession
+import com.example.gymsmart.R
+import com.example.gymsmart.firebase.UserSession
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -12,19 +12,24 @@ import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 
-class FirebaseAuthHelper(private val activity: Activity, private val navController: NavController) {
+/**
+ * Firebase auth helper
+ *
+ * @property activity
+ * @property navController
+ * @property signInLauncher
+ * @constructor Create empty Firebase auth helper
+ */
+class FirebaseAuthHelper(
+    private val activity: Activity,
+    private val navController: NavController,
+    private val signInLauncher: ActivityResultLauncher<Intent>
+) {
 
-    private lateinit var googleSignInClient: GoogleSignInClient
-    private lateinit var firebaseAuth: FirebaseAuth
-
-    companion object {
-        private const val RC_SIGN_IN = 1001
-    }
+    private var googleSignInClient: GoogleSignInClient
+    private var firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
 
     init {
-        // Initialize Firebase Auth
-        firebaseAuth = FirebaseAuth.getInstance()
-
         // Configure Google Sign-In
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(activity.getString(R.string.default_web_client_id))
@@ -33,22 +38,14 @@ class FirebaseAuthHelper(private val activity: Activity, private val navControll
 
         googleSignInClient = GoogleSignIn.getClient(activity, gso)
     }
-
-    fun signIn() {
-        val signInIntent = googleSignInClient.signInIntent
-        activity.startActivityForResult(signInIntent, RC_SIGN_IN)
-    }
-
-    fun handleSignInResult(requestCode: Int, data: Intent?) {
-        if (requestCode == RC_SIGN_IN) {
-            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
-            try {
-                val account = task.getResult(ApiException::class.java)!!
-                Log.d("FirebaseAuthHelper", "firebaseAuthWithGoogle:" + account.id)
-                firebaseAuthWithGoogle(account.idToken!!)
-            } catch (e: ApiException) {
-                Log.w("FirebaseAuthHelper", "Google sign in failed", e)
-            }
+    fun handleSignInResult(data: Intent?) {
+        val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+        try {
+            val account = task.getResult(ApiException::class.java)!!
+            Log.d("FirebaseAuthHelper", "firebaseAuthWithGoogle:" + account.id)
+            firebaseAuthWithGoogle(account.idToken!!)
+        } catch (e: ApiException) {
+            Log.w("FirebaseAuthHelper", "Google sign in failed", e)
         }
     }
 
@@ -77,5 +74,9 @@ class FirebaseAuthHelper(private val activity: Activity, private val navControll
         googleSignInClient.signOut().addOnCompleteListener {
             Log.d("FirebaseAuthHelper", "User signed out")
         }
+    }
+    fun signIn() {
+        val signInIntent = googleSignInClient.signInIntent
+        signInLauncher.launch(signInIntent)
     }
 }

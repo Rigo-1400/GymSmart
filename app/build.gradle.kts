@@ -7,11 +7,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.anew"
+    namespace = "com.example.gymsmart"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.anew"
+        applicationId = "com.example.gymsmart"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
@@ -81,9 +81,11 @@ dependencies {
     implementation("com.google.android.material:material:1.8.0")
     implementation ("androidx.compose.material3:material3:1.0.0")
     implementation(libs.androidx.navigation.testing)
+    implementation(libs.firebase.firestore.ktx)
 
     // Unit tests
     testImplementation(libs.junit)
+    testImplementation(libs.junit.jupiter)
 
     // Android Instrumentation tests
     androidTestImplementation(libs.androidx.junit)
@@ -109,4 +111,6 @@ dependencies {
     // Add the dependencies for any other desired Firebase products
     // https://firebase.google.com/docs/android/setup#available-libraries
     implementation("io.coil-kt:coil-compose:2.7.0")
+    implementation ("com.google.code.gson:gson:2.8.8")
+
 }
