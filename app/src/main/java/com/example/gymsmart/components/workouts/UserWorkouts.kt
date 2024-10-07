@@ -26,6 +26,7 @@ fun UserWorkouts(navController: NavController) {
 
     var workouts by remember { mutableStateOf(listOf<WorkoutData>()) }
     var searchQuery by remember { mutableStateOf("") }
+    var showSpinner by remember { mutableStateOf(true) }
 
     // Fetch workouts from Firestore
     LaunchedEffect(userId) {
@@ -39,6 +40,7 @@ fun UserWorkouts(navController: NavController) {
                         }
                     }
                     workouts = fetchedWorkouts
+                    showSpinner = false
                 }
                 .addOnFailureListener { e ->
                     Log.w("WorkoutListPage", "Error getting documents", e)
@@ -72,51 +74,52 @@ fun UserWorkouts(navController: NavController) {
                     .fillMaxWidth()
                     .padding(bottom = 16.dp)
             )
+            if(!showSpinner) {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .wrapContentHeight()
+                ) {
+                        // Display filtered Upper Body Workouts Header and Items
+                        if (filteredUpperBodyWorkouts.isNotEmpty()) {
+                            item {
+                                Text(
+                                    text = "Upper Body Workouts",
+                                    style = MaterialTheme.typography.titleMedium,
+                                    modifier = Modifier.padding(vertical = 8.dp)
+                                )
+                            }
+                            items(filteredUpperBodyWorkouts) { workout ->
+                                WorkoutItem(workout, navController)
+                            }
+                        }
 
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .wrapContentHeight()
-            ) {
-                // Display filtered Upper Body Workouts Header and Items
-                if (filteredUpperBodyWorkouts.isNotEmpty()) {
-                    item {
-                        Text(
-                            text = "Upper Body Workouts",
-                            style = MaterialTheme.typography.titleMedium,
-                            modifier = Modifier.padding(vertical = 8.dp)
-                        )
-                    }
-                    items(filteredUpperBodyWorkouts) { workout ->
-                        WorkoutItem(workout, navController)
-                    }
-                }
+                        // Display filtered Lower Body Workouts Header and Items
+                        if (filteredLowerBodyWorkouts.isNotEmpty()) {
+                            item {
+                                Text(
+                                    text = "Lower Body Workouts",
+                                    style = MaterialTheme.typography.titleMedium,
+                                    modifier = Modifier.padding(vertical = 8.dp)
+                                )
+                            }
+                            items(filteredLowerBodyWorkouts) { workout ->
+                                WorkoutItem(workout, navController)
+                            }
+                        }
 
-                // Display filtered Lower Body Workouts Header and Items
-                if (filteredLowerBodyWorkouts.isNotEmpty()) {
-                    item {
-                        Text(
-                            text = "Lower Body Workouts",
-                            style = MaterialTheme.typography.titleMedium,
-                            modifier = Modifier.padding(vertical = 8.dp)
-                        )
-                    }
-                    items(filteredLowerBodyWorkouts) { workout ->
-                        WorkoutItem(workout, navController)
-                    }
+                        // Show message if no workouts match the search
+                        if (filteredUpperBodyWorkouts.isEmpty() && filteredLowerBodyWorkouts.isEmpty() && searchQuery.isNotEmpty()) {
+                            item {
+                                Text(
+                                    text = "No workouts found",
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    modifier = Modifier.padding(vertical = 8.dp)
+                                )
+                            }
+                        }
                 }
-
-                // Show message if no workouts match the search
-                if (filteredUpperBodyWorkouts.isEmpty() && filteredLowerBodyWorkouts.isEmpty() && searchQuery.isNotEmpty()) {
-                    item {
-                        Text(
-                            text = "No workouts found",
-                            style = MaterialTheme.typography.bodyMedium,
-                            modifier = Modifier.padding(vertical = 8.dp)
-                        )
-                    }
-                }
-            }
+            } else CircularProgressIndicator()
         }
     }
 }

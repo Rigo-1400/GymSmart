@@ -1,5 +1,6 @@
 package com.example.gymsmart.firebase
 
+import androidx.compose.ui.text.font.FontWeight
 import com.google.firebase.Timestamp
 
 /**
@@ -21,5 +22,6 @@ data class WorkoutData(
     var name: String = "",
     var muscleGroup: String = "",
     var sets: Int = 0,
-    var reps: Int = 0
+    var reps: Int = 0,
+    var weight: Int = 0
 )

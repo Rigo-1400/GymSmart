@@ -1,20 +1,15 @@
 package com.example.gymsmart.components.workouts
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.gymsmart.firebase.saveWorkoutToFirebase
 import com.google.firebase.Timestamp
@@ -32,8 +27,9 @@ import com.google.firebase.firestore.FirebaseFirestore
 fun WorkoutCreator(navController: NavController, partOfTheBody: String, muscleGroup: String) {
     // State variables to track user input
     var workoutName by remember { mutableStateOf("") }
-    var sets by remember { mutableStateOf("") }
-    var reps by remember { mutableStateOf("") }
+    var sets by remember { mutableStateOf(1) }
+    var reps by remember { mutableStateOf(1) }
+    var weight by remember { mutableStateOf(10) }
 
     // Firestore and Auth instances
     val db = FirebaseFirestore.getInstance()
@@ -44,46 +40,114 @@ fun WorkoutCreator(navController: NavController, partOfTheBody: String, muscleGr
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(innerPadding),
-            verticalArrangement = Arrangement.spacedBy(8.dp) // Add spacing between items
+                .padding(innerPadding)
+                .padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text("This is the $muscleGroup page!")
+            Text(
+                text = "Add Your $muscleGroup Workout",
+                fontSize = 24.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(bottom = 16.dp)
+            )
+
             // Input for Workout Name
             TextField(
                 value = workoutName,
                 onValueChange = { workoutName = it },
                 label = { Text("Workout Name") },
-                modifier = Modifier.padding(8.dp)
+                placeholder = { Text("e.g., Bench Press") },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 8.dp)
             )
 
-            // Input for Sets
-            TextField(
-                value = sets,
-                onValueChange = { sets = it },
-                label = { Text("Sets") },
-                modifier = Modifier.padding(8.dp)
-            )
+            // Input for Sets using +/- buttons
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Text("Sets:", fontSize = 18.sp, fontWeight = FontWeight.Medium)
+                IconButton(
+                    onClick = { if (sets > 1) sets-- },
+                    colors = IconButtonDefaults.iconButtonColors(containerColor = Color.Gray)
+                ) {
+                    Text("-", color = Color.White, fontSize = 18.sp, fontWeight = FontWeight.Bold)
+                }
+                Text("$sets", fontSize = 18.sp, fontWeight = FontWeight.Medium)
+                IconButton(
+                    onClick = { sets++ },
+                    colors = IconButtonDefaults.iconButtonColors(containerColor = Color.Gray)
+                ) {
+                    Text("+", color = Color.White, fontSize = 18.sp, fontWeight = FontWeight.Bold)
+                }
+            }
 
-            // Input for Reps
-            TextField(
-                value = reps,
-                onValueChange = { reps = it },
-                label = { Text("Reps") },
-                modifier = Modifier.padding(8.dp)
-            )
+            // Input for Reps using +/- buttons
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Text("Reps:", fontSize = 18.sp, fontWeight = FontWeight.Medium)
+                IconButton(
+                    onClick = { if (reps > 1) reps-- },
+                    colors = IconButtonDefaults.iconButtonColors(containerColor = Color.Gray)
+                ) {
+                    Text("-", color = Color.White, fontSize = 18.sp, fontWeight = FontWeight.Bold)
+                }
+                Text("$reps", fontSize = 18.sp, fontWeight = FontWeight.Medium)
+                IconButton(
+                    onClick = { reps++ },
+                    colors = IconButtonDefaults.iconButtonColors(containerColor = Color.Gray)
+                ) {
+                    Text("+", color = Color.White, fontSize = 18.sp, fontWeight = FontWeight.Bold)
+                }
+            }
+            // Input for Reps using +/- buttons
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Text("Weight:", fontSize = 18.sp, fontWeight = FontWeight.Medium)
+                IconButton(
+                    onClick = { if (weight > 1) weight -= 5 },
+                    colors = IconButtonDefaults.iconButtonColors(containerColor = Color.Gray)
+                ) {
+                    Text("-", color = Color.White, fontSize = 18.sp, fontWeight = FontWeight.Bold)
+                }
+                Text("${weight}lbs", fontSize = 18.sp, fontWeight = FontWeight.Medium)
+                IconButton(
+                    onClick = { weight += 5 },
+                    colors = IconButtonDefaults.iconButtonColors(containerColor = Color.Gray)
+                ) {
+                    Text("+", color = Color.White, fontSize = 18.sp, fontWeight = FontWeight.Bold)
+                }
+            }
 
             // Save Button
             Button(
                 onClick = {
                     // Check if user is logged in and input is not empty before saving
-                    if (userId != null && sets.isNotEmpty() && reps.isNotEmpty()) {
-                        saveWorkoutToFirebase(db, userId, Timestamp.now(), partOfTheBody, workoutName, muscleGroup, sets.toInt(), reps.toInt())
+                    if (userId != null && sets > 0 && reps > 0) {
+                        saveWorkoutToFirebase(
+                            db, userId, Timestamp.now(),
+                            partOfTheBody, workoutName, muscleGroup, sets, reps, weight
+                        )
                         navController.navigate("userWorkouts")
                     }
                 },
-                modifier = Modifier.padding(8.dp)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp),
+                shape = RoundedCornerShape(12.dp)
             ) {
-                Text("Save Workout")
+                Text(
+                    text = "Save Workout",
+                    color = Color.White,
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.SemiBold
+                )
             }
         }
     }

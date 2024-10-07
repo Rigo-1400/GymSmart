@@ -32,6 +32,7 @@ fun WorkoutDetails(workoutData: WorkoutData?) {
                 Text("Muscle Group: ${it.muscleGroup}")
                 Text("Sets: ${it.sets}")
                 Text("Reps: ${it.reps}")
+                Text("Weight: ${it.weight}")
             }
         }
     }

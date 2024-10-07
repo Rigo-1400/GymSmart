@@ -24,7 +24,8 @@ fun saveWorkoutToFirebase(
     workoutName: String,
     muscleGroup: String,
     sets: Int,
-    reps: Int
+    reps: Int,
+    weight: Int
 ) {
     val workout = hashMapOf(
         "partOfTheBody" to partOfTheBody,
@@ -32,7 +33,8 @@ fun saveWorkoutToFirebase(
         "name" to workoutName,
         "muscleGroup" to muscleGroup,
         "sets" to sets,
-        "reps" to reps
+        "reps" to reps,
+        "weight" to weight
     )
 
     db.collection("users").document(userId).collection("workouts")
