@@ -63,8 +63,19 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
 
+    //Google Gson
+    implementation ("com.google.code.gson:gson:2.11.0")
+
+    //Firebase update
+    implementation("com.google.firebase:firebase-auth:21.0.1")
+    implementation("com.google.firebase:firebase-messaging:23.0.5")
+    implementation ("com.google.android.gms:play-services-gcm:17.0.0")
+
+
     // Jetpack Compose BOM
     implementation(platform(libs.androidx.compose.bom))
+    //Jetpack Coil
+    implementation("io.coil-kt:coil-compose:2.7.0")
 
     // Compose UI dependencies (versions managed by the BOM)
     implementation(libs.androidx.ui)
@@ -78,7 +89,7 @@ dependencies {
     //third parties youtube api support
     implementation ("com.pierfrancescosoffritti.androidyoutubeplayer:core:12.1.0")
     implementation ("com.pierfrancescosoffritti.androidyoutubeplayer:custom-ui:12.1.0")
-    implementation(files("libs/core-12.1.0-javadoc.jar"))
+    implementation(files("libs/core-12.1.1-javadoc.jar"))
 
     // Material 3
     implementation(libs.androidx.material3)
