@@ -12,13 +12,13 @@ import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 
-public class FirebaseAuthHelper(
+class FirebaseAuthHelper(
     private val activity: Activity,
     private val navController: NavController,
     private val signInLauncher: ActivityResultLauncher<Intent>
 ) {
 
-    private lateinit var googleSignInClient: GoogleSignInClient
+    private var googleSignInClient: GoogleSignInClient
     private var firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
 
     init {

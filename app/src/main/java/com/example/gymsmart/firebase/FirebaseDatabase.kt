@@ -1,11 +1,13 @@
 package com.example.gymsmart.firebase
 
 import android.util.Log
+import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
 
 fun saveWorkoutToFirebase(
     db: FirebaseFirestore,
     userId: String,
+    dateAdded: Timestamp,
     partOfTheBody: String,
     workoutName: String,
     muscleGroup: String,
@@ -14,6 +16,7 @@ fun saveWorkoutToFirebase(
 ) {
     val workout = hashMapOf(
         "partOfTheBody" to partOfTheBody,
+        "dateAdded" to dateAdded,
         "name" to workoutName,
         "muscleGroup" to muscleGroup,
         "sets" to sets,
@@ -33,6 +36,7 @@ fun saveWorkoutToFirebase(
 // Data class for workout information
 data class WorkoutData(
     var id: String = "",
+    var dateAdded: Timestamp = Timestamp.now(),
     var partOfTheBody: String = "",
     var name: String = "",
     var muscleGroup: String = "",

@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.gymsmart.firebase.saveWorkoutToFirebase
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -69,7 +70,7 @@ fun Workout(navController: NavController, partOfTheBody: String, muscleGroup: St
                 onClick = {
                     // Check if user is logged in and input is not empty before saving
                     if (userId != null && sets.isNotEmpty() && reps.isNotEmpty()) {
-                        saveWorkoutToFirebase(db, userId, partOfTheBody, workoutName, muscleGroup, sets.toInt(), reps.toInt())
+                        saveWorkoutToFirebase(db, userId, Timestamp.now(), partOfTheBody, workoutName, muscleGroup, sets.toInt(), reps.toInt())
                         navController.navigate("workoutList")
                     }
                 },

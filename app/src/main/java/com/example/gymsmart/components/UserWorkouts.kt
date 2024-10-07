@@ -14,6 +14,8 @@ import android.util.Log
 import androidx.navigation.NavController
 import com.example.gymsmart.firebase.WorkoutData
 import com.google.gson.Gson
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 @Composable
 fun WorkoutList(navController: NavController) {
@@ -131,9 +133,12 @@ fun WorkoutItem(workout: WorkoutData, navController: NavController) {
             },
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
+        val formatter = SimpleDateFormat("MM/dd/yy hh:mm a", Locale.getDefault())
+        val formattedDate = formatter.format(workout.dateAdded.toDate())
         Column(modifier = Modifier.padding(16.dp)) {
-            Text(text = "Workout: ${workout.name}", style = MaterialTheme.typography.titleMedium)
-            Text(text = "Muscle Group: ${workout.muscleGroup}", style = MaterialTheme.typography.bodyMedium)
+            Text("Workout: ${workout.name}", style = MaterialTheme.typography.titleMedium)
+            Text("Muscle Group: ${workout.muscleGroup}", style = MaterialTheme.typography.bodyMedium)
+            Text(formattedDate, style = MaterialTheme.typography.bodyMedium)
         }
     }
 }
