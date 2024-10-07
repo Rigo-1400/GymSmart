@@ -45,7 +45,7 @@ fun Attatchements(navController: NavController, attatchements: Array<String>) {
 
 
             Button(
-                onClick = { navController.navigate("attatchements/$attatchementsNames") },  //Change "attatchements/$attatchementsNames" attatchement name to another file to access those buttons (i.e Workout.kt)
+                onClick = { navController.navigate("attatchements2/$attatchementsNames") },  //Change "attatchements/$attatchementsNames" attatchement name to another file to access those buttons (i.e Workout.kt)
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(8.dp)

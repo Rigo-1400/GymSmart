@@ -36,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.material3.Button
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.anew.components.Attatchements
+import com.example.anew.components.Attatchements2
 import java.util.Date
 class MainActivity : ComponentActivity() {
 
@@ -97,6 +98,15 @@ class MainActivity : ComponentActivity() {
                     val attatchementsNamesString = navBackStackEntry.arguments?.getString("attatchementsNames")
                     val attatchementsNames = attatchementsNamesString?.split(",")?.toTypedArray() ?: arrayOf()
                     Attatchements(navController, attatchementsNames)
+                }
+
+                composable(
+                    route = "attatchements2/{attatchementsNames}",
+                    arguments = listOf(navArgument("attatchementsNames") {type = NavType.StringType })
+                ) { navBackStackEntry ->
+                    val name = navBackStackEntry.arguments?.getString("attatchementsNames")
+                    name?.let{Attatchements2(name)}
+
                 }
 
 

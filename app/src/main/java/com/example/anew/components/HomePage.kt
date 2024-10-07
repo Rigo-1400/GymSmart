@@ -58,7 +58,7 @@ fun HomePage(navController: NavController?, onSignOutClick: (() -> Unit)?) {
                     .fillMaxWidth()
                     .padding(8.dp)
             ) {
-                Text(text = "Go to Accessories")
+                Text(text = "Additional Accessories")
             }
 
             // Sign-out button
