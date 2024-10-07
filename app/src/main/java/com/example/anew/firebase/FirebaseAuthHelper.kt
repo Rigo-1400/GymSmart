@@ -1,10 +1,10 @@
-package com.example.anew
+package com.example.anew.firebase
 
 import android.app.Activity
 import android.content.Intent
 import android.util.Log
 import androidx.navigation.NavController
-import com.example.anew.firebase.UserSession
+import com.example.anew.R
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -14,7 +14,7 @@ import com.google.firebase.auth.GoogleAuthProvider
 
 class FirebaseAuthHelper(private val activity: Activity, private val navController: NavController) {
 
-    private lateinit var googleSignInClient: GoogleSignInClient
+    private var googleSignInClient: GoogleSignInClient
     // Initialize Firebase Auth
     private var firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
 

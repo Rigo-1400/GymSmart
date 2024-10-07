@@ -16,6 +16,7 @@ import com.example.anew.components.Workout
 import com.example.anew.components.WorkoutDetails
 import com.example.anew.components.WorkoutList
 import com.example.anew.components.Workouts
+import com.example.anew.firebase.FirebaseAuthHelper
 import com.example.anew.firebase.WorkoutData
 import com.google.gson.Gson
 

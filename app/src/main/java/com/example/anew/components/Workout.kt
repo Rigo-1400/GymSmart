@@ -69,7 +69,7 @@ fun Workout(navController: NavController, partOfTheBody: String, muscleGroup: St
                 onClick = {
                     // Check if user is logged in and input is not empty before saving
                     if (userId != null && sets.isNotEmpty() && reps.isNotEmpty()) {
-                        saveWorkoutToFirebase(db, userId, partOfTheBody, muscleGroup, workoutName, sets.toInt(), reps.toInt())
+                        saveWorkoutToFirebase(db, userId, partOfTheBody, workoutName, muscleGroup, sets.toInt(), reps.toInt())
                         navController.navigate("workoutList")
                     }
                 },
