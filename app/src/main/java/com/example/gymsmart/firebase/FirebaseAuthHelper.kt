@@ -12,6 +12,14 @@ import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 
+/**
+ * Firebase auth helper
+ *
+ * @property activity
+ * @property navController
+ * @property signInLauncher
+ * @constructor Create empty Firebase auth helper
+ */
 class FirebaseAuthHelper(
     private val activity: Activity,
     private val navController: NavController,

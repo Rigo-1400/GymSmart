@@ -4,6 +4,18 @@ import android.util.Log
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
 
+/**
+ * Save workout to firebase
+ *
+ * @param db
+ * @param userId
+ * @param dateAdded
+ * @param partOfTheBody
+ * @param workoutName
+ * @param muscleGroup
+ * @param sets
+ * @param reps
+ */
 fun saveWorkoutToFirebase(
     db: FirebaseFirestore,
     userId: String,
@@ -32,14 +44,3 @@ fun saveWorkoutToFirebase(
             Log.w("WorkoutPage", "Error adding document", e)
         }
 }
-
-// Data class for workout information
-data class WorkoutData(
-    var id: String = "",
-    var dateAdded: Timestamp = Timestamp.now(),
-    var partOfTheBody: String = "",
-    var name: String = "",
-    var muscleGroup: String = "",
-    var sets: Int = 0,
-    var reps: Int = 0
-)

@@ -1,4 +1,4 @@
-package com.example.gymsmart.components
+package com.example.gymsmart.components.workouts
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -21,8 +21,15 @@ import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
+/**
+ * Workout
+ *
+ * @param navController
+ * @param partOfTheBody
+ * @param muscleGroup
+ */
 @Composable
-fun Workout(navController: NavController, partOfTheBody: String, muscleGroup: String) {
+fun WorkoutCreator(navController: NavController, partOfTheBody: String, muscleGroup: String) {
     // State variables to track user input
     var workoutName by remember { mutableStateOf("") }
     var sets by remember { mutableStateOf("") }
@@ -71,7 +78,7 @@ fun Workout(navController: NavController, partOfTheBody: String, muscleGroup: St
                     // Check if user is logged in and input is not empty before saving
                     if (userId != null && sets.isNotEmpty() && reps.isNotEmpty()) {
                         saveWorkoutToFirebase(db, userId, Timestamp.now(), partOfTheBody, workoutName, muscleGroup, sets.toInt(), reps.toInt())
-                        navController.navigate("workoutList")
+                        navController.navigate("userWorkouts")
                     }
                 },
                 modifier = Modifier.padding(8.dp)

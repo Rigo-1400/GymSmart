@@ -14,8 +14,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 
+/**
+ * Part of body selector
+ *
+ * @param navController
+ */
 @Composable
-fun CreateWorkout(navController: NavController) {
+fun PartOfBodySelector(navController: NavController) {
     val upperWorkouts = arrayOf("Chest", "Biceps", "Triceps", "Shoulders", "Lats")
     val lowerWorkouts = arrayOf("Hamstring", "Glutes", "Quadriceps", "Calves")
     Scaffold(modifier = Modifier.fillMaxWidth()) { innerPadding ->
@@ -27,7 +32,7 @@ fun CreateWorkout(navController: NavController) {
         ) {
             Button(
                 colors = ButtonDefaults.buttonColors(containerColor = Color.Black),
-                onClick = { navController.navigate("workouts/${upperWorkouts.joinToString(",")}") },
+                onClick = { navController.navigate("muscleGroupSelector/${upperWorkouts.joinToString(",")}") },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(8.dp)
@@ -36,7 +41,7 @@ fun CreateWorkout(navController: NavController) {
             }
 
             Button(
-                onClick = { navController.navigate("workouts/${lowerWorkouts.joinToString(",")}") },
+                onClick = { navController.navigate("muscleGroupSelector/${lowerWorkouts.joinToString(",")}") },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(8.dp)

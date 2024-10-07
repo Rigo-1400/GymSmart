@@ -14,6 +14,12 @@ import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.gymsmart.firebase.UserSession
 
+/**
+ * Home page
+ *
+ * @param navController
+ * @param onSignOutClick
+ */
 @Composable
 fun HomePage(navController: NavController?, onSignOutClick: (() -> Unit)?) {
     Scaffold(modifier = Modifier.fillMaxWidth()) { innerPadding ->
@@ -27,7 +33,7 @@ fun HomePage(navController: NavController?, onSignOutClick: (() -> Unit)?) {
             AsyncImage(UserSession.userPhotoUrl, "${UserSession.userName} Profile Picture")
 
             Button(
-                onClick = { navController?.navigate("createWorkout") },
+                onClick = { navController?.navigate("workoutCreator") },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(8.dp)
@@ -36,7 +42,7 @@ fun HomePage(navController: NavController?, onSignOutClick: (() -> Unit)?) {
             }
             // Workout Details Button
             Button(
-                onClick = { navController?.navigate("workoutList") },
+                onClick = { navController?.navigate("userWorkouts") },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(8.dp)

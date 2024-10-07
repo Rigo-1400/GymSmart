@@ -85,6 +85,7 @@ dependencies {
 
     // Unit tests
     testImplementation(libs.junit)
+    testImplementation(libs.junit.jupiter)
 
     // Android Instrumentation tests
     androidTestImplementation(libs.androidx.junit)

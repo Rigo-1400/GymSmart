@@ -1,6 +1,5 @@
-package com.example.gymsmart.components
+package com.example.gymsmart.components.workouts
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -13,12 +12,14 @@ import com.google.firebase.firestore.FirebaseFirestore
 import android.util.Log
 import androidx.navigation.NavController
 import com.example.gymsmart.firebase.WorkoutData
-import com.google.gson.Gson
-import java.text.SimpleDateFormat
-import java.util.Locale
 
+/**
+ * Workout list
+ *
+ * @param navController
+ */
 @Composable
-fun WorkoutList(navController: NavController) {
+fun UserWorkouts(navController: NavController) {
     val db = FirebaseFirestore.getInstance()
     val firebaseAuth = FirebaseAuth.getInstance()
     val userId = firebaseAuth.currentUser?.uid
@@ -119,52 +120,6 @@ fun WorkoutList(navController: NavController) {
         }
     }
 }
-
-@Composable
-fun WorkoutItem(workout: WorkoutData, navController: NavController) {
-    val gson = Gson()
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 4.dp)
-            .clickable {
-                val workoutJson = gson.toJson(workout)
-                navController.navigate("workoutDetail/$workoutJson")
-            },
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
-    ) {
-        val formatter = SimpleDateFormat("MM/dd/yy hh:mm a", Locale.getDefault())
-        val formattedDate = formatter.format(workout.dateAdded.toDate())
-        Column(modifier = Modifier.padding(16.dp)) {
-            Text("Workout: ${workout.name}", style = MaterialTheme.typography.titleMedium)
-            Text("Muscle Group: ${workout.muscleGroup}", style = MaterialTheme.typography.bodyMedium)
-            Text(formattedDate, style = MaterialTheme.typography.bodyMedium)
-        }
-    }
-}
-
-
-@Composable
-fun WorkoutDetails(workoutData: WorkoutData?) {
-    // Display workout details
-    Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-        workoutData?.let {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(innerPadding)
-                    .padding(16.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                Text("Workout Name: ${it.name}")
-                Text("Muscle Group: ${it.muscleGroup}")
-                Text("Sets: ${it.sets}")
-                Text("Reps: ${it.reps}")
-            }
-        }
-    }
-}
-
 
 
 

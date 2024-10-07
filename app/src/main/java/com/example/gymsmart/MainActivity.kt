@@ -1,5 +1,4 @@
 package com.example.gymsmart
-import android.app.Activity
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -10,14 +9,14 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.example.gymsmart.components.CreateWorkout
+import com.example.gymsmart.components.workouts.WorkoutCreator
 import com.example.gymsmart.components.HomePage
 import com.example.gymsmart.components.Login
-import com.example.gymsmart.components.Workout
-import com.example.gymsmart.components.WorkoutDetails
-import com.example.gymsmart.components.WorkoutList
-import com.example.gymsmart.components.Workouts
-import FirebaseAuthHelper;
+import com.example.gymsmart.components.workouts.WorkoutDetails
+import com.example.gymsmart.components.workouts.UserWorkouts
+import FirebaseAuthHelper
+import com.example.gymsmart.components.MuscleGroupSelector
+import com.example.gymsmart.components.PartOfBodySelector
 import com.example.gymsmart.firebase.WorkoutData
 import com.google.gson.Gson
 
@@ -52,22 +51,22 @@ class MainActivity : ComponentActivity() {
                 }
                 // Define composable for workout screen, accepting a comma-separated list of workout names
                 composable(
-                    route = "workouts/{workoutNames}",
+                    route = "muscleGroupSelector/{workoutNames}",
                     arguments = listOf(navArgument("workoutNames") { type = NavType.StringType })
                 ) { navBackStackEntry ->
                     val workoutNamesString = navBackStackEntry.arguments?.getString("workoutNames")
                     val workoutNames = workoutNamesString?.split(",")?.toTypedArray() ?: arrayOf()
-                    Workouts(navController, workoutNames)
+                    MuscleGroupSelector(navController, workoutNames)
                 }
 
                 composable(
-                    route = "workout/{partOfTheBody}/{muscleGroup}",
+                    route = "workoutCreator/{partOfTheBody}/{muscleGroup}",
                     arguments = listOf(navArgument("partOfTheBody") { type = NavType.StringType }, navArgument("muscleGroup") { NavType.StringType })
                 ) { navBackStackEntry ->
                     val pOfTheBody = navBackStackEntry.arguments?.getString("partOfTheBody")
                     val mGroup = navBackStackEntry.arguments?.getString("muscleGroup")
                     if (pOfTheBody != null && mGroup != null) {
-                        Workout(navController, pOfTheBody, mGroup)
+                        WorkoutCreator(navController, pOfTheBody, mGroup)
                     }
                 }
                 composable("login") {
@@ -76,12 +75,12 @@ class MainActivity : ComponentActivity() {
                         firebaseAuthHelper.signIn() // Trigger Google Sign-In
                     })
                 }
-                composable("createWorkout") { CreateWorkout(navController) }
-                composable("workoutList") {
-                    WorkoutList(navController)
+                composable("workoutCreator") { PartOfBodySelector(navController) }
+                composable("userWorkouts") {
+                    UserWorkouts(navController)
                 }
                 composable(
-                    route = "workoutDetail/{workoutJson}",
+                    route = "workoutDetails/{workoutJson}",
                     arguments = listOf(navArgument("workoutJson") { type = NavType.StringType })
                 ) { backStackEntry ->
                     val workoutJson = backStackEntry.arguments?.getString("workoutJson")
@@ -97,8 +96,8 @@ class MainActivity : ComponentActivity() {
     // In your Activity, define the launcher using the new Activity Result API
     private val signInLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
-                // Handle the result using your FirebaseAuthHelper
+            if (result.resultCode == RESULT_OK) {
+                // Handle the result using the FirebaseAuthHelper
                 firebaseAuthHelper.handleSignInResult(result.data)
             } else {
                 Log.w("MainActivity", "Google sign-in canceled or failed")
