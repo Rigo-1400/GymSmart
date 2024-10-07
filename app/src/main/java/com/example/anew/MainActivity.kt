@@ -1,5 +1,6 @@
 package com.example.anew
 
+import com.example.anew.Workouts
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -22,8 +23,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 
-import com.example.anew.VideoPlayerActivity
-
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,17 +32,15 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@Preview
 @Composable
 fun MainScreen() {
-    // Creating an object of the Workouts interface to pass down to the Workouts component.
     val navController = rememberNavController()
 
-    // Set up NavHost for navigation
     NavHost(navController = navController, startDestination = "main") {
+        // Main page
         composable("main") { MainPage(navController) }
 
-        // Define composable for workout screen, accepting a comma-separated list of workout names
+        // Workouts screen
         composable(
             route = "workouts/{workoutNames}",
             arguments = listOf(navArgument("workoutNames") { type = NavType.StringType })
@@ -53,12 +50,43 @@ fun MainScreen() {
             Workouts(navController, workoutNames)
         }
 
+        // Individual workout screen with list of video IDs
         composable(
-            route = "workout/{workoutName}",
-            arguments = listOf(navArgument("workoutName") { type = NavType.StringType })
+            route = "workout/{workoutName}/{videoIds}",
+            arguments = listOf(
+                navArgument("workoutName") { type = NavType.StringType },
+                navArgument("videoIds") { type = NavType.StringType }
+            )
         ) { navBackStackEntry ->
-            val name = navBackStackEntry.arguments?.getString("workoutName")
-            name?.let { Workout(name) }
+            val workoutName = navBackStackEntry.arguments?.getString("workoutName")
+            val videoIdsString = navBackStackEntry.arguments?.getString("videoIds")
+            val videoIds = videoIdsString?.split(",") ?: listOf()
+            if (workoutName != null) {
+                Workout(navController, workoutName = workoutName, videoIds = videoIds)
+            }
+        }
+
+        // VideoPlayer screen to launch the VideoPlayerActivity
+        composable(
+            route = "videoPlayer/{videoId}",
+            arguments = listOf(navArgument("videoId") { type = NavType.StringType })
+        ) { navBackStackEntry ->
+            val videoId = navBackStackEntry.arguments?.getString("videoId")
+            VideoPlayerScreen(videoId)
+        }
+    }
+}
+
+@Composable
+fun VideoPlayerScreen(videoId: String?) {
+    val context = LocalContext.current
+
+    androidx.compose.runtime.LaunchedEffect(Unit) {
+        videoId?.let {
+            val intent = Intent(context, VideoPlayerActivity::class.java).apply {
+                putExtra("VIDEO_ID", videoId)
+            }
+            context.startActivity(intent)
         }
     }
 }
@@ -67,9 +95,6 @@ fun MainScreen() {
 fun MainPage(navController: NavController) {
     val upperWorkouts = arrayOf("Chest", "Biceps", "Triceps", "Shoulders", "Lats")
     val lowerWorkouts = arrayOf("Hamstring", "Glutes", "Quadriceps", "Calves")
-
-    // Get the context to use with Intents
-    val context = LocalContext.current
 
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
         Column(
@@ -80,7 +105,9 @@ fun MainPage(navController: NavController) {
         ) {
             Button(
                 colors = ButtonDefaults.buttonColors(containerColor = Color.Black),
-                onClick = { navController.navigate("workouts/${upperWorkouts.joinToString(",")}") },
+                onClick = {
+                    navController.navigate("workouts/${upperWorkouts.joinToString(",")}")
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(8.dp)
@@ -88,26 +115,21 @@ fun MainPage(navController: NavController) {
                 Text("Go to Upper Body Workouts")
             }
             Button(
-                onClick = { navController.navigate("workouts/${lowerWorkouts.joinToString(",")}") },
+                onClick = {
+                    navController.navigate("workouts/${lowerWorkouts.joinToString(",")}")
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(8.dp)
             ) {
                 Text("Go to Lower Body Workouts")
             }
-
-            // New Button to launch VideoPlayerActivity
-            Button(
-                onClick = {
-                    val intent = Intent(context, VideoPlayerActivity::class.java)
-                    context.startActivity(intent)
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp)
-            ) {
-                Text("Watch YouTube Video")
-            }
         }
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun MainScreenPreview() {
+    MainScreen()
 }

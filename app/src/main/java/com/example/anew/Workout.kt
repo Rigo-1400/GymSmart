@@ -10,18 +10,30 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.compose.material3.Button
+
+
+
 
 @Composable
-
-fun Workout(workoutName: String) {
+fun Workout(navController: NavController, workoutName: String, videoIds: List<String>) {
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding),
-            verticalArrangement = Arrangement.spacedBy(8.dp) // Add spacing between items
+            verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            Text("This is the $workoutName page!");
+            Text("This is the $workoutName page!")
+            // Optional: Loop through videoIds if you want to display each video
+            videoIds.forEach { videoId ->
+                Button(
+                    onClick = { navController.navigate("videoPlayer/$videoId") }
+                ) {
+                    Text("Watch Video $workoutName")
+                }
+            }
         }
     }
 }
