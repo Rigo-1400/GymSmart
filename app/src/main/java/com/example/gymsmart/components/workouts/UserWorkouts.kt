@@ -10,6 +10,8 @@ import androidx.compose.ui.unit.dp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import android.util.Log
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.navigation.NavController
 import com.example.gymsmart.firebase.WorkoutData
 
@@ -63,6 +65,10 @@ fun UserWorkouts(navController: NavController) {
             .wrapContentHeight()
     ) { innerPadding ->
         Column(modifier = Modifier.padding(innerPadding).padding(16.dp)) {
+            // TODO: Implement this as the filter button doesn't anything when you click it.
+            IconButton({ Log.w("UserWorkouts.kt", "Filter button clicked") }) {
+                Icon(Icons.Filled.MoreVert, "Filter Workouts")
+            }
             // Search Bar
             TextField(
                 value = searchQuery,
