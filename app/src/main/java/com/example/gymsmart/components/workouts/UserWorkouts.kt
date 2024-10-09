@@ -74,12 +74,24 @@ fun UserWorkouts(navController: NavController) {
                     .fillMaxWidth()
                     .padding(bottom = 16.dp)
             )
-            if(!showSpinner) {
+            if(!showSpinner)
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxWidth()
                         .wrapContentHeight()
                 ) {
+                    // Display whether the workout is empty or not and if its empty direct them to
+                        if(workouts.isEmpty()) {
+                            item {
+                                Text("It seems you have no workouts to fetch from, please create a workout below.")
+                                Button(
+                                    onClick = { navController.navigate("workoutCreator") },
+                                    modifier = Modifier.fillMaxWidth()
+                                ) {
+                                    Text("Create a Workout!")
+                                }
+                            }
+                        }
                         // Display filtered Upper Body Workouts Header and Items
                         if (filteredUpperBodyWorkouts.isNotEmpty()) {
                             item {
@@ -118,11 +130,10 @@ fun UserWorkouts(navController: NavController) {
                                 )
                             }
                         }
-                }
-            } else CircularProgressIndicator()
+                } else CircularProgressIndicator()
+            }
         }
     }
-}
 
 
 
