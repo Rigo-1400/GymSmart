@@ -27,9 +27,9 @@ import com.google.firebase.firestore.FirebaseFirestore
 fun WorkoutCreator(navController: NavController, partOfTheBody: String, muscleGroup: String) {
     // State variables to track user input
     var workoutName by remember { mutableStateOf("") }
-    var sets by remember { mutableStateOf(1) }
-    var reps by remember { mutableStateOf(1) }
-    var weight by remember { mutableStateOf(10) }
+    var sets by remember { mutableIntStateOf(1) }
+    var reps by remember { mutableIntStateOf(1) }
+    var weight by remember { mutableIntStateOf(10) }
 
     // Firestore and Auth instances
     val db = FirebaseFirestore.getInstance()

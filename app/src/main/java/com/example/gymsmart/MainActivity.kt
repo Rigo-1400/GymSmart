@@ -20,6 +20,11 @@ import com.example.gymsmart.components.PartOfBodySelector
 import com.example.gymsmart.firebase.WorkoutData
 import com.google.gson.Gson
 
+/**
+ * Main activity
+ *
+ * @constructor Create empty Main activity
+ */
 class MainActivity : ComponentActivity() {
 
     private lateinit var firebaseAuthHelper: FirebaseAuthHelper
