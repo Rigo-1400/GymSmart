@@ -1,5 +1,5 @@
-package com.example.anew
-
+package com.example.gymsmart
+import com.example.gymsmart.R
 import android.os.Bundle
 import android.view.Window
 import android.view.WindowManager

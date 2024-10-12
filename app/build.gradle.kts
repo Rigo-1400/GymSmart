@@ -63,13 +63,19 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
 
+
+
     //Google Gson
-    implementation ("com.google.code.gson:gson:2.11.0")
+    implementation ("com.google.code.gson:gson:2.8.8")
 
     //Firebase update
     implementation("com.google.firebase:firebase-auth:21.0.1")
     implementation("com.google.firebase:firebase-messaging:23.0.5")
     implementation ("com.google.android.gms:play-services-gcm:17.0.0")
+    implementation ("com.firebaseui:firebase-ui-firestore:8.0.0")
+
+    //Google sign in
+    implementation ("com.google.android.gms:play-services-auth:20.6.0")
 
 
     // Jetpack Compose BOM
@@ -83,7 +89,7 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation("androidx.navigation:navigation-compose:2.7.0")
 
-    // use for webview
+    // use for Web view
     implementation("androidx.webkit:webkit:1.8.0")
 
     //third parties youtube api support

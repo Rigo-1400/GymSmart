@@ -1,4 +1,4 @@
-package com.example.anew
+package com.example.gymsmart
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
