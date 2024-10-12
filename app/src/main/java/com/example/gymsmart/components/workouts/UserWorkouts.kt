@@ -10,13 +10,14 @@ import androidx.compose.ui.unit.dp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import android.util.Log
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.ui.Alignment
 import androidx.navigation.NavController
+import com.example.gymsmart.components.FilterDropdownMenu
+import com.example.gymsmart.components.SearchBarWithIcon
 import com.example.gymsmart.firebase.WorkoutData
 
 /**
- * Workout list
+ * UserWorkouts list
  *
  * @param navController
  */
@@ -29,6 +30,7 @@ fun UserWorkouts(navController: NavController) {
     var workouts by remember { mutableStateOf(listOf<WorkoutData>()) }
     var searchQuery by remember { mutableStateOf("") }
     var showSpinner by remember { mutableStateOf(true) }
+    var filteredWorkouts by remember { mutableStateOf(listOf<WorkoutData>()) }
 
     // Fetch workouts from Firestore
     LaunchedEffect(userId) {
@@ -42,6 +44,7 @@ fun UserWorkouts(navController: NavController) {
                         }
                     }
                     workouts = fetchedWorkouts
+                    filteredWorkouts = workouts
                     showSpinner = false
                 }
                 .addOnFailureListener { e ->
@@ -50,14 +53,28 @@ fun UserWorkouts(navController: NavController) {
         }
     }
 
-    // Filter workouts based on search query
-    val filteredWorkouts = workouts.filter {
-        it.name.contains(searchQuery, true) || it.muscleGroup.contains(searchQuery, true) || (it.partOfTheBody.contains(searchQuery, true))
+    // Function to apply filters
+    fun applyFilter(filter: String) {
+        filteredWorkouts = when (filter) {
+            "All" -> workouts
+            "Sort by Date (Newest)" -> workouts.sortedByDescending { it.dateAdded }
+            "Sort by Date (Oldest)" -> workouts.sortedBy { it.dateAdded }
+            "Upper Body" -> workouts.filter { it.partOfTheBody.equals("Upper Body", ignoreCase = true) }
+            "Lower Body" -> workouts.filter { it.partOfTheBody.equals("Lower Body", ignoreCase = true) }
+            else -> workouts
+        }
     }
 
-    // Filter upper and lower body workouts from the filtered workouts
-    val filteredUpperBodyWorkouts = filteredWorkouts.filter { it.partOfTheBody.equals("Upper Body", true) }
-    val filteredLowerBodyWorkouts = filteredWorkouts.filter { it.partOfTheBody.equals("Lower Body", true) }
+    // Filter workouts based on search query
+    val displayedWorkouts = filteredWorkouts.filter {
+        it.name.contains(searchQuery, true) ||
+                it.muscleGroup.contains(searchQuery, true) ||
+                it.partOfTheBody.contains(searchQuery, true)
+    }
+
+    // Separate the workouts into upper and lower body for display
+    val upperBodyWorkouts = displayedWorkouts.filter { it.partOfTheBody.equals("Upper Body", ignoreCase = true) }
+    val lowerBodyWorkouts = displayedWorkouts.filter { it.partOfTheBody.equals("Lower Body", ignoreCase = true) }
 
     Scaffold(
         modifier = Modifier
@@ -65,81 +82,81 @@ fun UserWorkouts(navController: NavController) {
             .wrapContentHeight()
     ) { innerPadding ->
         Column(modifier = Modifier.padding(innerPadding).padding(16.dp)) {
-            // TODO: Implement this as the filter button doesn't anything when you click it.
-            IconButton({ Log.w("UserWorkouts.kt", "Filter button clicked") }) {
-                Icon(Icons.Filled.MoreVert, "Filter Workouts")
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                // Filter Button
+                FilterDropdownMenu(onFilterSelected = { filter -> applyFilter(filter) })
+
+                // Search Bar
+                SearchBarWithIcon(searchQuery) { query -> searchQuery = query }
             }
-            // Search Bar
-            TextField(
-                value = searchQuery,
-                onValueChange = { query ->
-                    searchQuery = query
-                },
-                label = { Text("Search for a workout") },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 16.dp)
-            )
-            if(!showSpinner)
+
+            if (showSpinner) {
+                CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
+            } else {
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxWidth()
                         .wrapContentHeight()
                 ) {
-                    // Display whether the workout is empty or not and if its empty direct them to
-                        if(workouts.isEmpty()) {
-                            item {
-                                Text("It seems you have no workouts to fetch from, please create a workout below.")
-                                Button(
-                                    onClick = { navController.navigate("workoutCreator") },
-                                    modifier = Modifier.fillMaxWidth()
-                                ) {
-                                    Text("Create a Workout!")
-                                }
-                            }
+                    // Display message if no workouts are found
+                    if (displayedWorkouts.isEmpty() && searchQuery.isNotEmpty()) {
+                        item {
+                            Text(
+                                text = "No workouts found",
+                                style = MaterialTheme.typography.bodyMedium,
+                                modifier = Modifier.padding(vertical = 8.dp)
+                            )
                         }
-                        // Display filtered Upper Body Workouts Header and Items
-                        if (filteredUpperBodyWorkouts.isNotEmpty()) {
-                            item {
-                                Text(
-                                    text = "Upper Body Workouts",
-                                    style = MaterialTheme.typography.titleMedium,
-                                    modifier = Modifier.padding(vertical = 8.dp)
-                                )
-                            }
-                            items(filteredUpperBodyWorkouts) { workout ->
-                                WorkoutItem(workout, navController)
-                            }
-                        }
+                    }
 
-                        // Display filtered Lower Body Workouts Header and Items
-                        if (filteredLowerBodyWorkouts.isNotEmpty()) {
-                            item {
-                                Text(
-                                    text = "Lower Body Workouts",
-                                    style = MaterialTheme.typography.titleMedium,
-                                    modifier = Modifier.padding(vertical = 8.dp)
-                                )
-                            }
-                            items(filteredLowerBodyWorkouts) { workout ->
-                                WorkoutItem(workout, navController)
-                            }
+                    // Display Upper Body Workouts if any
+                    if (upperBodyWorkouts.isNotEmpty()) {
+                        item {
+                            Text(
+                                text = "Upper Body Workouts",
+                                style = MaterialTheme.typography.titleMedium,
+                                modifier = Modifier.padding(vertical = 8.dp)
+                            )
                         }
+                        items(upperBodyWorkouts) { workout ->
+                            WorkoutItem(workout, navController)
+                        }
+                    }
 
-                        // Show message if no workouts match the search
-                        if (filteredUpperBodyWorkouts.isEmpty() && filteredLowerBodyWorkouts.isEmpty() && searchQuery.isNotEmpty()) {
-                            item {
-                                Text(
-                                    text = "No workouts found",
-                                    style = MaterialTheme.typography.bodyMedium,
-                                    modifier = Modifier.padding(vertical = 8.dp)
-                                )
+                    // Display Lower Body Workouts if any
+                    if (lowerBodyWorkouts.isNotEmpty()) {
+                        item {
+                            Text(
+                                text = "Lower Body Workouts",
+                                style = MaterialTheme.typography.titleMedium,
+                                modifier = Modifier.padding(vertical = 8.dp)
+                            )
+                        }
+                        items(lowerBodyWorkouts) { workout ->
+                            WorkoutItem(workout, navController)
+                        }
+                    }
+
+                    // Show message if no workouts exist at all
+                    if (upperBodyWorkouts.isEmpty() && lowerBodyWorkouts.isEmpty() && searchQuery.isEmpty()) {
+                        item {
+                            Text("It seems you have no workouts to fetch from, please create a workout below.")
+                            Button(
+                                onClick = { navController.navigate("workoutCreator") },
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Text("Create a Workout!")
                             }
                         }
-                } else CircularProgressIndicator()
+                    }
+                }
             }
         }
     }
+}
 
 
 
