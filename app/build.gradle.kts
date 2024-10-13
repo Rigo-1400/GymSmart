@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.anew"
+    namespace = "com.example.gymsmart"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.anew"
+        applicationId = "com.example.gymsmart"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
@@ -44,7 +44,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1" // Update this to your Compose version
+        kotlinCompilerExtensionVersion = "1.5.1" // Update to latest if needed
     }
 
     packaging {
@@ -52,68 +52,61 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+
     lint {
-        abortOnError = false;
+        abortOnError = true
     }
 }
 
 dependencies {
     // Core Android dependencies
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.androidx.activity.compose)
-
-
-
-    //Google Gson
-    implementation ("com.google.code.gson:gson:2.8.8")
-
-    //Firebase update
-    implementation("com.google.firebase:firebase-auth:21.0.1")
-    implementation("com.google.firebase:firebase-messaging:23.0.5")
-    implementation ("com.google.android.gms:play-services-gcm:17.0.0")
-    implementation ("com.firebaseui:firebase-ui-firestore:8.0.0")
-
-    //Google sign in
-    implementation ("com.google.android.gms:play-services-auth:20.6.0")
-
+    implementation("androidx.core:core-ktx:1.12.0")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
+    implementation("androidx.activity:activity-compose:1.7.2")
 
     // Jetpack Compose BOM
-    implementation(platform(libs.androidx.compose.bom))
-    //Jetpack Coil
-    implementation("io.coil-kt:coil-compose:2.7.0")
+    implementation(platform("androidx.compose:compose-bom:2023.05.01")) // Update version as needed
 
-    // Compose UI dependencies (versions managed by the BOM)
-    implementation(libs.androidx.ui)
-    implementation(libs.androidx.ui.graphics)
-    implementation(libs.androidx.ui.tooling.preview)
-    implementation("androidx.navigation:navigation-compose:2.7.0")
+    // Compose UI dependencies (managed by BOM)
+    implementation("androidx.compose.ui:ui")
+    implementation("androidx.compose.ui:ui-graphics")
+    implementation("androidx.compose.ui:ui-tooling-preview")
+    implementation("androidx.navigation:navigation-compose:2.7.0") // Navigation for Compose
 
-    // use for Web view
-    implementation("androidx.webkit:webkit:1.8.0")
+    // Material Design 3 and related dependencies
+    implementation("androidx.compose.material3:material3:1.1.0")
+    implementation("com.google.android.material:material:1.9.0")
+    implementation("androidx.navigation:navigation-testing:2.7.0")
 
-    //third parties youtube api support
-    implementation ("com.pierfrancescosoffritti.androidyoutubeplayer:core:12.1.0")
-    implementation ("com.pierfrancescosoffritti.androidyoutubeplayer:custom-ui:12.1.0")
-    implementation(files("libs/core-12.1.1-javadoc.jar"))
+    // Firebase and Google Play Services (using Firebase BoM)
+    implementation(platform("com.google.firebase:firebase-bom:32.0.0"))
+    implementation("com.google.firebase:firebase-auth")
+    implementation("com.google.firebase:firebase-firestore-ktx")
+    implementation("com.google.android.gms:play-services-auth:20.7.0")
 
-    // Material 3
-    implementation(libs.androidx.material3)
-    implementation("com.google.android.material:material:1.8.0")
-    implementation("androidx.constraintlayout:constraintlayout:2.1.4") // For ConstraintLayout
-    implementation ("androidx.appcompat:appcompat:1.4.0")
+    // Image Loading with Coil
+    implementation("io.coil-kt:coil-compose:2.4.0")
 
+    // Gson for JSON parsing
+    implementation("com.google.code.gson:gson:2.8.8")
 
     // Unit tests
-    testImplementation(libs.junit)
+    testImplementation("junit:junit:4.13.2")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.10.0")
+
+    // YouTube API for third-party integration
+    implementation("com.pierfrancescosoffritti.androidyoutubeplayer:core:12.1.1")
+    implementation("com.pierfrancescosoffritti.androidyoutubeplayer:custom-ui:12.1.1")
+    implementation(files("libs/core-12.1.1-javadoc.jar"))
 
     // Android Instrumentation tests
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.ui.test.junit4)
+    androidTestImplementation("androidx.test.ext:junit:1.1.5")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    androidTestImplementation(platform("androidx.compose:compose-bom:2023.05.01"))
+    androidTestImplementation("androidx.compose.ui:ui-test-junit4")
 
     // Debugging tools
-    debugImplementation(libs.androidx.ui.tooling)
-    debugImplementation(libs.androidx.ui.test.manifest)
+    debugImplementation("androidx.compose.ui:ui-tooling")
+    debugImplementation("androidx.compose.ui:ui-test-manifest")
 }
+
