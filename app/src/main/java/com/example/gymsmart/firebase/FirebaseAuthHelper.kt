@@ -1,11 +1,13 @@
+package com.example.gymsmart.firebase
+
 import android.app.Activity
 import android.content.Intent
 import android.util.Log
 import androidx.activity.result.ActivityResultLauncher
 import androidx.navigation.NavController
 import com.example.gymsmart.R
-import com.example.gymsmart.firebase.UserSession
-import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignIn.getClient
+import com.google.android.gms.auth.api.signin.GoogleSignIn.getSignedInAccountFromIntent
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
@@ -36,16 +38,16 @@ class FirebaseAuthHelper(
             .requestEmail()
             .build()
 
-        googleSignInClient = GoogleSignIn.getClient(activity, gso)
+        googleSignInClient = getClient(activity, gso)
     }
     fun handleSignInResult(data: Intent?) {
-        val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+        val task = getSignedInAccountFromIntent(data)
         try {
             val account = task.getResult(ApiException::class.java)!!
-            Log.d("FirebaseAuthHelper", "firebaseAuthWithGoogle:" + account.id)
+            Log.d("com.example.gymsmart.firebase.FirebaseAuthHelper", "firebaseAuthWithGoogle:" + account.id)
             firebaseAuthWithGoogle(account.idToken!!)
         } catch (e: ApiException) {
-            Log.w("FirebaseAuthHelper", "Google sign in failed", e)
+            Log.w("com.example.gymsmart.firebase.FirebaseAuthHelper", "Google sign in failed", e)
         }
     }
 
@@ -55,7 +57,7 @@ class FirebaseAuthHelper(
             .addOnCompleteListener(activity) { task ->
                 if (task.isSuccessful) {
                     // Sign in success
-                    Log.d("FirebaseAuthHelper", "signInWithCredential:success")
+                    Log.d("com.example.gymsmart.firebase.FirebaseAuthHelper", "signInWithCredential:success")
                     val user = firebaseAuth.currentUser
                     user?.let {
                         // Set user data in the singleton for global access
@@ -65,14 +67,14 @@ class FirebaseAuthHelper(
                         navController.navigate("home") // Assuming 'home' is the destination
                     }
                 } else {
-                    Log.w("FirebaseAuthHelper", "signInWithCredential:failure", task.exception)
+                    Log.w("com.example.gymsmart.firebase.FirebaseAuthHelper", "signInWithCredential:failure", task.exception)
                 }
             }
     }
 
     fun signOut() {
         googleSignInClient.signOut().addOnCompleteListener {
-            Log.d("FirebaseAuthHelper", "User signed out")
+            Log.d("com.example.gymsmart.firebase.FirebaseAuthHelper", "User signed out")
         }
     }
     fun signIn() {

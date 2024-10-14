@@ -1,4 +1,4 @@
-package com.example.gymsmart.components
+package com.example.gymsmart.components.pages
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Button
@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
  * @receiver
  */
 @Composable
-fun Login(onGoogleSignInClick: () -> Unit) {
+fun LoginPage(onGoogleSignInClick: () -> Unit) {
     Button(
         onClick = onGoogleSignInClick,
         modifier = Modifier.fillMaxWidth()

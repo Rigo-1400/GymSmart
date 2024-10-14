@@ -1,4 +1,4 @@
-package com.example.gymsmart.components.workouts
+package com.example.gymsmart.components.ui
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column

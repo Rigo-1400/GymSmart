@@ -1,25 +1,23 @@
-package com.example.gymsmart.components
+package com.example.gymsmart.components.ui
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.composables.icons.lucide.ListFilter
 
 @Composable
 fun FilterDropdownMenu(
     onFilterSelected: (String) -> Unit,
-    modifier: Modifier = Modifier
 ) {
     var expanded by remember { mutableStateOf(false) }
 
-    Box(modifier = modifier.wrapContentSize(Alignment.TopEnd)) {
+    Box(modifier = Modifier.wrapContentSize(Alignment.TopEnd)) {
         IconButton(onClick = { expanded = true }) {
             Icon(
-                imageVector = Icons.Default.MoreVert,
+                imageVector = com.composables.icons.lucide.Lucide.ListFilter,
                 contentDescription = "Filter Workouts"
             )
         }

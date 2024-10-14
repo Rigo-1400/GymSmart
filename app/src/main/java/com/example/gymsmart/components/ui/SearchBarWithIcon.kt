@@ -1,10 +1,7 @@
-package com.example.gymsmart.components
+package com.example.gymsmart.components.ui
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -12,6 +9,9 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
+import com.composables.icons.lucide.Lucide
+import com.composables.icons.lucide.Search
+import com.composables.icons.lucide.X
 
 @Composable
 fun SearchBarWithIcon(
@@ -35,13 +35,13 @@ fun SearchBarWithIcon(
                 label = { Text("Search for a workout") },
                 leadingIcon = {
                     Icon(
-                        imageVector = Icons.Default.Search,
+                        imageVector = Lucide.Search,
                         contentDescription = "Search Icon"
                     )
                 },
                 trailingIcon = {
                     Icon(
-                        imageVector = Icons.Default.Close,
+                        imageVector = Lucide.X,
                         contentDescription = "Clear Search",
                         modifier = Modifier.clickable {
                             onSearchQueryChanged("")
@@ -72,7 +72,7 @@ fun SearchBarWithIcon(
         } else {
             // If the search bar is not visible, show the search icon
             Icon(
-                imageVector = Icons.Default.Search,
+                imageVector = Lucide.Search,
                 contentDescription = "Search Icon",
                 modifier = Modifier
                     .clickable {
