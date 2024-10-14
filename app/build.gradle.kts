@@ -115,4 +115,7 @@ dependencies {
     implementation(libs.coil.compose)
     implementation (libs.gson)
 
+    // Dependecy for the YouTube Player
+    implementation(libs.core)
+
 }

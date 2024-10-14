@@ -9,6 +9,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.example.gymsmart.components.ui.YouTubePlayer
 import com.example.gymsmart.firebase.WorkoutData
 
 /**
@@ -33,6 +34,7 @@ fun WorkoutDetailsPage(workoutData: WorkoutData?) {
                 Text("Sets: ${it.sets}")
                 Text("Reps: ${it.reps}")
                 Text("Weight: ${it.weight}")
+                YouTubePlayer("VPmJ-OpCoyY")
             }
         }
     }
