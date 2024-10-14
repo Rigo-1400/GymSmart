@@ -2,6 +2,7 @@ package com.example.gymsmart.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
@@ -62,6 +63,14 @@ fun HomePage(navController: NavController?, onSignOutClick: (() -> Unit)?) {
             ) {
                 Text(text = "Additional Accessories")
             }
+
+
+
+
+
+
+
+
 
 
             // Sign-out button
