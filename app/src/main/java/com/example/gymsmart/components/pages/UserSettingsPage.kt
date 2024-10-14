@@ -11,11 +11,14 @@ import com.composables.icons.lucide.Cog
 import com.composables.icons.lucide.Dumbbell
 import com.composables.icons.lucide.LogOut
 import com.composables.icons.lucide.Lucide
+import com.example.gymsmart.firebase.FirebaseAuthHelper
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun UserSettingsPage(navController: NavController) {
+fun UserSettingsPage(
+    navController: NavController,
+    firebaseAuthHelper: FirebaseAuthHelper) {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -51,7 +54,10 @@ fun UserSettingsPage(navController: NavController) {
                     text = "Logout",
                     description = "Sign out of your account",
                     icon = Lucide.LogOut,
-                    onClick = { navController.navigate("logout") }
+                    onClick = {
+                        firebaseAuthHelper.signOut()
+                        navController.navigate("login")
+                    }
                 )
             }
         }

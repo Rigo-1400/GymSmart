@@ -1,5 +1,6 @@
 package com.example.gymsmart.components.pages.workouts
 
+
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -17,6 +18,7 @@ import com.example.gymsmart.components.ui.SearchBarWithIcon
 import com.example.gymsmart.components.ui.UserSettingsDropdownMenu
 import com.example.gymsmart.components.ui.WorkoutItem
 import com.example.gymsmart.firebase.WorkoutData
+import com.example.gymsmart.firebase.FirebaseAuthHelper
 
 /**
  * UserWorkouts list
@@ -25,7 +27,9 @@ import com.example.gymsmart.firebase.WorkoutData
  */
 @Composable
 // TODO: Figure out a way to take the com.example.gymsmart.firebase.FirebaseAuthHelper helper as an argument, since we need to pass down.
-fun UserWorkoutsPage(navController: NavController) {
+fun UserWorkoutsPage(
+    navController: NavController,
+    firebaseAuthHelper: FirebaseAuthHelper) {
     val db = FirebaseFirestore.getInstance()
     val firebaseAuth = FirebaseAuth.getInstance()
     val userId = firebaseAuth.currentUser?.uid
@@ -101,7 +105,7 @@ fun UserWorkoutsPage(navController: NavController) {
             ) {
                 // User Settings Drop Down Menu Button
                 // TODO: Figure out a way to pass down the firebaseAuthHelper variable down to the UserSettingsDropdownMenu
-                UserSettingsDropdownMenu{ setting -> navigateUserSettingMenu(setting) }
+                UserSettingsDropdownMenu({ setting -> navigateUserSettingMenu(setting) }, firebaseAuthHelper, navController )
 
 
                 // Filter Button

@@ -74,6 +74,7 @@ class FirebaseAuthHelper(
 
     fun signOut() {
         googleSignInClient.signOut().addOnCompleteListener {
+            firebaseAuth.signOut()  //added
             Log.d("com.example.gymsmart.firebase.FirebaseAuthHelper", "User signed out")
         }
     }

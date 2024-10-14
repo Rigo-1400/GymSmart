@@ -88,7 +88,7 @@ class MainActivity : ComponentActivity() {
                     }
                     composable("workoutCreator") { PartOfBodyPage(navController) }
                     composable("userWorkouts") {
-                        UserWorkoutsPage(navController)
+                        UserWorkoutsPage(navController, firebaseAuthHelper)
                     }
                     composable(
                         route = "workoutDetails/{workoutJson}",
@@ -99,7 +99,7 @@ class MainActivity : ComponentActivity() {
                         WorkoutDetailsPage(workout)
                     }
                     // TODO: Pass down the firebaseAuthHelper variable to the UserSettingsPage.
-                    composable("settings") { UserSettingsPage(navController) }
+                    composable("settings") { UserSettingsPage(navController, firebaseAuthHelper) }
                 }
             }
         }
