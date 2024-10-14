@@ -11,11 +11,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
+import com.example.gymsmart.firebase.WorkoutData
 import java.util.Calendar
 import java.util.Date
 
 @Composable
-fun workoutDatePicker(context: Context, onDateSelected: (String) -> Unit) {
+fun WorkoutDatePicker(context: Context, workouts: List<WorkoutData>) {
     val year: Int
     val month: Int
     val day: Int
@@ -28,13 +29,15 @@ fun workoutDatePicker(context: Context, onDateSelected: (String) -> Unit) {
     calendar.time = Date()
 
     val date = remember { mutableStateOf("") }
-
+    workouts.forEach { workout ->
+        Text("Workout date: ${workout.dateAdded}")
+    }
     val datePickerDialog = DatePickerDialog(
         context,
         { _: DatePicker, selectedYear: Int, selectedMonth: Int, dayOfMonth: Int ->
             val formattedDate = "$dayOfMonth/${selectedMonth + 1}/$selectedYear"  // Month is 0-indexed
             date.value = "Workouts for selected date: $formattedDate"
-            onDateSelected(formattedDate)
+            //onDateSelected(formattedDate)
         }, year, month, day
     )
 

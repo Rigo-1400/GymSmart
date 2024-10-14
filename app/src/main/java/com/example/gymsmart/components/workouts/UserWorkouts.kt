@@ -10,10 +10,9 @@ import androidx.compose.ui.unit.dp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import android.util.Log
-import android.widget.DatePicker
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
-import com.example.gymsmart.components.workoutDatePicker
+import com.example.gymsmart.components.WorkoutDatePicker
 import com.example.gymsmart.firebase.WorkoutData
 
 /**
@@ -73,8 +72,7 @@ fun UserWorkouts(navController: NavController) {
     ) { innerPadding ->
         Column(modifier = Modifier.padding(innerPadding).padding(16.dp)) {
             // Call DatePicker component
-            workoutDatePicker(LocalContext.current) { date ->
-                selectedDate = date // Update the selected date
+            WorkoutDatePicker(LocalContext.current, workouts)
             }
 
             // Display the selected date (optional)
@@ -140,5 +138,4 @@ fun UserWorkouts(navController: NavController) {
             } else CircularProgressIndicator()
         }
     }
-}
 
