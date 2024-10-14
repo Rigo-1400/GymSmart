@@ -1,4 +1,4 @@
-package com.example.gymsmart.components
+package com.example.gymsmart.components.pages
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -22,7 +22,7 @@ import androidx.navigation.NavController
  * @param workouts
  */
 @Composable
-fun MuscleGroupSelector(navController: NavController, workouts: Array<String>) {
+fun MuscleGroupPage(navController: NavController, workouts: Array<String>) {
 
     // Creating two State variables
     val text by remember { mutableStateOf("") }

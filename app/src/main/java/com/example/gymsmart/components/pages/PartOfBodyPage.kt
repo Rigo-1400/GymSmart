@@ -1,27 +1,28 @@
-package com.example.gymsmart.components
+package com.example.gymsmart.components.pages
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import coil.compose.AsyncImage
-import com.example.gymsmart.firebase.UserSession
 
 /**
- * Home page
+ * Part of body selector
  *
  * @param navController
- * @param onSignOutClick
  */
 @Composable
-fun HomePage(navController: NavController?, onSignOutClick: (() -> Unit)?) {
+fun PartOfBodyPage(navController: NavController) {
+    val upperWorkouts = arrayOf("Chest", "Biceps", "Triceps", "Shoulders", "Lats")
+    val lowerWorkouts = arrayOf("Hamstring", "Glutes", "Quadriceps", "Calves")
     Scaffold(modifier = Modifier.fillMaxWidth()) { innerPadding ->
         Column(
             modifier = Modifier
@@ -29,38 +30,23 @@ fun HomePage(navController: NavController?, onSignOutClick: (() -> Unit)?) {
                 .padding(innerPadding),
             verticalArrangement = Arrangement.Center
         ) {
-            Text("Hello ${UserSession.userName ?: "NULL"}!")
-            AsyncImage(UserSession.userPhotoUrl, "${UserSession.userName} Profile Picture")
-
             Button(
-                onClick = { navController?.navigate("workoutCreator") },
+                colors = ButtonDefaults.buttonColors(containerColor = Color.Black),
+                onClick = { navController.navigate("muscleGroupPage/${upperWorkouts.joinToString(",")}") },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(8.dp)
             ) {
-                Text("Create Workout")
+                Text("Go to Upper Body Workouts")
             }
-            // Workout Details Button
+
             Button(
-                onClick = { navController?.navigate("userWorkouts") },
+                onClick = { navController.navigate("muscleGroupPage/${lowerWorkouts.joinToString(",")}") },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(8.dp)
             ) {
-                Text("Workout Details")
-            }
-
-
-            // Sign-out button
-            if (onSignOutClick != null) {
-                Button(
-                    onClick = onSignOutClick, // Call the sign-out function
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp)
-                ) {
-                    Text("Sign Out")
-                }
+                Text("Go to Lower Body Workouts")
             }
         }
     }

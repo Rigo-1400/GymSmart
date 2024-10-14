@@ -74,6 +74,7 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.navigation.compose)
+    implementation(libs.icons.lucide)
 
 
     // Material 3
@@ -105,6 +106,7 @@ dependencies {
     // Firebase Auth and Google Sign-In
     implementation (libs.firebase.auth)
     implementation (libs.play.services.auth)
+    implementation (libs.androidx.credentials)
 
 
 
