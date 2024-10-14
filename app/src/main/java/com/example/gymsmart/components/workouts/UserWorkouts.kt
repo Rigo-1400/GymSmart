@@ -63,6 +63,7 @@ fun UserWorkouts(navController: NavController) {
     // Filter upper and lower body workouts from the filtered workouts
     val filteredUpperBodyWorkouts = filteredWorkouts.filter { it.partOfTheBody.equals("Upper Body", true) }
     val filteredLowerBodyWorkouts = filteredWorkouts.filter { it.partOfTheBody.equals("Lower Body", true) }
+    val filteredUpperBodyWorkoutsByDate = filteredUpperBodyWorkouts.sortedBy { selectedDate }
 
     Scaffold(
         modifier = Modifier
@@ -70,9 +71,19 @@ fun UserWorkouts(navController: NavController) {
             .wrapContentHeight()
 
     ) { innerPadding ->
-        Column(modifier = Modifier.padding(innerPadding).padding(16.dp)) {
-            // Call DatePicker component
-            WorkoutDatePicker(LocalContext.current, workouts)
+        Column(modifier = Modifier
+            .padding(innerPadding)
+            .padding(16.dp)) {
+            Row(
+
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ){}
+
+
+                // Call DatePicker component
+
+                WorkoutDatePicker(LocalContext.current, { newDate -> selectedDate = newDate }, workouts)
             }
 
             // Display the selected date (optional)
@@ -90,6 +101,8 @@ fun UserWorkouts(navController: NavController) {
                     .fillMaxWidth()
                     .padding(bottom = 16.dp)
             )
+
+
             if(!showSpinner) {
                 LazyColumn(
                     modifier = Modifier
@@ -97,7 +110,7 @@ fun UserWorkouts(navController: NavController) {
                         .wrapContentHeight()
                 ) {
                         // Display filtered Upper Body Workouts Header and Items
-                        if (filteredUpperBodyWorkouts.isNotEmpty()) {
+                        if (filteredUpperBodyWorkoutsByDate.isNotEmpty()) {
                             item {
                                 Text(
                                     text = "Upper Body Workouts",
@@ -105,7 +118,7 @@ fun UserWorkouts(navController: NavController) {
                                     modifier = Modifier.padding(vertical = 8.dp)
                                 )
                             }
-                            items(filteredUpperBodyWorkouts) { workout ->
+                            items(filteredUpperBodyWorkoutsByDate) { workout ->
                                 WorkoutItem(workout, navController)
                             }
                         }

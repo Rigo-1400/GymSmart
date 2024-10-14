@@ -5,18 +5,21 @@ import android.content.Context
 import android.widget.DatePicker
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Button
+import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import com.example.gymsmart.firebase.WorkoutData
 import java.util.Calendar
 import java.util.Date
 
 @Composable
-fun WorkoutDatePicker(context: Context, workouts: List<WorkoutData>) {
+fun WorkoutDatePicker(context: Context, onDateSelected: (String) -> Unit, workouts: List<WorkoutData>) {
     val year: Int
     val month: Int
     val day: Int
@@ -42,6 +45,7 @@ fun WorkoutDatePicker(context: Context, workouts: List<WorkoutData>) {
     )
 
     Column(
+        modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Bottom,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
