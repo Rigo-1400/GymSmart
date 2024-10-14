@@ -64,7 +64,6 @@ class MainActivity : ComponentActivity() {
         setContent {
             // Create NavController in the setContent block
             val navController = rememberNavController()
-            showDatePicker(context = this)
             // Initialize FirebaseAuthHelper with the navController
             firebaseAuthHelper = FirebaseAuthHelper(this, navController, signInLauncher)
 
@@ -160,53 +159,4 @@ class MainActivity : ComponentActivity() {
                 Log.w("MainActivity", "Google sign-in canceled or failed")
             }
         }
-}
-
-
-
-
-@Composable
-fun showDatePicker(context: Context) {
-    val year: Int
-    val month: Int
-    val day: Int
-    var selectedDate by remember { mutableStateOf<Long?>(null) }
-
-
-    val calendar = Calendar.getInstance()
-    year = calendar.get(Calendar.YEAR)
-    day = calendar.get(Calendar.DAY_OF_MONTH)
-    month = calendar.get(Calendar.MONTH)
-
-
-    calendar.time = Date()
-
-    val date = remember { mutableStateOf("") }
-
-    val datePickerDialog = DatePickerDialog(
-        context,
-
-        { _: DatePicker, year: Int, month: Int, dayOfMonth: Int ->
-            date.value = "Workouts for selected date:" + "$dayOfMonth/$month/ $year"
-        }, year, month, day
-    )
-
-
-    val wrkout = println("Workouts for today: ")
-    Column(
-
-        verticalArrangement = Arrangement.Bottom,
-        horizontalAlignment = Alignment.CenterHorizontally )
-    {
-        Text(text = "Open Calendar: ${date.value}",)
-
-        Button(onClick = { datePickerDialog.show() }) {
-            Text(text = "Open")
-        }
-
-    }
-
-
-
-
 }

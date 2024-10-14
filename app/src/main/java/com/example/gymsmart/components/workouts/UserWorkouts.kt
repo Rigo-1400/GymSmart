@@ -1,6 +1,5 @@
 package com.example.gymsmart.components.workouts
 
-import android.content.Context
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -12,12 +11,10 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import android.util.Log
 import android.widget.DatePicker
-import androidx.compose.ui.Alignment
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
+import com.example.gymsmart.components.workoutDatePicker
 import com.example.gymsmart.firebase.WorkoutData
-import com.example.gymsmart.showDatePicker
-import java.util.Calendar
-import java.util.Date
 
 /**
  * Workout list
@@ -34,6 +31,7 @@ fun UserWorkouts(navController: NavController) {
     var workouts by remember { mutableStateOf(listOf<WorkoutData>()) }
     var searchQuery by remember { mutableStateOf("") }
     var showSpinner by remember { mutableStateOf(true) }
+    var selectedDate by remember { mutableStateOf("") }
 
 
 
@@ -74,58 +72,15 @@ fun UserWorkouts(navController: NavController) {
 
     ) { innerPadding ->
         Column(modifier = Modifier.padding(innerPadding).padding(16.dp)) {
-
-            @Composable
-            fun showDatePicker(context: Context) {
-                val year: Int
-                val month: Int
-                val day: Int
-                var selectedDate by remember { mutableStateOf<Long?>(null) }
-
-
-                val calendar = Calendar.getInstance()
-                year = calendar.get(Calendar.YEAR)
-                day = calendar.get(Calendar.DAY_OF_MONTH)
-                month = calendar.get(Calendar.MONTH)
-
-
-                calendar.time = Date()
-
-                val date = remember { mutableStateOf("") }
-
-                val datePickerDialog = android.app.DatePickerDialog(
-                    context,
-
-                    { _: DatePicker, year: Int, month: Int, dayOfMonth: Int ->
-                        date.value = "Workouts for selected date:" + "$dayOfMonth/$month/ $year"
-                    }, year, month, day
-                )
-
-
-                val wrkout = println("Workouts for today: ")
-                Column(
-
-                    verticalArrangement = Arrangement.Bottom,
-                    horizontalAlignment = Alignment.CenterHorizontally )
-                {
-                    Text(text = "Open Calendar: ${date.value}",)
-
-                    Button(onClick = { datePickerDialog.show() }) {
-                        Text(text = "Open")
-                    }
-
-                }
-
-
-
-
+            // Call DatePicker component
+            workoutDatePicker(LocalContext.current) { date ->
+                selectedDate = date // Update the selected date
             }
 
-
-
-
-
-
+            // Display the selected date (optional)
+            if (selectedDate.isNotEmpty()) {
+                Text(text = "Selected Date: $selectedDate")
+            }
             // Search Bar
             TextField(
                 value = searchQuery,

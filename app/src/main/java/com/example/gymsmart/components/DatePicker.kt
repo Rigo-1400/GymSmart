@@ -1,0 +1,50 @@
+package com.example.gymsmart.components
+
+import android.app.DatePickerDialog
+import android.content.Context
+import android.widget.DatePicker
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.material3.Button
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
+import java.util.Calendar
+import java.util.Date
+
+@Composable
+fun workoutDatePicker(context: Context, onDateSelected: (String) -> Unit) {
+    val year: Int
+    val month: Int
+    val day: Int
+
+    val calendar = Calendar.getInstance()
+    year = calendar.get(Calendar.YEAR)
+    day = calendar.get(Calendar.DAY_OF_MONTH)
+    month = calendar.get(Calendar.MONTH)
+
+    calendar.time = Date()
+
+    val date = remember { mutableStateOf("") }
+
+    val datePickerDialog = DatePickerDialog(
+        context,
+        { _: DatePicker, selectedYear: Int, selectedMonth: Int, dayOfMonth: Int ->
+            val formattedDate = "$dayOfMonth/${selectedMonth + 1}/$selectedYear"  // Month is 0-indexed
+            date.value = "Workouts for selected date: $formattedDate"
+            onDateSelected(formattedDate)
+        }, year, month, day
+    )
+
+    Column(
+        verticalArrangement = Arrangement.Bottom,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(text = date.value)
+        Button(onClick = { datePickerDialog.show() }) {
+            Text(text = "Open Calendar")
+        }
+    }
+}
