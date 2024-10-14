@@ -23,6 +23,7 @@ import androidx.navigation.NavController
 fun PartOfBodySelector(navController: NavController) {
     val upperWorkouts = arrayOf("Chest", "Biceps", "Triceps", "Shoulders", "Lats")
     val lowerWorkouts = arrayOf("Hamstring", "Glutes", "Quadriceps", "Calves")
+    val attList = arrayOf("Cable", "Rope", "V-Bar", "Straight Bar")
     Scaffold(modifier = Modifier.fillMaxWidth()) { innerPadding ->
         Column(
             modifier = Modifier
@@ -48,6 +49,26 @@ fun PartOfBodySelector(navController: NavController) {
             ) {
                 Text("Go to Lower Body Workouts")
             }
+
+            Button(
+                onClick = { navController?.navigate("userWorkouts") },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp)
+            ) {
+                Text("Workout Details")
+            }
+
+            Button(
+                onClick = {navController?.navigate("attatchements/${attList.joinToString (",")}") },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp)
+            ) {
+                Text(text = "Additional Accessories")
+            }
+
+
         }
     }
 }
