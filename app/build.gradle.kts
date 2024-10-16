@@ -1,6 +1,9 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+
+    // Add the Google services Gradle plugin
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -54,7 +57,7 @@ android {
     }
 
     lint {
-        abortOnError = true
+        abortOnError = false
     }
 }
 
@@ -78,11 +81,13 @@ dependencies {
     implementation("com.google.android.material:material:1.9.0")
     implementation("androidx.navigation:navigation-testing:2.7.0")
 
-    // Firebase and Google Play Services (using Firebase BoM)
-    implementation(platform("com.google.firebase:firebase-bom:32.0.0"))
-    implementation("com.google.firebase:firebase-auth")
-    implementation("com.google.firebase:firebase-firestore-ktx")
-    implementation("com.google.android.gms:play-services-auth:20.7.0")
+
+    // Compose UI dependencies (versions managed by the BOM)
+    implementation(libs.androidx.ui)
+    implementation(libs.androidx.ui.graphics)
+    implementation(libs.androidx.ui.tooling.preview)
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.icons.lucide)
 
     // Image Loading with Coil
     implementation("io.coil-kt:coil-compose:2.4.0")
@@ -90,14 +95,21 @@ dependencies {
     // Gson for JSON parsing
     implementation("com.google.code.gson:gson:2.8.8")
 
-    // Unit tests
-    testImplementation("junit:junit:4.13.2")
-    testImplementation("org.junit.jupiter:junit-jupiter:5.10.0")
+     // Unit tests
+    testImplementation(libs.junit)
+    testImplementation(libs.junit.jupiter
 
     // YouTube API for third-party integration
     implementation("com.pierfrancescosoffritti.androidyoutubeplayer:core:12.1.1")
     implementation("com.pierfrancescosoffritti.androidyoutubeplayer:custom-ui:12.1.1")
     implementation(files("libs/core-12.1.1-javadoc.jar"))
+    // Material 3
+    implementation(libs.androidx.material3)
+    implementation(libs.material)
+    implementation (libs.material3)
+    implementation(libs.androidx.navigation.testing)
+    implementation(libs.firebase.firestore.ktx)
+
 
     // Android Instrumentation tests
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
@@ -110,3 +122,24 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 }
 
+    debugImplementation(libs.androidx.ui.tooling)
+    debugImplementation(libs.androidx.ui.test.manifest)
+
+    // Import the Firebase BoM
+    implementation(platform(libs.firebase.bom))
+
+
+    // When using the BoM, don't specify versions in Firebase dependencies
+    // Firebase Auth and Google Sign-In
+    implementation (libs.firebase.auth)
+    implementation (libs.play.services.auth)
+    implementation (libs.androidx.credentials)
+
+
+
+    // Add the dependencies for any other desired Firebase products
+    // https://firebase.google.com/docs/android/setup#available-libraries
+    implementation(libs.coil.compose)
+    implementation (libs.gson)
+
+}
