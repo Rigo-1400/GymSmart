@@ -108,6 +108,11 @@ dependencies {
     implementation (libs.play.services.auth)
     implementation (libs.androidx.credentials)
 
+    // YouTube API for third-party integration
+    implementation("com.pierfrancescosoffritti.androidyoutubeplayer:core:12.1.1")
+    implementation("com.pierfrancescosoffritti.androidyoutubeplayer:custom-ui:12.1.1")
+    implementation(files("core-12.1.1-javadoc.jar"))
+
 
 
     // Add the dependencies for any other desired Firebase products
