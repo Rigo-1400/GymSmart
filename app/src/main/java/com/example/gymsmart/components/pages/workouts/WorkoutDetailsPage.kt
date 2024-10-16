@@ -1,4 +1,4 @@
-package com.example.gymsmart.components.workouts
+package com.example.gymsmart.components.pages.workouts
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -17,7 +17,7 @@ import com.example.gymsmart.firebase.WorkoutData
  * @param workoutData
  */
 @Composable
-fun WorkoutDetails(workoutData: WorkoutData?) {
+fun WorkoutDetailsPage(workoutData: WorkoutData?) {
     // Display workout details
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
         workoutData?.let {
