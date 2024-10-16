@@ -7,11 +7,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.anew"
+    namespace = "com.example.gymsmart"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.anew"
+        applicationId = "com.example.gymsmart"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
@@ -73,17 +73,20 @@ dependencies {
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
-    implementation("androidx.navigation:navigation-compose:2.7.0")
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.icons.lucide)
 
 
     // Material 3
     implementation(libs.androidx.material3)
-    implementation("com.google.android.material:material:1.8.0")
-    implementation ("androidx.compose.material3:material3:1.0.0")
+    implementation(libs.material)
+    implementation (libs.material3)
     implementation(libs.androidx.navigation.testing)
+    implementation(libs.firebase.firestore.ktx)
 
     // Unit tests
     testImplementation(libs.junit)
+    testImplementation(libs.junit.jupiter)
 
     // Android Instrumentation tests
     androidTestImplementation(libs.androidx.junit)
@@ -96,17 +99,24 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
 
     // Import the Firebase BoM
-    implementation(platform("com.google.firebase:firebase-bom:33.3.0"))
+    implementation(platform(libs.firebase.bom))
 
 
     // When using the BoM, don't specify versions in Firebase dependencies
     // Firebase Auth and Google Sign-In
-    implementation ("com.google.firebase:firebase-auth:22.0.0")
-    implementation ("com.google.android.gms:play-services-auth:20.4.0")
+    implementation (libs.firebase.auth)
+    implementation (libs.play.services.auth)
+    implementation (libs.androidx.credentials)
+
+    // YouTube API for third-party integration
+    implementation(libs.core)
+    implementation(libs.custom.ui)
 
 
 
     // Add the dependencies for any other desired Firebase products
     // https://firebase.google.com/docs/android/setup#available-libraries
-    implementation("io.coil-kt:coil-compose:2.7.0")
+    implementation(libs.coil.compose)
+    implementation (libs.gson)
+
 }

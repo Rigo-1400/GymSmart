@@ -1,5 +1,4 @@
-package com.example.anew.components
-
+package com.example.gymsmart.components
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,7 +11,7 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 
-fun Workout(workoutName: String) {
+fun Attatchements2(attatchementsNames: String) {
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
         Column(
             modifier = Modifier
@@ -20,7 +19,7 @@ fun Workout(workoutName: String) {
                 .padding(innerPadding),
             verticalArrangement = Arrangement.spacedBy(8.dp) // Add spacing between items
         ) {
-            Text("This is the $workoutName page!")
+            Text("This is the $attatchementsNames page!")
         }
     }
 }
