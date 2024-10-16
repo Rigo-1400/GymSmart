@@ -12,13 +12,18 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import android.util.Log
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
+import com.example.gymsmart.components.WorkoutDatePicker
 import com.example.gymsmart.components.ui.FilterDropdownMenu
 import com.example.gymsmart.components.ui.SearchBarWithIcon
 import com.example.gymsmart.components.ui.UserSettingsDropdownMenu
 import com.example.gymsmart.components.ui.WorkoutItem
 import com.example.gymsmart.firebase.WorkoutData
 import com.example.gymsmart.firebase.FirebaseAuthHelper
+import java.text.SimpleDateFormat
+import java.util.Locale
+
 
 /**
  * UserWorkouts list
@@ -38,6 +43,8 @@ fun UserWorkoutsPage(
     var searchQuery by remember { mutableStateOf("") }
     var showSpinner by remember { mutableStateOf(true) }
     var filteredWorkouts by remember { mutableStateOf(listOf<WorkoutData>()) }
+
+
 
     // Fetch workouts from Firestore
     LaunchedEffect(userId) {
@@ -69,8 +76,26 @@ fun UserWorkoutsPage(
             "Upper Body" -> workouts.filter { it.partOfTheBody.equals("Upper Body", ignoreCase = true) }
             "Lower Body" -> workouts.filter { it.partOfTheBody.equals("Lower Body", ignoreCase = true) }
             else -> workouts
+
+
         }
     }
+
+    // Function to apply calendar filter
+    fun applyCalendarFilter(selectedDate: String) {
+        // Parse the selected date string from the calendar
+        val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+        val parsedDate = dateFormat.parse(selectedDate)
+
+        // Filter workouts by matching their dateAdded field (converted to Date)
+        filteredWorkouts = workouts.filter { workout ->
+            val workoutDate = workout.dateAdded.toDate()
+            val workoutFormattedDate = dateFormat.format(workoutDate)
+            workoutFormattedDate == parsedDate?.let { dateFormat.format(it) }
+        }
+    }
+
+
     // Function to handle the user setting navigation's
     fun navigateUserSettingMenu(setting: String) {
         when(setting) {
@@ -93,12 +118,17 @@ fun UserWorkoutsPage(
     val upperBodyWorkouts = displayedWorkouts.filter { it.partOfTheBody.equals("Upper Body", ignoreCase = true) }
     val lowerBodyWorkouts = displayedWorkouts.filter { it.partOfTheBody.equals("Lower Body", ignoreCase = true) }
 
+
+
+
     Scaffold(
         modifier = Modifier
             .fillMaxWidth()
             .wrapContentHeight()
     ) { innerPadding ->
-        Column(modifier = Modifier.padding(innerPadding).padding(16.dp)) {
+        Column(modifier = Modifier
+            .padding(innerPadding)
+            .padding(16.dp)) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
@@ -114,6 +144,10 @@ fun UserWorkoutsPage(
                 // Search Bar
                 SearchBarWithIcon(searchQuery) { query -> searchQuery = query }
             }
+            // Date Picker
+
+
+
 
             if (showSpinner) {
                 CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
@@ -174,7 +208,21 @@ fun UserWorkoutsPage(
                             }
                         }
                     }
+                    if (upperBodyWorkouts.isNotEmpty()) {
+                        item {
+                            Text(
+                                text = "Upper Body Workouts",
+                                style = MaterialTheme.typography.titleMedium,
+                                modifier = Modifier.padding(vertical = 8.dp)
+                            )
+                        }
+                        items(upperBodyWorkouts) { workout ->
+                            WorkoutItem(workout, navController)
+                        }
+                    }
+
                 }
+                WorkoutDatePicker(LocalContext.current, {newDate -> applyCalendarFilter(newDate) }, workouts)
             }
         }
     }

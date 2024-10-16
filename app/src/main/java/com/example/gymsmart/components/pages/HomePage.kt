@@ -2,6 +2,7 @@ package com.example.gymsmart.components.pages
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
@@ -20,7 +21,11 @@ import androidx.navigation.NavController
  */
 @Composable
 fun HomePage(navController: NavController?, onSignOutClick: (() -> Unit)?) {
-    Scaffold(modifier = Modifier.fillMaxWidth()) { innerPadding ->
+    val upperWorkouts = arrayOf("Chest", "Biceps", "Triceps", "Shoulders", "Lats")
+    val lowerWorkouts = arrayOf("Hamstring", "Glutes", "Quadriceps", "Calves")
+    val attList = arrayOf("Cable", "Rope", "V-Bar", "Straight Bar")
+
+    Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -44,6 +49,23 @@ fun HomePage(navController: NavController?, onSignOutClick: (() -> Unit)?) {
             ) {
                 Text("Workout Details")
             }
+            
+            Button(
+                onClick = {navController?.navigate("attatchements/${attList.joinToString (",")}") },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp)
+            ) {
+                Text(text = "Additional Accessories")
+            }
+
+
+
+
+
+
+
+
 
 
             // Sign-out button
@@ -57,6 +79,7 @@ fun HomePage(navController: NavController?, onSignOutClick: (() -> Unit)?) {
                     Text("Sign Out")
                 }
             }
+
         }
     }
 }
