@@ -12,13 +12,17 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import android.util.Log
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
+import com.example.gymsmart.components.WorkoutDatePicker
 import com.example.gymsmart.components.ui.FilterDropdownMenu
 import com.example.gymsmart.components.ui.SearchBarWithIcon
 import com.example.gymsmart.components.ui.UserSettingsDropdownMenu
 import com.example.gymsmart.components.ui.WorkoutItem
 import com.example.gymsmart.firebase.WorkoutData
 import com.example.gymsmart.firebase.FirebaseAuthHelper
+import com.example.gymsmart.components.WorkoutDatePicker
+
 
 /**
  * UserWorkouts list
@@ -38,6 +42,9 @@ fun UserWorkoutsPage(
     var searchQuery by remember { mutableStateOf("") }
     var showSpinner by remember { mutableStateOf(true) }
     var filteredWorkouts by remember { mutableStateOf(listOf<WorkoutData>()) }
+    val selectedDate by remember { mutableStateOf("") }
+
+
 
     // Fetch workouts from Firestore
     LaunchedEffect(userId) {
@@ -69,7 +76,11 @@ fun UserWorkoutsPage(
             "Upper Body" -> workouts.filter { it.partOfTheBody.equals("Upper Body", ignoreCase = true) }
             "Lower Body" -> workouts.filter { it.partOfTheBody.equals("Lower Body", ignoreCase = true) }
             else -> workouts
+
+
         }
+
+
     }
     // Function to handle the user setting navigation's
     fun navigateUserSettingMenu(setting: String) {
@@ -92,13 +103,19 @@ fun UserWorkoutsPage(
     // Separate the workouts into upper and lower body for display
     val upperBodyWorkouts = displayedWorkouts.filter { it.partOfTheBody.equals("Upper Body", ignoreCase = true) }
     val lowerBodyWorkouts = displayedWorkouts.filter { it.partOfTheBody.equals("Lower Body", ignoreCase = true) }
+    val filteredUpperBodyWorkoutsByDate = upperBodyWorkouts.sortedBy { selectedDate }
+
+
+
 
     Scaffold(
         modifier = Modifier
             .fillMaxWidth()
             .wrapContentHeight()
     ) { innerPadding ->
-        Column(modifier = Modifier.padding(innerPadding).padding(16.dp)) {
+        Column(modifier = Modifier
+            .padding(innerPadding)
+            .padding(16.dp)) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
@@ -113,7 +130,12 @@ fun UserWorkoutsPage(
 
                 // Search Bar
                 SearchBarWithIcon(searchQuery) { query -> searchQuery = query }
+
             }
+           WorkoutDatePicker(LocalContext.current, {newDate -> searchQuery = newDate }, workouts)
+
+
+
 
             if (showSpinner) {
                 CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
@@ -174,6 +196,19 @@ fun UserWorkoutsPage(
                             }
                         }
                     }
+                    if (filteredUpperBodyWorkoutsByDate.isNotEmpty()) {
+                        item {
+                            Text(
+                                text = "Upper Body Workouts",
+                                style = MaterialTheme.typography.titleMedium,
+                                modifier = Modifier.padding(vertical = 8.dp)
+                            )
+                        }
+                        items(filteredUpperBodyWorkoutsByDate) { workout ->
+                            WorkoutItem(workout, navController)
+                        }
+                    }
+
                 }
             }
         }

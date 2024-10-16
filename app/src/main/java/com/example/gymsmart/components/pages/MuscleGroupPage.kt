@@ -1,5 +1,6 @@
 package com.example.gymsmart.components.pages
 
+import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -14,6 +15,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.gymsmart.components.WorkoutDatePicker
+import com.example.gymsmart.firebase.WorkoutData
 
 /**
  * Muscle group selector
@@ -26,6 +29,7 @@ fun MuscleGroupPage(navController: NavController, workouts: Array<String>) {
 
     // Creating two State variables
     val text by remember { mutableStateOf("") }
+
 
     // Filter the workouts based on the search query
     val filteredWorkouts = workouts.filter {
@@ -53,6 +57,7 @@ fun MuscleGroupPage(navController: NavController, workouts: Array<String>) {
                     Text(muscleGroup)
                 }
             }
+
         }
     }
 }

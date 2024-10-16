@@ -15,14 +15,18 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.example.gymsmart.firebase.WorkoutData
+import com.google.firebase.firestore.FirebaseFirestore
 import java.util.Calendar
 import java.util.Date
 
 @Composable
+
 fun WorkoutDatePicker(context: Context, onDateSelected: (String) -> Unit, workouts: List<WorkoutData>) {
     val year: Int
     val month: Int
     val day: Int
+
+
 
     val calendar = Calendar.getInstance()
     year = calendar.get(Calendar.YEAR)
@@ -40,9 +44,12 @@ fun WorkoutDatePicker(context: Context, onDateSelected: (String) -> Unit, workou
         { _: DatePicker, selectedYear: Int, selectedMonth: Int, dayOfMonth: Int ->
             val formattedDate = "$dayOfMonth/${selectedMonth + 1}/$selectedYear"  // Month is 0-indexed
             date.value = "Workouts for selected date: $formattedDate"
-            //onDateSelected(formattedDate)
+
+           // onDateSelected(formattedDate)
         }, year, month, day
     )
+
+
 
     Column(
         modifier = Modifier.fillMaxSize(),
