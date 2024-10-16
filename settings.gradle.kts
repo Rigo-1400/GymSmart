@@ -21,3 +21,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "New"
 include(":app")
+include(":libs")

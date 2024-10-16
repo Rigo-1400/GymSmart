@@ -12,6 +12,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.New"
         tools:targetApi="31">
+
+        <!-- Main activity with intent filter for launcher -->
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -21,6 +23,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- Additional activities -->
+        <activity android:name=".VideoPlayerActivity"
+            android:screenOrientation="landscape">
+        </activity>
+
+
     </application>
+
+    <!-- Permissions for internet access -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
 </manifest>
