@@ -49,24 +49,15 @@ fun PartOfBodyPage(navController: NavController) {
             ) {
                 Text("Go to Lower Body Workouts")
             }
-
-            Button(
-                onClick = { navController?.navigate("userWorkouts") },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp)
-            ) {
-                Text("Workout Details")
-            }
-
-            Button(
-                onClick = {navController?.navigate("attatchements/${attList.joinToString (",")}") },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp)
-            ) {
-                Text(text = "Additional Accessories")
-            }
+// TODO: Implement this later
+//            Button(
+//                onClick = {navController?.navigate("attatchements/${attList.joinToString (",")}") },
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .padding(8.dp)
+//            ) {
+//                Text(text = "Additional Accessories")
+//            }
 
 
         }

@@ -50,14 +50,14 @@ fun HomePage(navController: NavController?, onSignOutClick: (() -> Unit)?) {
                 Text("Workout Details")
             }
             
-            Button(
-                onClick = {navController?.navigate("attatchements/${attList.joinToString (",")}") },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp)
-            ) {
-                Text(text = "Additional Accessories")
-            }
+//            Button(
+//                onClick = {navController?.navigate("attatchements/${attList.joinToString (",")}") },
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .padding(8.dp)
+//            ) {
+//                Text(text = "Additional Accessories")
+//            }
 
 
 
