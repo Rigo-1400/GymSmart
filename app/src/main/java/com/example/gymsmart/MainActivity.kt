@@ -1,25 +1,9 @@
-
-
 package com.example.gymsmart
-
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.layout.*
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -45,13 +29,13 @@ import com.google.gson.Gson
  * @constructor Create empty Main activity
  */
 class MainActivity : ComponentActivity() {
+
     private lateinit var firebaseAuthHelper: FirebaseAuthHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContent {
-
             // Create NavController in the setContent block
             val navController = rememberNavController()
 
@@ -132,51 +116,3 @@ class MainActivity : ComponentActivity() {
             }
         }
 }
-
-@Composable
-fun MainPage(navController: NavController) {
-    val upperWorkouts = arrayOf("Chest", "Biceps", "Triceps", "Shoulders", "Lats")
-    val lowerWorkouts = arrayOf("Hamstring", "Glutes", "Quadriceps", "Calves")
-
-    Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-        Column(
-            modifier = Modifier.fillMaxSize().padding(innerPadding),
-            verticalArrangement = Arrangement.Center
-        ) {
-            Button(
-                colors = ButtonDefaults.buttonColors(containerColor = Color.Black),
-                onClick = { navController.navigate("workouts/${upperWorkouts.joinToString(",")}") },
-                modifier = Modifier.fillMaxWidth().padding(8.dp)
-            ) {
-                Text("Go to Upper Body Workouts")
-            }
-            Button(
-                onClick = { navController.navigate("workouts/${lowerWorkouts.joinToString(",")}") },
-                modifier = Modifier.fillMaxWidth().padding(8.dp)
-            ) {
-                Text("Go to Lower Body Workouts")
-            }
-        }
-    }
-}
-
-@Composable
-fun VideoPlayerScreen(videoId: String?) {
-    val context = LocalContext.current
-
-    androidx.compose.runtime.LaunchedEffect(Unit) {
-        videoId?.let {
-            val intent = Intent(context, VideoPlayerActivity::class.java).apply {
-                putExtra("VIDEO_ID", videoId)
-            }
-            context.startActivity(intent)
-        }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun MainScreenPreview() {
-    MainPage(rememberNavController())
-}
-

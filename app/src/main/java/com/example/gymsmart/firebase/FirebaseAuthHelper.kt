@@ -1,4 +1,3 @@
-
 package com.example.gymsmart.firebase
 
 import android.app.Activity
@@ -39,7 +38,6 @@ class FirebaseAuthHelper(
             .requestEmail()
             .build()
 
-
         googleSignInClient = getClient(activity, gso)
     }
     fun handleSignInResult(data: Intent?) {
@@ -59,7 +57,6 @@ class FirebaseAuthHelper(
             .addOnCompleteListener(activity) { task ->
                 if (task.isSuccessful) {
                     // Sign in success
-
                     Log.d("com.example.gymsmart.firebase.FirebaseAuthHelper", "signInWithCredential:success")
                     val user = firebaseAuth.currentUser
                     user?.let {
@@ -70,7 +67,6 @@ class FirebaseAuthHelper(
                         navController.navigate("home") // Assuming 'home' is the destination
                     }
                 } else {
-
                     Log.w("com.example.gymsmart.firebase.FirebaseAuthHelper", "signInWithCredential:failure", task.exception)
                 }
             }
