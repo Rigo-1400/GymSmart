@@ -208,19 +208,6 @@ fun UserWorkoutsPage(
                             }
                         }
                     }
-                    if (upperBodyWorkouts.isNotEmpty()) {
-                        item {
-                            Text(
-                                text = "Upper Body Workouts",
-                                style = MaterialTheme.typography.titleMedium,
-                                modifier = Modifier.padding(vertical = 8.dp)
-                            )
-                        }
-                        items(upperBodyWorkouts) { workout ->
-                            WorkoutItem(workout, navController)
-                        }
-                    }
-
                 }
                 WorkoutDatePicker(LocalContext.current, {newDate -> applyCalendarFilter(newDate) }, workouts)
             }
