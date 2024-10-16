@@ -109,9 +109,8 @@ dependencies {
     implementation (libs.androidx.credentials)
 
     // YouTube API for third-party integration
-    implementation("com.pierfrancescosoffritti.androidyoutubeplayer:core:12.1.1")
-    implementation("com.pierfrancescosoffritti.androidyoutubeplayer:custom-ui:12.1.1")
-    implementation(files("core-12.1.1-javadoc.jar"))
+    implementation(libs.core)
+    implementation(libs.custom.ui)
 
 
 

@@ -1,10 +1,11 @@
-package com.example.gymsmart
+package com.example.gymsmart.components.nonfirebasepages
 
 import android.os.Bundle
 import android.view.Window
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.gymsmart.R
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstants
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
@@ -43,14 +44,17 @@ class VideoPlayerActivity : AppCompatActivity() {
 
         // Set up YouTubePlayer listener
         youTubePlayerView.addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
-            override fun onReady(youTubePlayer: YouTubePlayer) {
+            override fun onReady(youTubePlayer: com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer) {
                 // Load the video only if a valid video ID is present
                 selectedVideoId?.let { videoId ->
                     youTubePlayer.loadVideo(videoId, 0f)
                 }
             }
 
-            override fun onStateChange(youTubePlayer: YouTubePlayer, state: PlayerConstants.PlayerState) {
+            override fun onStateChange(
+                youTubePlayer: YouTubePlayer,
+                state: PlayerConstants.PlayerState
+            ) {
                 // Optionally handle other player states
                 super.onStateChange(youTubePlayer, state)
             }
