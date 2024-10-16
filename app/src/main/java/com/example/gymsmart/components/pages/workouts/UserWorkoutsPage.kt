@@ -21,7 +21,8 @@ import com.example.gymsmart.components.ui.UserSettingsDropdownMenu
 import com.example.gymsmart.components.ui.WorkoutItem
 import com.example.gymsmart.firebase.WorkoutData
 import com.example.gymsmart.firebase.FirebaseAuthHelper
-import com.example.gymsmart.components.WorkoutDatePicker
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 
 /**
@@ -42,7 +43,6 @@ fun UserWorkoutsPage(
     var searchQuery by remember { mutableStateOf("") }
     var showSpinner by remember { mutableStateOf(true) }
     var filteredWorkouts by remember { mutableStateOf(listOf<WorkoutData>()) }
-    val selectedDate by remember { mutableStateOf("") }
 
 
 
@@ -79,9 +79,23 @@ fun UserWorkoutsPage(
 
 
         }
-
-
     }
+
+    // Function to apply calendar filter
+    fun applyCalendarFilter(selectedDate: String) {
+        // Parse the selected date string from the calendar
+        val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+        val parsedDate = dateFormat.parse(selectedDate)
+
+        // Filter workouts by matching their dateAdded field (converted to Date)
+        filteredWorkouts = workouts.filter { workout ->
+            val workoutDate = workout.dateAdded.toDate()
+            val workoutFormattedDate = dateFormat.format(workoutDate)
+            workoutFormattedDate == parsedDate?.let { dateFormat.format(it) }
+        }
+    }
+
+
     // Function to handle the user setting navigation's
     fun navigateUserSettingMenu(setting: String) {
         when(setting) {
@@ -103,7 +117,6 @@ fun UserWorkoutsPage(
     // Separate the workouts into upper and lower body for display
     val upperBodyWorkouts = displayedWorkouts.filter { it.partOfTheBody.equals("Upper Body", ignoreCase = true) }
     val lowerBodyWorkouts = displayedWorkouts.filter { it.partOfTheBody.equals("Lower Body", ignoreCase = true) }
-    val filteredUpperBodyWorkoutsByDate = upperBodyWorkouts.sortedBy { selectedDate }
 
 
 
@@ -130,9 +143,8 @@ fun UserWorkoutsPage(
 
                 // Search Bar
                 SearchBarWithIcon(searchQuery) { query -> searchQuery = query }
-
             }
-           WorkoutDatePicker(LocalContext.current, {newDate -> searchQuery = newDate }, workouts)
+            // Date Picker
 
 
 
@@ -196,7 +208,7 @@ fun UserWorkoutsPage(
                             }
                         }
                     }
-                    if (filteredUpperBodyWorkoutsByDate.isNotEmpty()) {
+                    if (upperBodyWorkouts.isNotEmpty()) {
                         item {
                             Text(
                                 text = "Upper Body Workouts",
@@ -204,12 +216,13 @@ fun UserWorkoutsPage(
                                 modifier = Modifier.padding(vertical = 8.dp)
                             )
                         }
-                        items(filteredUpperBodyWorkoutsByDate) { workout ->
+                        items(upperBodyWorkouts) { workout ->
                             WorkoutItem(workout, navController)
                         }
                     }
 
                 }
+                WorkoutDatePicker(LocalContext.current, {newDate -> applyCalendarFilter(newDate) }, workouts)
             }
         }
     }
