@@ -1,5 +1,6 @@
-package com.pierfrancescosoffritti.androidyoutubeplayer.core.player
+package com.example.gymsmart.components.nonfirebasepages
 
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstants
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.YouTubePlayerListener
 
 /**

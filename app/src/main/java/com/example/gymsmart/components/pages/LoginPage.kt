@@ -8,7 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import com.example.gymsmart.MainActivity_NonFireBase
+import com.example.gymsmart.components.nonfirebasepages.MainActivity_NonFireBase
 
 /**
  * Login

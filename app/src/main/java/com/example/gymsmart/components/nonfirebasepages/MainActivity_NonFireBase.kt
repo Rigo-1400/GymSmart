@@ -1,4 +1,4 @@
-package com.example.gymsmart
+package com.example.gymsmart.components.nonfirebasepages
 
 import android.content.Intent
 import android.os.Bundle

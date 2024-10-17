@@ -23,10 +23,10 @@
         </activity>
 
         <activity
-            android:name=".MainActivity_NonFireBase"
+            android:name=".components.nonfirebasepages.MainActivity_NonFireBase"
             android:exported="true" />
 
-        <activity android:name=".VideoPlayerActivity" />
+        <activity android:name=".components.nonfirebasepages.VideoPlayerActivity" />
     </application>
 
 </manifest>

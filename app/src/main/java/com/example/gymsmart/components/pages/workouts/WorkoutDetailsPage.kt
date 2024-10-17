@@ -9,6 +9,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.example.gymsmart.components.WorkoutDatePicker
 import com.example.gymsmart.firebase.WorkoutData
 
 /**
@@ -19,6 +20,7 @@ import com.example.gymsmart.firebase.WorkoutData
 @Composable
 fun WorkoutDetailsPage(workoutData: WorkoutData?) {
     // Display workout details
+
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
         workoutData?.let {
             Column(
