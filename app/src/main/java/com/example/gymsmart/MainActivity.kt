@@ -1,4 +1,5 @@
 package com.example.gymsmart
+import WorkoutDetailsPage
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -19,7 +20,6 @@ import com.example.gymsmart.components.pages.PartOfBodyPage
 import com.example.gymsmart.components.pages.UserSettingsPage
 import com.example.gymsmart.components.pages.workouts.UserWorkoutsPage
 import com.example.gymsmart.components.pages.workouts.WorkoutCreatorPage
-import com.example.gymsmart.components.pages.workouts.WorkoutDetailsPage
 import com.example.gymsmart.firebase.WorkoutData
 import com.google.gson.Gson
 
