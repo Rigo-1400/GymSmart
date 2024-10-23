@@ -68,16 +68,14 @@ fun UserWorkoutsPage(
     }
 
     // Function to apply filters
-    fun applyFilter(filter: String) {
-        filteredWorkouts = when (filter) {
+    fun applyFilter(filterType: String) {
+        filteredWorkouts = when (filterType) {
             "All" -> workouts
             "Sort by Date (Newest)" -> workouts.sortedByDescending { it.dateAdded }
             "Sort by Date (Oldest)" -> workouts.sortedBy { it.dateAdded }
             "Upper Body" -> workouts.filter { it.partOfTheBody.equals("Upper Body", ignoreCase = true) }
             "Lower Body" -> workouts.filter { it.partOfTheBody.equals("Lower Body", ignoreCase = true) }
             else -> workouts
-
-
         }
     }
 
