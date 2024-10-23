@@ -7,6 +7,9 @@ plugins {
 }
 
 android {
+    buildFeatures {
+        buildConfig = true
+    }
     namespace = "com.example.gymsmart"
     compileSdk = 34
 
@@ -21,6 +24,16 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+        // Read the API key from the local.properties file
+//        val googleApiKey = project.rootProject.file("local.properties").inputStream().use { inputStream ->
+//            val properties = Properties()
+//            properties.load(inputStream)
+//            properties.getProperty("GOOGLE_API_KEY") ?: ""
+//        }
+//        // Pass the API key to the BuildConfig
+//        buildConfigField("String", "GOOGLE_API_KEY", "\"${googleApiKey}\"")
+          val googleApiKey = System.getenv("GOOGLE_API_KEY")
+          buildConfigField("String", "GOOGLE_API_KEY", "\"${googleApiKey}\"")
     }
 
     buildTypes {
