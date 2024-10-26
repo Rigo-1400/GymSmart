@@ -57,7 +57,7 @@ fun UserWorkoutsPage(
                             it.id = document.id
                         }
                     }
-                    workouts = fetchedWorkouts
+                    workouts = fetchedWorkouts.sortedByDescending { it.dateAdded }
                     filteredWorkouts = workouts
                     showSpinner = false
                 }

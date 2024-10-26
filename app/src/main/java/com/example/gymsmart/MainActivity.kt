@@ -15,8 +15,6 @@ import com.example.gymsmart.firebase.FirebaseAuthHelper
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import com.example.gymsmart.components.pages.LoginPage
-import com.example.gymsmart.components.pages.MuscleGroupPage
-import com.example.gymsmart.components.pages.PartOfBodyPage
 import com.example.gymsmart.components.pages.UserSettingsPage
 import com.example.gymsmart.components.pages.workouts.UserWorkoutsPage
 import com.example.gymsmart.components.pages.workouts.WorkoutCreatorPage
@@ -60,33 +58,24 @@ class MainActivity : ComponentActivity() {
                             }
                         )
                     }
-                    // Define composable for workout screen, accepting a comma-separated list of workout names
-                    composable(
-                        route = "muscleGroupPage/{workoutNames}",
-                        arguments = listOf(navArgument("workoutNames") { type = NavType.StringType })
-                    ) { navBackStackEntry ->
-                        val workoutNamesString = navBackStackEntry.arguments?.getString("workoutNames")
-                        val workoutNames = workoutNamesString?.split(",")?.toTypedArray() ?: arrayOf()
-                        MuscleGroupPage(navController, workoutNames)
-                    }
 
-                    composable(
-                        route = "workoutCreator/{partOfTheBody}/{muscleGroup}",
-                        arguments = listOf(navArgument("partOfTheBody") { type = NavType.StringType }, navArgument("muscleGroup") { NavType.StringType })
-                    ) { navBackStackEntry ->
-                        val pOfTheBody = navBackStackEntry.arguments?.getString("partOfTheBody")
-                        val mGroup = navBackStackEntry.arguments?.getString("muscleGroup")
-                        if (pOfTheBody != null && mGroup != null) {
-                            WorkoutCreatorPage(navController, pOfTheBody, mGroup)
-                        }
-                    }
+//                    composable(
+//                        route = "workoutCreator/{partOfTheBody}/{muscleGroup}",
+//                        arguments = listOf(navArgument("partOfTheBody") { type = NavType.StringType }, navArgument("muscleGroup") { NavType.StringType })
+//                    ) { navBackStackEntry ->
+//                        val pOfTheBody = navBackStackEntry.arguments?.getString("partOfTheBody")
+//                        val mGroup = navBackStackEntry.arguments?.getString("muscleGroup")
+//                        if (pOfTheBody != null && mGroup != null) {
+//                            WorkoutCreatorPage(navController, pOfTheBody, mGroup)
+//                        }
+//                    }
+                    composable("workoutCreator") { WorkoutCreatorPage(navController) }
                     composable("login") {
                         // Login Screen
                         LoginPage(onGoogleSignInClick = {
                             firebaseAuthHelper.signIn() // Trigger Google Sign-In
                         })
                     }
-                    composable("workoutCreator") { PartOfBodyPage(navController) }
                     composable("userWorkouts") {
                         UserWorkoutsPage(navController, firebaseAuthHelper)
                     }
@@ -98,7 +87,6 @@ class MainActivity : ComponentActivity() {
                         val workout = Gson().fromJson(workoutJson, WorkoutData::class.java)
                         WorkoutDetailsPage(workout)
                     }
-                    // TODO: Pass down the firebaseAuthHelper variable to the UserSettingsPage.
                     composable("settings") { UserSettingsPage(navController, firebaseAuthHelper) }
                 }
             }
