@@ -39,7 +39,6 @@ fun UserSettingsDropdownMenu(
             DropdownMenuItem(
                 text = { Text("Logout") },
                 onClick = {
-                    // TODO: Figure out a way to call the firebaseAuthHelper.signOut function here.
                     expanded = false
                     firebaseAuthHelper.signOut()
                     navController.navigate("login")
