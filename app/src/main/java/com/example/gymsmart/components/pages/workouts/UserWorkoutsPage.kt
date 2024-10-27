@@ -17,10 +17,8 @@ import androidx.navigation.NavController
 import com.example.gymsmart.components.ui.WorkoutDatePicker
 import com.example.gymsmart.components.ui.FilterDropdownMenu
 import com.example.gymsmart.components.ui.SearchBarWithIcon
-import com.example.gymsmart.components.ui.UserSettingsDropdownMenu
 import com.example.gymsmart.components.ui.WorkoutItem
 import com.example.gymsmart.firebase.WorkoutData
-import com.example.gymsmart.firebase.FirebaseAuthHelper
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -31,9 +29,7 @@ import java.util.Locale
  * @param navController
  */
 @Composable
-fun UserWorkoutsPage(
-    navController: NavController,
-    firebaseAuthHelper: FirebaseAuthHelper) {
+fun UserWorkoutsPage(navController: NavController) {
     val db = FirebaseFirestore.getInstance()
     val firebaseAuth = FirebaseAuth.getInstance()
     val userId = firebaseAuth.currentUser?.uid
@@ -92,18 +88,6 @@ fun UserWorkoutsPage(
         }
     }
 
-
-    // Function to handle the user setting navigation's
-    fun navigateUserSettingMenu(setting: String) {
-        when(setting) {
-            "Settings" -> navController.navigate("settings")
-            "Logout" -> navController.navigate("logout")
-            else -> {
-                Log.w("Navigation", "unknown setting: $setting")
-            }
-        }
-    }
-
     // Filter workouts based on search query
     val displayedWorkouts = filteredWorkouts.filter {
         it.name.contains(searchQuery, true) ||
@@ -132,7 +116,7 @@ fun UserWorkoutsPage(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 // User Settings Drop Down Menu Button
-                UserSettingsDropdownMenu({ setting -> navigateUserSettingMenu(setting) }, firebaseAuthHelper, navController )
+                //UserSettingsDropdownMenu({ setting -> navigateUserSettingMenu(setting) }, firebaseAuthHelper, navController )
 
 
                 // Filter Button
