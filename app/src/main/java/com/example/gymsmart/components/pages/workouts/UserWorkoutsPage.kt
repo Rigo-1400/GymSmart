@@ -14,13 +14,11 @@ import android.util.Log
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
-import com.example.gymsmart.components.WorkoutDatePicker
+import com.example.gymsmart.components.ui.WorkoutDatePicker
 import com.example.gymsmart.components.ui.FilterDropdownMenu
 import com.example.gymsmart.components.ui.SearchBarWithIcon
-import com.example.gymsmart.components.ui.UserSettingsDropdownMenu
 import com.example.gymsmart.components.ui.WorkoutItem
 import com.example.gymsmart.firebase.WorkoutData
-import com.example.gymsmart.firebase.FirebaseAuthHelper
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -31,10 +29,7 @@ import java.util.Locale
  * @param navController
  */
 @Composable
-// TODO: Figure out a way to take the com.example.gymsmart.firebase.FirebaseAuthHelper helper as an argument, since we need to pass down.
-fun UserWorkoutsPage(
-    navController: NavController,
-    firebaseAuthHelper: FirebaseAuthHelper) {
+fun UserWorkoutsPage(navController: NavController) {
     val db = FirebaseFirestore.getInstance()
     val firebaseAuth = FirebaseAuth.getInstance()
     val userId = firebaseAuth.currentUser?.uid
@@ -57,7 +52,7 @@ fun UserWorkoutsPage(
                             it.id = document.id
                         }
                     }
-                    workouts = fetchedWorkouts
+                    workouts = fetchedWorkouts.sortedByDescending { it.dateAdded }
                     filteredWorkouts = workouts
                     showSpinner = false
                 }
@@ -93,18 +88,6 @@ fun UserWorkoutsPage(
         }
     }
 
-
-    // Function to handle the user setting navigation's
-    fun navigateUserSettingMenu(setting: String) {
-        when(setting) {
-            "Settings" -> navController.navigate("settings")
-            "Logout" -> navController.navigate("logout")
-            else -> {
-                Log.w("Navigation", "unknown setting: $setting")
-            }
-        }
-    }
-
     // Filter workouts based on search query
     val displayedWorkouts = filteredWorkouts.filter {
         it.name.contains(searchQuery, true) ||
@@ -129,15 +112,18 @@ fun UserWorkoutsPage(
             .padding(16.dp)) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 // User Settings Drop Down Menu Button
-                // TODO: Figure out a way to pass down the firebaseAuthHelper variable down to the UserSettingsDropdownMenu
-                UserSettingsDropdownMenu({ setting -> navigateUserSettingMenu(setting) }, firebaseAuthHelper, navController )
+                //UserSettingsDropdownMenu({ setting -> navigateUserSettingMenu(setting) }, firebaseAuthHelper, navController )
 
 
                 // Filter Button
                 FilterDropdownMenu { filter -> applyFilter(filter) }
+
+                // Calender Filter Button
+                WorkoutDatePicker(LocalContext.current) { newDate -> applyCalendarFilter(newDate) }
 
                 // Search Bar
                 SearchBarWithIcon(searchQuery) { query -> searchQuery = query }
@@ -207,7 +193,6 @@ fun UserWorkoutsPage(
                         }
                     }
                 }
-                WorkoutDatePicker(LocalContext.current, {newDate -> applyCalendarFilter(newDate) }, workouts)
             }
         }
     }

@@ -1,85 +1,100 @@
 package com.example.gymsmart.components.pages
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
+import android.util.Log
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.gymsmart.components.ui.UserSettingsDropdownMenu
+import com.example.gymsmart.firebase.FirebaseAuthHelper
+import com.example.gymsmart.firebase.UserSession
 
 /**
  * Home page
  *
  * @param navController
- * @param onSignOutClick
  */
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomePage(navController: NavController?, onSignOutClick: (() -> Unit)?) {
-    val upperWorkouts = arrayOf("Chest", "Biceps", "Triceps", "Shoulders", "Lats")
-    val lowerWorkouts = arrayOf("Hamstring", "Glutes", "Quadriceps", "Calves")
-    val attList = arrayOf("Cable", "Rope", "V-Bar", "Straight Bar")
+fun HomePage(navController: NavController, firebaseAuthHelper: FirebaseAuthHelper) {
+    // Function to handle the user setting navigation
+    fun navigateUserSettingMenu(setting: String) {
+        when (setting) {
+            "Settings" -> navController.navigate("settings")
+            "Logout" -> navController.navigate("logout")
+            else -> Log.w("Navigation", "Unknown setting: $setting")
+        }
+    }
 
-    Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text("GymSmart", fontWeight = FontWeight.Bold, fontSize = 20.sp, color = Color.White) },
+                actions = {
+                    UserSettingsDropdownMenu(
+                        { setting -> navigateUserSettingMenu(setting) },
+                        firebaseAuthHelper = firebaseAuthHelper,
+                        navController
+                    )
+                },
+                colors = TopAppBarDefaults.topAppBarColors(Color(0xFF1c1c1c))
+            )
+        },
+        modifier = Modifier.fillMaxSize(),
+         // Dark background for modern look
+    ) { innerPadding ->
         Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(innerPadding),
-            verticalArrangement = Arrangement.Center
+                .fillMaxSize()
+                .padding(innerPadding)
+                .padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            // Welcome section
+            Text(
+                text = "Welcome back, ${UserSession.userName}!",
+                fontSize = 24.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.White,
+                modifier = Modifier.padding(bottom = 8.dp)
+            )
+            Text(
+                text = "Track your progress and create new workouts.",
+                fontSize = 16.sp,
+            )
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            // Create Workout Button
             Button(
-                onClick = { navController?.navigate("workoutCreator") },
+                onClick = { navController.navigate("workoutCreator") },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(8.dp)
+                    .padding(horizontal = 8.dp),
+                //colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
+                shape = MaterialTheme.shapes.medium
             ) {
-                Text("Create Workout")
+                Text("Create Workout", fontSize = 18.sp, fontWeight = FontWeight.SemiBold)
             }
+
             // Workout Details Button
             Button(
-                onClick = { navController?.navigate("userWorkouts") },
+                onClick = { navController.navigate("userWorkouts") },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(8.dp)
+                    .padding(horizontal = 8.dp),
+                //colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
+                shape = MaterialTheme.shapes.medium
             ) {
-                Text("Workout Details")
+                Text("Workout Details", fontSize = 18.sp, fontWeight = FontWeight.SemiBold)
             }
-            
-//            Button(
-//                onClick = {navController?.navigate("attatchements/${attList.joinToString (",")}") },
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .padding(8.dp)
-//            ) {
-//                Text(text = "Additional Accessories")
-//            }
-
-
-
-
-
-
-
-
-
-
-            // Sign-out button
-            if (onSignOutClick != null) {
-                Button(
-                    onClick = onSignOutClick, // Call the sign-out function
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp)
-                ) {
-                    Text("Sign Out")
-                }
-            }
-
         }
     }
 }

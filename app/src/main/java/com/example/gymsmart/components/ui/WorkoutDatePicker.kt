@@ -1,35 +1,29 @@
-package com.example.gymsmart.components
+package com.example.gymsmart.components.ui
 
 import android.app.DatePickerDialog
 import android.content.Context
 import android.widget.DatePicker
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Button
-import androidx.compose.material3.Text
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.example.gymsmart.firebase.WorkoutData
+import com.composables.icons.lucide.Calendar
+import com.composables.icons.lucide.Lucide
 import java.util.Calendar
 
 @Composable
 fun WorkoutDatePicker(
     context: Context,
     onDateSelected: (String) -> Unit,
-    workouts: List<WorkoutData>
 ) {
     // Get the current date
     val calendar = Calendar.getInstance()
     val year = calendar.get(Calendar.YEAR)
     val month = calendar.get(Calendar.MONTH)
     val day = calendar.get(Calendar.DAY_OF_MONTH)
-
-    // State to hold the selected date
-    val date = remember { mutableStateOf("") }
 
     // DatePickerDialog for selecting a date
     val datePickerDialog = DatePickerDialog(
@@ -42,14 +36,9 @@ fun WorkoutDatePicker(
 
 
     // UI for the DatePicker
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Bottom,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(text = date.value)
-        Button(onClick = { datePickerDialog.show() }) {
-            Text(text = "Open Calendar")
+    Box(Modifier.wrapContentSize(Alignment.TopEnd)) {
+        IconButton({ datePickerDialog.show() }) {
+            Icon(Lucide.Calendar, "Open Calender Filter")
         }
     }
 }
