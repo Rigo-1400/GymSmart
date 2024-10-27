@@ -128,6 +128,7 @@ fun UserWorkoutsPage(
             .padding(16.dp)) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 // User Settings Drop Down Menu Button
