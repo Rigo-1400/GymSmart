@@ -4,6 +4,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
@@ -71,15 +72,17 @@ fun SearchBarWithIcon(
             }
         } else {
             // If the search bar is not visible, show the search icon
-            Icon(
-                imageVector = Lucide.Search,
-                contentDescription = "Search Icon",
-                modifier = Modifier
-                    .clickable {
-                        isSearchBarVisible = true // Show the search bar on click
-                    }
-                    .padding(8.dp)
-            )
+            Box(Modifier.wrapContentSize(Alignment.TopEnd)) {
+                Icon(
+                    imageVector = Lucide.Search,
+                    contentDescription = "Search Icon",
+                    modifier = Modifier
+                        .clickable {
+                            isSearchBarVisible = true // Show the search bar on click
+                        }
+                        .padding(8.dp)
+                )
+            }
         }
     }
 }
