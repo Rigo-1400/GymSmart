@@ -16,6 +16,7 @@ import androidx.compose.ui.Alignment
 import com.example.gymsmart.BuildConfig
 import com.example.gymsmart.api.searchYouTubeVideo
 import kotlinx.coroutines.launch
+import com.composables.icons.lucide.MoveLeft
 
 /**
  * Workout details

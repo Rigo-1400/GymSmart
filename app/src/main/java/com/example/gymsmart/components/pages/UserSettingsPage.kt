@@ -2,6 +2,7 @@ package com.example.gymsmart.components.pages
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -10,6 +11,7 @@ import androidx.navigation.NavController
 import com.composables.icons.lucide.Cog
 import com.composables.icons.lucide.Dumbbell
 import com.composables.icons.lucide.LogOut
+import com.composables.icons.lucide.MoveLeft
 import com.composables.icons.lucide.Lucide
 import com.example.gymsmart.firebase.FirebaseAuthHelper
 
