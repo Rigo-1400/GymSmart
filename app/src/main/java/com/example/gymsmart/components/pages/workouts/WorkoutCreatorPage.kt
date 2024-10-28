@@ -46,7 +46,6 @@ fun WorkoutCreatorPage(navController: NavController) {
                 text = "Create Your Workout",
                 fontSize = 28.sp,
                 fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.padding(bottom = 12.dp)
             )
 
@@ -128,7 +127,7 @@ fun WorkoutCreatorPage(navController: NavController) {
                             db, userId, Timestamp.now(),
                             partOfTheBody, workoutName, muscleGroup, sets, reps, weight
                         )
-                        navController.navigate("userWorkouts")
+                        navController.navigate("workouts")
                     }
                 },
                 modifier = Modifier

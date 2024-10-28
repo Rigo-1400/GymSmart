@@ -1,5 +1,6 @@
 package com.example.gymsmart.components.pages
 
+import BottomNavigationBar
 import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
@@ -16,9 +17,10 @@ import com.example.gymsmart.firebase.FirebaseAuthHelper
 import com.example.gymsmart.firebase.UserSession
 
 /**
- * Home page
+ * Home page (Splash Page)
  *
  * @param navController
+ * @param firebaseAuthHelper
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -43,9 +45,12 @@ fun HomePage(navController: NavController, firebaseAuthHelper: FirebaseAuthHelpe
                         navController
                     )
                 },
-                colors = TopAppBarDefaults.topAppBarColors(Color(0xFF1c1c1c))
+                colors = TopAppBarDefaults.topAppBarColors(Color(0xFF1c1c1c)),
             )
         },
+        bottomBar = { navController.currentBackStackEntry?.destination?.route?.let {
+            BottomNavigationBar(navController, it)
+        } },
         modifier = Modifier.fillMaxSize(),
          // Dark background for modern look
     ) { innerPadding ->
@@ -86,7 +91,7 @@ fun HomePage(navController: NavController, firebaseAuthHelper: FirebaseAuthHelpe
 
             // Workout Details Button
             Button(
-                onClick = { navController.navigate("userWorkouts") },
+                onClick = { navController.navigate("workouts") },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 8.dp),
