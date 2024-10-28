@@ -63,7 +63,7 @@ class MainActivity : ComponentActivity() {
                     composable("workoutCreator") { WorkoutCreatorPage(navController) }
 
                     // User Workouts Page
-                    composable("userWorkouts") { UserWorkoutsPage(navController)
+                    composable("workouts") { UserWorkoutsPage(navController)
                     }
 
                     // Workout Details Page

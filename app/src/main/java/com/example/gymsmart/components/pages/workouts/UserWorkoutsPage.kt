@@ -1,6 +1,7 @@
 package com.example.gymsmart.components.pages.workouts
 
 
+import BottomNavigationBar
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -105,7 +106,12 @@ fun UserWorkoutsPage(navController: NavController) {
     Scaffold(
         modifier = Modifier
             .fillMaxWidth()
-            .wrapContentHeight()
+            .wrapContentHeight(),
+        bottomBar = { navController.currentBackStackEntry?.destination?.route?.let {
+            BottomNavigationBar(navController,
+                it
+            )
+        } }
     ) { innerPadding ->
         Column(modifier = Modifier
             .padding(innerPadding)
