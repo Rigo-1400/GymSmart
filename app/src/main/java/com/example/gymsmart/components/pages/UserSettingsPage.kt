@@ -22,7 +22,15 @@ fun UserSettingsPage(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("User Settings") }
+                title = { Text("User Settings") },
+                navigationIcon = {
+                    IconButton(onClick = { navController.popBackStack() }) {
+                        Icon(
+                            imageVector = Lucide.MoveLeft,
+                            contentDescription = "Move Back Previous Page"
+                        )
+                    }
+                }
             )
         },
         content = { innerPadding ->
