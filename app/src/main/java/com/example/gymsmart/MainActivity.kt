@@ -73,7 +73,7 @@ class MainActivity : ComponentActivity() {
                     ) { backStackEntry ->
                         val workoutJson = backStackEntry.arguments?.getString("workoutJson")
                         val workout = Gson().fromJson(workoutJson, WorkoutData::class.java)
-                        WorkoutDetailsPage(workout)
+                        WorkoutDetailsPage(workoutData = workout, navController = navController)
                     }
 
                     // User Settings Page
