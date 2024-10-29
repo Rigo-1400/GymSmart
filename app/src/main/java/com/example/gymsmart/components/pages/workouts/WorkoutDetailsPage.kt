@@ -31,6 +31,8 @@ import com.composables.icons.lucide.Trash
 import com.example.gymsmart.BuildConfig
 import com.example.gymsmart.api.searchYouTubeVideo
 import kotlinx.coroutines.launch
+import com.composables.icons.lucide.MoveLeft
+import androidx.navigation.NavController
 
 /**
  * Workout details
@@ -39,7 +41,7 @@ import kotlinx.coroutines.launch
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun WorkoutDetailsPage(workoutData: WorkoutData?) {
+fun WorkoutDetailsPage(workoutData: WorkoutData?, navController: NavController) {
     val apiKey = BuildConfig.GOOGLE_API_KEY
     Log.w("WorkoutDetailsPageAPIKEY", apiKey)
     var videoId by remember { mutableStateOf<String?>(null) }
@@ -68,6 +70,16 @@ fun WorkoutDetailsPage(workoutData: WorkoutData?) {
                         fontSize = 20.sp,
                         color = Color.White
                     )
+                },
+                navigationIcon = {
+                    IconButton(onClick = {
+                        navController.popBackStack()
+                    }) {
+                        Icon(
+                            imageVector = Lucide.MoveLeft,
+                            contentDescription = "Move Back Previous Page"
+                        )
+                    }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(Color(0xFF1c1c1c)),
             )
