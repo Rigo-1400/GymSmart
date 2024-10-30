@@ -18,6 +18,7 @@ import com.example.gymsmart.components.pages.LoginPage
 import com.example.gymsmart.components.pages.UserSettingsPage
 import com.example.gymsmart.components.pages.workouts.UserWorkoutsPage
 import com.example.gymsmart.components.pages.workouts.WorkoutCreatorPage
+import com.example.gymsmart.components.pages.workouts.WorkoutDeletePage
 import com.example.gymsmart.firebase.WorkoutData
 import com.google.gson.Gson
 
@@ -63,10 +64,14 @@ class MainActivity : ComponentActivity() {
                     composable("workoutCreator") { WorkoutCreatorPage(navController) }
 
                     // User Workouts Page
-                    composable("userWorkouts") { UserWorkoutsPage(navController)
-                    }
+                    composable("userWorkouts") { UserWorkoutsPage(navController) }
 
-                    // Workout Details Page
+                    // Workout Delete Page
+                    composable("WorkoutDeletePage") { WorkoutDeletePage(navController) }
+
+
+
+                        // Workout Details Page
                     composable(
                         route = "workoutDetails/{workoutJson}",
                         arguments = listOf(navArgument("workoutJson") { type = NavType.StringType })

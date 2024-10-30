@@ -131,7 +131,10 @@ fun WorkoutDetailsPage(workoutData: WorkoutData?, navController: NavController, 
                         IconButton(onClick = { /* Handle edit */ }) {
                             Icon(imageVector = Lucide.Pencil, contentDescription = "Edit Icon")
                         }
-                        IconButton(onClick = { /* Handle delete */ }) {
+                        IconButton(onClick = {
+                            /* Handle Delete */
+                            navController.navigate("WorkoutDeletePage")
+                        }) {
                             Icon(
                                 imageVector = Lucide.Trash,
                                 contentDescription = "Delete Icon",
@@ -139,6 +142,7 @@ fun WorkoutDetailsPage(workoutData: WorkoutData?, navController: NavController, 
                             )
                         }
                     }
+
                 }
                 Card(Modifier.fillMaxWidth()) {
                     Text("Sets: ${it.sets}")
