@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -42,6 +43,10 @@ import com.example.gymsmart.firebase.FirebaseAuthHelper
  *
  * @param workoutData
  */
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.TextButton
+import com.example.gymsmart.firebase.deleteWorkout
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WorkoutDetailsPage(workoutData: WorkoutData?, navController: NavController, firebaseAuthHelper: FirebaseAuthHelper) {
@@ -52,18 +57,19 @@ fun WorkoutDetailsPage(workoutData: WorkoutData?, navController: NavController, 
     val coroutineScope = rememberCoroutineScope()
 
     var videoIds by remember { mutableStateOf<List<String>>(emptyList()) }
+    var showDeleteDialog by remember { mutableStateOf(false) } // State for dialog visibility
 
     // Fetch video based on exercise/workout name
     LaunchedEffect(workoutData?.name) {
         workoutData?.name?.let { workoutName ->
             coroutineScope.launch {
-                val fetchedVideoIds =
-                    searchYouTubeVideos(workoutName, apiKey) // Update this to fetch multiple videos
+                val fetchedVideoIds = searchYouTubeVideos(workoutName, apiKey)
                 videoIds = fetchedVideoIds
                 showVideoSpinner = false
             }
         }
     }
+
     // Function to handle the user setting navigation
     fun navigateUserSettingMenu(setting: String) {
         when (setting) {
@@ -74,25 +80,16 @@ fun WorkoutDetailsPage(workoutData: WorkoutData?, navController: NavController, 
     }
 
     // Display workout details
-    Scaffold(modifier = Modifier.fillMaxSize(),
+    Scaffold(
+        modifier = Modifier.fillMaxSize(),
         topBar = {
             TopAppBar(
                 title = {
-                    Text(
-                        "GymSmart",
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 20.sp,
-                        color = Color.White
-                    )
+                    Text("GymSmart", fontWeight = FontWeight.Bold, fontSize = 20.sp, color = Color.White)
                 },
                 navigationIcon = {
-                    IconButton(onClick = {
-                        navController.popBackStack()
-                    }) {
-                        Icon(
-                            imageVector = Lucide.MoveLeft,
-                            contentDescription = "Move Back Previous Page"
-                        )
+                    IconButton(onClick = { navController.popBackStack() }) {
+                        Icon(imageVector = Lucide.MoveLeft, contentDescription = "Move Back Previous Page")
                     }
                 },
                 actions = {
@@ -122,19 +119,13 @@ fun WorkoutDetailsPage(workoutData: WorkoutData?, navController: NavController, 
                 ) {
                     Text(
                         text = it.name,
-                        modifier = Modifier.weight(1f), // Pushes the icons to the end of the row
+                        modifier = Modifier.weight(1f),
                         fontWeight = FontWeight.Bold,
                         fontSize = 20.sp
                     )
 
                     Row {
-                        IconButton(onClick = { /* Handle edit */ }) {
-                            Icon(imageVector = Lucide.Pencil, contentDescription = "Edit Icon")
-                        }
-                        IconButton(onClick = {
-                            /* Handle Delete */
-                            navController.navigate("WorkoutDeletePage")
-                        }) {
+                        IconButton(onClick = { showDeleteDialog = true }) {
                             Icon(
                                 imageVector = Lucide.Trash,
                                 contentDescription = "Delete Icon",
@@ -142,13 +133,15 @@ fun WorkoutDetailsPage(workoutData: WorkoutData?, navController: NavController, 
                             )
                         }
                     }
-
                 }
+
                 Card(Modifier.fillMaxWidth()) {
-                    Text("Sets: ${it.sets}")
-                    Text("Reps: ${it.reps}")
-                    Text("Weight: ${it.weight}")
-                    Text("Muscle Group: ${it.muscleGroup}")
+                    Column(Modifier.padding(16.dp)) {
+                        Text("Sets: ${it.sets}")
+                        Text("Reps: ${it.reps}")
+                        Text("Weight: ${it.weight}")
+                        Text("Muscle Group: ${it.muscleGroup}")
+                    }
                 }
 
                 HorizontalDivider()
@@ -168,18 +161,37 @@ fun WorkoutDetailsPage(workoutData: WorkoutData?, navController: NavController, 
                             verticalArrangement = Arrangement.spacedBy(16.dp),
                             modifier = Modifier.fillMaxWidth()
                         ) {
-                            videoIds.filter { !it.isNullOrEmpty() }.forEach { videoId ->
-                                videoId.let {
-                                    YoutubePlayer(videoId = videoId) // Display YouTube player for each video ID
-                                } ?: Text("No video found for this entry.")
+                            videoIds.filter { it.isNotEmpty() }.forEach { videoId ->
+                                YoutubePlayer(videoId = videoId)
                             }
                         }
                     } else {
                         Text("No videos found for this exercise!")
                     }
                 }
-
             }
         }
+    }
+
+    // Delete confirmation dialog
+    if (showDeleteDialog) {
+        AlertDialog(
+            onDismissRequest = { showDeleteDialog = false },
+            confirmButton = {
+                TextButton(onClick = {
+                    showDeleteDialog = false
+                    workoutData?.id?.let { deleteWorkout(it, {navController.popBackStack()}, { Log.w("WorkoutDetailsPage", "Failed to delete ${workoutData.id}")}) }
+                }) {
+                    Text("Delete")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showDeleteDialog = false }) {
+                    Text("Cancel")
+                }
+            },
+            title = { Text("Delete Workout") },
+            text = { Text("Are you sure you want to delete this workout? This action cannot be undone.") }
+        )
     }
 }

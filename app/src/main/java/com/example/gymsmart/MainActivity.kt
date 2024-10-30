@@ -14,13 +14,20 @@ import com.example.gymsmart.components.pages.HomePage
 import com.example.gymsmart.firebase.FirebaseAuthHelper
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import com.example.gymsmart.components.pages.LoginPage
 import com.example.gymsmart.components.pages.UserSettingsPage
+import com.example.gymsmart.components.pages.workouts.EditWorkoutPage
 import com.example.gymsmart.components.pages.workouts.UserWorkoutsPage
 import com.example.gymsmart.components.pages.workouts.WorkoutCreatorPage
-import com.example.gymsmart.components.pages.workouts.WorkoutDeletePage
 import com.example.gymsmart.firebase.WorkoutData
+import com.example.gymsmart.firebase.getWorkoutData
+import com.google.firebase.auth.FirebaseAuth
 import com.google.gson.Gson
+import kotlinx.coroutines.launch
 
 /**
  * Main activity
@@ -65,11 +72,6 @@ class MainActivity : ComponentActivity() {
 
                     // User Workouts Page
                     composable("userWorkouts") { UserWorkoutsPage(navController) }
-
-                    // Workout Delete Page
-                    composable("WorkoutDeletePage") { WorkoutDeletePage(navController) }
-
-
 
                         // Workout Details Page
                     composable(
