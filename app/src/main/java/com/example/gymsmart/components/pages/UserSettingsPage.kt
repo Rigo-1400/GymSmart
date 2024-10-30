@@ -13,8 +13,12 @@ import com.composables.icons.lucide.LogOut
 import com.composables.icons.lucide.MoveLeft
 import com.composables.icons.lucide.Lucide
 import com.example.gymsmart.firebase.FirebaseAuthHelper
-
-
+/**
+ * User Settings Page
+ *
+ * @param navController
+ * @param firebaseAuthHelper
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun UserSettingsPage(
