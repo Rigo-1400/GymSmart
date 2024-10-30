@@ -13,24 +13,24 @@ fun BottomNavigationBar(
     currentRoute: String
 ) {
     NavigationBar(
-        containerColor = Color(0xFF1c1c1c),
+        containerColor = Color(0xFFD0BCFF),
         contentColor = Color.White
     ) {
         NavigationBarItem(
-            icon = { Icon(Lucide.House, "Home") },
-            label = { Text("Home") },
+            icon = { Icon(Lucide.House, "Home", tint = Color.Black) },
+            label = { Text("Home", color = Color.Black) },
             selected = currentRoute == "home",
             onClick = { navController.navigate("home") }
         )
         NavigationBarItem(
-            icon = { Icon(Lucide.Dumbbell, "Workouts") },
-            label = { Text("Workouts") },
+            icon = { Icon(Lucide.Dumbbell, "Workouts", tint = Color.Black) },
+            label = { Text("Workouts", color = Color.Black) },
             selected = currentRoute == "workouts",
             onClick = { navController.navigate("workouts") }
         )
         NavigationBarItem(
-            icon = { Icon(Lucide.Settings, "Settings") },
-            label = { Text("Settings") },
+            icon = { Icon(Lucide.Settings, "Settings", tint = Color.Black) },
+            label = { Text("Settings", color = Color.Black) },
             selected = currentRoute == "settings",
             onClick = { navController.navigate("settings") }
         )
