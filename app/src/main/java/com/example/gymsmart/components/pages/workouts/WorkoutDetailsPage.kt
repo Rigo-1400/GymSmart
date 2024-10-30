@@ -29,10 +29,13 @@ import com.composables.icons.lucide.Lucide
 import com.composables.icons.lucide.Pencil
 import com.composables.icons.lucide.Trash
 import com.example.gymsmart.BuildConfig
-import com.example.gymsmart.api.searchYouTubeVideo
+import com.example.gymsmart.api.searchYouTubeVideos
 import kotlinx.coroutines.launch
 import com.composables.icons.lucide.MoveLeft
 import androidx.navigation.NavController
+import com.example.gymsmart.components.ui.UserSettingsDropdownMenu
+import com.example.gymsmart.firebase.FirebaseAuthHelper
+
 
 /**
  * Workout details
@@ -41,21 +44,32 @@ import androidx.navigation.NavController
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun WorkoutDetailsPage(workoutData: WorkoutData?, navController: NavController) {
+fun WorkoutDetailsPage(workoutData: WorkoutData?, navController: NavController, firebaseAuthHelper: FirebaseAuthHelper) {
     val apiKey = BuildConfig.GOOGLE_API_KEY
     Log.w("WorkoutDetailsPageAPIKEY", apiKey)
-    var videoId by remember { mutableStateOf<String?>(null) }
+
     var showVideoSpinner by remember { mutableStateOf(true) }
     val coroutineScope = rememberCoroutineScope()
+
+    var videoIds by remember { mutableStateOf<List<String>>(emptyList()) }
 
     // Fetch video based on exercise/workout name
     LaunchedEffect(workoutData?.name) {
         workoutData?.name?.let { workoutName ->
             coroutineScope.launch {
-                val fetchedVideoId = searchYouTubeVideo(workoutName, apiKey)
-                videoId = fetchedVideoId
+                val fetchedVideoIds =
+                    searchYouTubeVideos(workoutName, apiKey) // Update this to fetch multiple videos
+                videoIds = fetchedVideoIds
                 showVideoSpinner = false
             }
+        }
+    }
+    // Function to handle the user setting navigation
+    fun navigateUserSettingMenu(setting: String) {
+        when (setting) {
+            "Settings" -> navController.navigate("settings")
+            "Logout" -> navController.navigate("logout")
+            else -> Log.w("Navigation", "Unknown setting: $setting")
         }
     }
 
@@ -80,6 +94,13 @@ fun WorkoutDetailsPage(workoutData: WorkoutData?, navController: NavController) 
                             contentDescription = "Move Back Previous Page"
                         )
                     }
+                },
+                actions = {
+                    UserSettingsDropdownMenu(
+                        { setting -> navigateUserSettingMenu(setting) },
+                        firebaseAuthHelper = firebaseAuthHelper,
+                        navController
+                    )
                 },
                 colors = TopAppBarDefaults.topAppBarColors(Color(0xFF1c1c1c)),
             )
@@ -111,7 +132,11 @@ fun WorkoutDetailsPage(workoutData: WorkoutData?, navController: NavController) 
                             Icon(imageVector = Lucide.Pencil, contentDescription = "Edit Icon")
                         }
                         IconButton(onClick = { /* Handle delete */ }) {
-                            Icon(imageVector = Lucide.Trash, contentDescription = "Delete Icon", tint = Color.Red)
+                            Icon(
+                                imageVector = Lucide.Trash,
+                                contentDescription = "Delete Icon",
+                                tint = Color.Red
+                            )
                         }
                     }
                 }
@@ -124,13 +149,32 @@ fun WorkoutDetailsPage(workoutData: WorkoutData?, navController: NavController) 
 
                 HorizontalDivider()
 
-                // Display the spinner while we look for the exercise/workout video
-                if(showVideoSpinner) { CircularProgressIndicator(Modifier.align(Alignment.CenterHorizontally)); Text("Loading video...") }
-                if (videoId != null && !showVideoSpinner) {
-                    YoutubePlayer(videoId = videoId!!)
-                } else if(videoId == null && !showVideoSpinner) {
-                    Text("No video found for this exercise!")
+                // Display the spinner while loading multiple videos
+                if (showVideoSpinner) {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        CircularProgressIndicator()
+                        Text("Loading videos...")
+                    }
+                } else {
+                    if (videoIds.isNotEmpty()) {
+                        Column(
+                            verticalArrangement = Arrangement.spacedBy(16.dp),
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            videoIds.filter { !it.isNullOrEmpty() }.forEach { videoId ->
+                                videoId.let {
+                                    YoutubePlayer(videoId = videoId) // Display YouTube player for each video ID
+                                } ?: Text("No video found for this entry.")
+                            }
+                        }
+                    } else {
+                        Text("No videos found for this exercise!")
+                    }
                 }
+
             }
         }
     }

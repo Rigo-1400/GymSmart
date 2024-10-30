@@ -73,9 +73,8 @@ class MainActivity : ComponentActivity() {
                     ) { backStackEntry ->
                         val workoutJson = backStackEntry.arguments?.getString("workoutJson")
                         val workout = Gson().fromJson(workoutJson, WorkoutData::class.java)
-                        WorkoutDetailsPage(workoutData = workout, navController = navController)
+                        WorkoutDetailsPage(workoutData = workout, navController = navController, firebaseAuthHelper )
                     }
-
                     // User Settings Page
                     composable("settings") { UserSettingsPage(navController, firebaseAuthHelper) }
                 }
