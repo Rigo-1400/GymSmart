@@ -88,18 +88,6 @@ fun HomePage(navController: NavController, firebaseAuthHelper: FirebaseAuthHelpe
             ) {
                 Text("Create Workout", fontSize = 18.sp, fontWeight = FontWeight.SemiBold)
             }
-
-            // Workout Details Button
-            Button(
-                onClick = { navController.navigate("workouts") },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 8.dp),
-                //colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
-                shape = MaterialTheme.shapes.medium
-            ) {
-                Text("Workout Details", fontSize = 18.sp, fontWeight = FontWeight.SemiBold)
-            }
         }
     }
 }
