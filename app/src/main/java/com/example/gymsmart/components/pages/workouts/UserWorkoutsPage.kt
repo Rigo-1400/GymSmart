@@ -1,6 +1,7 @@
 package com.example.gymsmart.components.pages.workouts
 
 
+import BottomNavigationBar
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -14,13 +15,11 @@ import android.util.Log
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
-import com.example.gymsmart.components.WorkoutDatePicker
+import com.example.gymsmart.components.ui.WorkoutDatePicker
 import com.example.gymsmart.components.ui.FilterDropdownMenu
 import com.example.gymsmart.components.ui.SearchBarWithIcon
-import com.example.gymsmart.components.ui.UserSettingsDropdownMenu
 import com.example.gymsmart.components.ui.WorkoutItem
 import com.example.gymsmart.firebase.WorkoutData
-import com.example.gymsmart.firebase.FirebaseAuthHelper
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -31,10 +30,7 @@ import java.util.Locale
  * @param navController
  */
 @Composable
-// TODO: Figure out a way to take the com.example.gymsmart.firebase.FirebaseAuthHelper helper as an argument, since we need to pass down.
-fun UserWorkoutsPage(
-    navController: NavController,
-    firebaseAuthHelper: FirebaseAuthHelper) {
+fun UserWorkoutsPage(navController: NavController) {
     val db = FirebaseFirestore.getInstance()
     val firebaseAuth = FirebaseAuth.getInstance()
     val userId = firebaseAuth.currentUser?.uid
@@ -57,7 +53,7 @@ fun UserWorkoutsPage(
                             it.id = document.id
                         }
                     }
-                    workouts = fetchedWorkouts
+                    workouts = fetchedWorkouts.sortedByDescending { it.dateAdded }
                     filteredWorkouts = workouts
                     showSpinner = false
                 }
@@ -68,16 +64,14 @@ fun UserWorkoutsPage(
     }
 
     // Function to apply filters
-    fun applyFilter(filter: String) {
-        filteredWorkouts = when (filter) {
+    fun applyFilter(filterType: String) {
+        filteredWorkouts = when (filterType) {
             "All" -> workouts
             "Sort by Date (Newest)" -> workouts.sortedByDescending { it.dateAdded }
             "Sort by Date (Oldest)" -> workouts.sortedBy { it.dateAdded }
             "Upper Body" -> workouts.filter { it.partOfTheBody.equals("Upper Body", ignoreCase = true) }
             "Lower Body" -> workouts.filter { it.partOfTheBody.equals("Lower Body", ignoreCase = true) }
             else -> workouts
-
-
         }
     }
 
@@ -92,18 +86,6 @@ fun UserWorkoutsPage(
             val workoutDate = workout.dateAdded.toDate()
             val workoutFormattedDate = dateFormat.format(workoutDate)
             workoutFormattedDate == parsedDate?.let { dateFormat.format(it) }
-        }
-    }
-
-
-    // Function to handle the user setting navigation's
-    fun navigateUserSettingMenu(setting: String) {
-        when(setting) {
-            "Settings" -> navController.navigate("settings")
-            "Logout" -> navController.navigate("logout")
-            else -> {
-                Log.w("Navigation", "unknown setting: $setting")
-            }
         }
     }
 
@@ -124,22 +106,30 @@ fun UserWorkoutsPage(
     Scaffold(
         modifier = Modifier
             .fillMaxWidth()
-            .wrapContentHeight()
+            .wrapContentHeight(),
+        bottomBar = { navController.currentBackStackEntry?.destination?.route?.let {
+            BottomNavigationBar(navController,
+                it
+            )
+        } }
     ) { innerPadding ->
         Column(modifier = Modifier
             .padding(innerPadding)
             .padding(16.dp)) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 // User Settings Drop Down Menu Button
-                // TODO: Figure out a way to pass down the firebaseAuthHelper variable down to the UserSettingsDropdownMenu
-                UserSettingsDropdownMenu({ setting -> navigateUserSettingMenu(setting) }, firebaseAuthHelper, navController )
+                //UserSettingsDropdownMenu({ setting -> navigateUserSettingMenu(setting) }, firebaseAuthHelper, navController )
 
 
                 // Filter Button
                 FilterDropdownMenu { filter -> applyFilter(filter) }
+
+                // Calender Filter Button
+                WorkoutDatePicker(LocalContext.current) { newDate -> applyCalendarFilter(newDate) }
 
                 // Search Bar
                 SearchBarWithIcon(searchQuery) { query -> searchQuery = query }
@@ -209,7 +199,6 @@ fun UserWorkoutsPage(
                         }
                     }
                 }
-                WorkoutDatePicker(LocalContext.current, {newDate -> applyCalendarFilter(newDate) }, workouts)
             }
         }
     }

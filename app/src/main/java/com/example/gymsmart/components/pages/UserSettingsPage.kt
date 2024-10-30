@@ -10,10 +10,15 @@ import androidx.navigation.NavController
 import com.composables.icons.lucide.Cog
 import com.composables.icons.lucide.Dumbbell
 import com.composables.icons.lucide.LogOut
+import com.composables.icons.lucide.MoveLeft
 import com.composables.icons.lucide.Lucide
 import com.example.gymsmart.firebase.FirebaseAuthHelper
-
-
+/**
+ * User Settings Page
+ *
+ * @param navController
+ * @param firebaseAuthHelper
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun UserSettingsPage(
@@ -22,7 +27,15 @@ fun UserSettingsPage(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("User Settings") }
+                title = { Text("User Settings") },
+                navigationIcon = {
+                    IconButton(onClick = { navController.popBackStack() }) {
+                        Icon(
+                            imageVector = Lucide.MoveLeft,
+                            contentDescription = "Move Back Previous Page"
+                        )
+                    }
+                }
             )
         },
         content = { innerPadding ->

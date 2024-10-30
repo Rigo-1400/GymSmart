@@ -1,4 +1,5 @@
 package com.example.gymsmart
+import WorkoutDetailsPage
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -13,15 +14,20 @@ import com.example.gymsmart.components.pages.HomePage
 import com.example.gymsmart.firebase.FirebaseAuthHelper
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import com.example.gymsmart.components.pages.LoginPage
-import com.example.gymsmart.components.pages.MuscleGroupPage
-import com.example.gymsmart.components.pages.PartOfBodyPage
 import com.example.gymsmart.components.pages.UserSettingsPage
+import com.example.gymsmart.components.pages.workouts.EditWorkoutPage
 import com.example.gymsmart.components.pages.workouts.UserWorkoutsPage
 import com.example.gymsmart.components.pages.workouts.WorkoutCreatorPage
-import com.example.gymsmart.components.pages.workouts.WorkoutDetailsPage
 import com.example.gymsmart.firebase.WorkoutData
+import com.example.gymsmart.firebase.getWorkoutData
+import com.google.firebase.auth.FirebaseAuth
 import com.google.gson.Gson
+import kotlinx.coroutines.launch
 
 /**
  * Main activity
@@ -48,57 +54,36 @@ class MainActivity : ComponentActivity() {
             MaterialTheme(colorScheme = if(isDarkTheme) DarkColorScheme else LightColorScheme) {
                 // Set up NavHost for navigation
                 NavHost(navController = navController, startDestination = "login") {
-                    composable("home") {
-                        // Home Screen
-                        HomePage(
-                            navController = navController,
-                            onSignOutClick = {
-                                firebaseAuthHelper.signOut()
-                                navController.navigate("login") {
-                                    popUpTo("home") { inclusive = true } // Clear backstack
-                                }
-                            }
-                        )
-                    }
-                    // Define composable for workout screen, accepting a comma-separated list of workout names
-                    composable(
-                        route = "muscleGroupPage/{workoutNames}",
-                        arguments = listOf(navArgument("workoutNames") { type = NavType.StringType })
-                    ) { navBackStackEntry ->
-                        val workoutNamesString = navBackStackEntry.arguments?.getString("workoutNames")
-                        val workoutNames = workoutNamesString?.split(",")?.toTypedArray() ?: arrayOf()
-                        MuscleGroupPage(navController, workoutNames)
-                    }
 
-                    composable(
-                        route = "workoutCreator/{partOfTheBody}/{muscleGroup}",
-                        arguments = listOf(navArgument("partOfTheBody") { type = NavType.StringType }, navArgument("muscleGroup") { NavType.StringType })
-                    ) { navBackStackEntry ->
-                        val pOfTheBody = navBackStackEntry.arguments?.getString("partOfTheBody")
-                        val mGroup = navBackStackEntry.arguments?.getString("muscleGroup")
-                        if (pOfTheBody != null && mGroup != null) {
-                            WorkoutCreatorPage(navController, pOfTheBody, mGroup)
-                        }
-                    }
+                    // Login Page
                     composable("login") {
-                        // Login Screen
                         LoginPage(onGoogleSignInClick = {
                             firebaseAuthHelper.signIn() // Trigger Google Sign-In
                         })
                     }
-                    composable("workoutCreator") { PartOfBodyPage(navController) }
-                    composable("userWorkouts") {
-                        UserWorkoutsPage(navController, firebaseAuthHelper)
+                    // Home Page
+                    composable("home") {
+                        // Home Screen
+                        HomePage(navController, firebaseAuthHelper)
                     }
+
+                    // Workout Creator Page
+                    composable("workoutCreator") { WorkoutCreatorPage(navController) }
+
+                    // User Workouts Page
+                    composable("workouts") { UserWorkoutsPage(navController)
+                    }
+
+                        // Workout Details Page
                     composable(
                         route = "workoutDetails/{workoutJson}",
                         arguments = listOf(navArgument("workoutJson") { type = NavType.StringType })
                     ) { backStackEntry ->
                         val workoutJson = backStackEntry.arguments?.getString("workoutJson")
                         val workout = Gson().fromJson(workoutJson, WorkoutData::class.java)
-                        WorkoutDetailsPage(workout)
+                        WorkoutDetailsPage(workoutData = workout, navController = navController, firebaseAuthHelper )
                     }
-                    // TODO: Pass down the firebaseAuthHelper variable to the UserSettingsPage.
+                    // User Settings Page
                     composable("settings") { UserSettingsPage(navController, firebaseAuthHelper) }
                 }
             }
