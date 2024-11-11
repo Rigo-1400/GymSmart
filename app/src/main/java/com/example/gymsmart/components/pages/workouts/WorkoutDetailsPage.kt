@@ -27,7 +27,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.composables.icons.lucide.Lucide
-import com.composables.icons.lucide.Pencil
 import com.composables.icons.lucide.Trash
 import com.example.gymsmart.BuildConfig
 import com.example.gymsmart.api.searchYouTubeVideos

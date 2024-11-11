@@ -3,13 +3,10 @@ package com.example.gymsmart.components.pages
 import BottomNavigationBar
 import android.util.Log
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.AddCircle
-import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.PlayArrow
-import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -62,7 +59,7 @@ fun HomePage(navController: NavController, firebaseAuthHelper: FirebaseAuthHelpe
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding),
-            contentAlignment = Alignment.BottomEnd // Aligns the FAB to the bottom-right corner
+            contentAlignment = Alignment.BottomEnd
         ) {
             // Main content in a Column
             Column(
@@ -106,23 +103,21 @@ fun HomePage(navController: NavController, firebaseAuthHelper: FirebaseAuthHelpe
 fun FloatingActionButtonWithMenu(navController: NavController) {
     var isMenuExpanded by remember { mutableStateOf(false) } // State to track if the menu is open
 
-    // Column to arrange FABs vertically with some space
     Column(
         horizontalAlignment = Alignment.End, // Align to the end (right side)
         verticalArrangement = Arrangement.spacedBy(8.dp), // Space between FABs
-        modifier = Modifier.padding(16.dp) // Padding from edges
+        modifier = Modifier.padding(16.dp)
     ) {
         if (isMenuExpanded) {
             // Additional Action Button for "Video"
             FloatingActionButton(
-                onClick = { /* Handle edit action */ },
+                onClick = {navController.navigate("workoutVideo")},
                 containerColor = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.size(48.dp) // Smaller size for additional FABs
+                modifier = Modifier.size(48.dp)
             ) {
                 Icon(Icons.Filled.PlayArrow, contentDescription = "Video")
             }
 
-            // Additional Action Button for "Share"
             FloatingActionButton(
                 onClick = {navController.navigate("workoutCreator") },
                 containerColor = MaterialTheme.colorScheme.primary,
@@ -132,7 +127,6 @@ fun FloatingActionButtonWithMenu(navController: NavController) {
             }
         }
 
-        // Main FAB that toggles the menu
         FloatingActionButton(
             onClick = { isMenuExpanded = !isMenuExpanded }, // Toggle the menu
             containerColor = MaterialTheme.colorScheme.secondary

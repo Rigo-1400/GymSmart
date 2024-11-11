@@ -23,6 +23,7 @@ import com.example.gymsmart.components.pages.UserSettingsPage
 import com.example.gymsmart.components.pages.workouts.EditWorkoutPage
 import com.example.gymsmart.components.pages.workouts.UserWorkoutsPage
 import com.example.gymsmart.components.pages.workouts.WorkoutCreatorPage
+import com.example.gymsmart.components.pages.workouts.WorkoutVideoPage
 import com.example.gymsmart.firebase.WorkoutData
 import com.example.gymsmart.firebase.getWorkoutData
 import com.google.firebase.auth.FirebaseAuth
@@ -68,10 +69,17 @@ class MainActivity : ComponentActivity() {
                     }
 
                     // Workout Creator Page
-                    composable("workoutCreator") { WorkoutCreatorPage(navController) }
+                    composable("workoutCreator") { WorkoutCreatorPage(navController, firebaseAuthHelper) }
 
                     // User Workouts Page
-                    composable("workouts") { UserWorkoutsPage(navController)
+                    composable("workouts") { UserWorkoutsPage(navController) }
+
+                    // Workout Video Page
+                    composable("workoutVideo") {
+                        WorkoutVideoPage(
+                            navController = navController,
+                            firebaseAuthHelper = firebaseAuthHelper
+                        )
                     }
 
                         // Workout Details Page
