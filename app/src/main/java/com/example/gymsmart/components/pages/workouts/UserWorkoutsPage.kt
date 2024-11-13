@@ -12,6 +12,10 @@ import androidx.compose.ui.unit.dp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import android.util.Log
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.AddCircle
+import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
@@ -104,14 +108,11 @@ fun UserWorkoutsPage(navController: NavController) {
 
 
     Scaffold(
-        modifier = Modifier
-            .fillMaxWidth()
-            .wrapContentHeight(),
-        bottomBar = { navController.currentBackStackEntry?.destination?.route?.let {
-            BottomNavigationBar(navController,
-                it
-            )
-        } }
+        modifier = Modifier.fillMaxSize(),
+        bottomBar = { navController.currentBackStackEntry?.destination?.route?.let { BottomNavigationBar(navController, it) } },
+        floatingActionButton = {
+            FloatingActionButtonWithMenu(navController)
+        }
     ) { innerPadding ->
         Column(modifier = Modifier
             .padding(innerPadding)
@@ -200,6 +201,43 @@ fun UserWorkoutsPage(navController: NavController) {
                     }
                 }
             }
+        }
+    }
+}
+
+@Composable
+fun FloatingActionButtonWithMenu(navController: NavController) {
+    var isMenuExpanded by remember { mutableStateOf(false) } // State to track if the menu is open
+
+    Column(
+        horizontalAlignment = Alignment.End,
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+        modifier = Modifier.padding(24.dp),
+    ) {
+        if (isMenuExpanded) {
+            // Additional Action Button for "Video"
+            FloatingActionButton(
+                onClick = { navController.navigate("workoutVideo") },
+                containerColor = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.size(48.dp)
+            ) {
+                Icon(Icons.Filled.PlayArrow, contentDescription = "Video")
+            }
+
+            FloatingActionButton(
+                onClick = { navController.navigate("workoutCreator") },
+                containerColor = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.size(48.dp)
+            ) {
+                Icon(Icons.Filled.AddCircle, contentDescription = "Add")
+            }
+        }
+
+        FloatingActionButton(
+            onClick = { isMenuExpanded = !isMenuExpanded },
+            containerColor = MaterialTheme.colorScheme.primary,
+        ) {
+            Icon(Icons.Filled.Add, contentDescription = "Add")
         }
     }
 }
