@@ -6,6 +6,7 @@ import com.composables.icons.lucide.Dumbbell
 import com.composables.icons.lucide.House
 import com.composables.icons.lucide.Lucide
 import com.composables.icons.lucide.Settings
+import com.composables.icons.lucide.User
 
 @Composable
 fun BottomNavigationBar(
@@ -29,10 +30,10 @@ fun BottomNavigationBar(
             onClick = { navController.navigate("workouts") }
         )
         NavigationBarItem(
-            icon = { Icon(Lucide.Settings, "Settings", tint = Color.Black) },
-            label = { Text("Settings", color = Color.Black) },
-            selected = currentRoute == "settings",
-            onClick = { navController.navigate("settings") }
+            icon = { Icon(Lucide.User, "Profile", tint = Color.Black) },
+            label = { Text("Profile", color = Color.Black) },
+            selected = currentRoute == "Profile",
+            onClick = { navController.navigate("Settings") }
         )
     }
 }
