@@ -207,40 +207,50 @@ fun UserWorkoutsPage(navController: NavController) {
 
 @Composable
 fun FloatingActionButtonWithMenu(navController: NavController) {
-    var isMenuExpanded by remember { mutableStateOf(false) } // State to track if the menu is open
+    var isMenuExpanded by remember { mutableStateOf(false) }
+    val buttonWidth = 150.dp
 
     Column(
         horizontalAlignment = Alignment.End,
         verticalArrangement = Arrangement.spacedBy(8.dp),
         modifier = Modifier.padding(24.dp),
+
     ) {
         if (isMenuExpanded) {
-            // Additional Action Button for "Video"
-            FloatingActionButton(
+            // Button for "Video Library"
+            ExtendedFloatingActionButton(
                 onClick = { navController.navigate("workoutVideo") },
                 containerColor = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.size(48.dp)
+                modifier = Modifier.width(buttonWidth)
             ) {
                 Icon(Icons.Filled.PlayArrow, contentDescription = "Video")
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(text = "Video")
             }
 
-            FloatingActionButton(
+            // Button for "Add Workout"
+            ExtendedFloatingActionButton(
                 onClick = { navController.navigate("workoutCreator") },
                 containerColor = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.size(48.dp)
+                modifier = Modifier.width(buttonWidth)
             ) {
-                Icon(Icons.Filled.AddCircle, contentDescription = "Add")
+                Icon(Icons.Filled.AddCircle, contentDescription = "Create")
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(text = "Create ")
             }
         }
 
+        // Main Floating Action Button to expand/collapse the menu
         FloatingActionButton(
             onClick = { isMenuExpanded = !isMenuExpanded },
             containerColor = MaterialTheme.colorScheme.primary,
         ) {
-            Icon(Icons.Filled.Add, contentDescription = "Add")
+            Icon(Icons.Filled.Add, contentDescription = "Expand Menu")
         }
     }
 }
+
+
 
 
 

@@ -1,6 +1,7 @@
 package com.example.gymsmart.components.pages.workouts
 
 import android.util.Log
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -22,22 +23,24 @@ import com.example.gymsmart.components.ui.YoutubePlayer
 import com.example.gymsmart.firebase.FirebaseAuthHelper
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun WorkoutVideoPage( navController: NavController, firebaseAuthHelper: FirebaseAuthHelper) {
+fun WorkoutVideoPage(navController: NavController, firebaseAuthHelper: FirebaseAuthHelper) {
     val apiKey = BuildConfig.GOOGLE_API_KEY
     var showVideoSpinner by remember { mutableStateOf(true) }
-    val coroutineScope = rememberCoroutineScope()
+    var allVideos by remember { mutableStateOf<Map<String, List<String>>>(emptyMap()) }
+    var selectedWorkout by remember { mutableStateOf("All Workouts") }
+    var expanded by remember { mutableStateOf(false) }
 
     val hardcodedWorkoutNames = listOf(
-        "Chest", "Triceps", "Biceps", "Shoulders",
-        "Quadriceps", " Hamstrings", "Calves"
-        )
-    var workoutVideos by remember { mutableStateOf<Map<String, List<String>>>(emptyMap()) }
+        "All Workouts", "Chest", "Triceps", "Biceps", "Shoulders",
+        "Quadriceps", "Hamstrings", "Calves"
+    )
 
     LaunchedEffect(hardcodedWorkoutNames) {
-        coroutineScope.launch {
-            val videosMap = hardcodedWorkoutNames.associateWith { workoutName ->
+        showVideoSpinner = true
+        allVideos = hardcodedWorkoutNames
+            .filter { it != "All Workouts" }
+            .associateWith { workoutName ->
                 try {
                     searchYouTubeVideos(workoutName, apiKey)
                 } catch (e: Exception) {
@@ -45,72 +48,132 @@ fun WorkoutVideoPage( navController: NavController, firebaseAuthHelper: Firebase
                     emptyList()
                 }
             }
-            workoutVideos = videosMap
-            showVideoSpinner = false
-            Log.d("WorkoutVideoPage", "Fetched workout videos: $workoutVideos")
-        }
+        showVideoSpinner = false
     }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
-            TopAppBar(
-                title = { Text("GymSmart", fontWeight = FontWeight.Bold, fontSize = 20.sp, color = Color.White) },
-                navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(imageVector = Lucide.MoveLeft, contentDescription = "Move Back to Previous Page")
-                    }
-                },
-                actions = {
-                    UserSettingsDropdownMenu(
-                        { setting -> if (setting == "Settings") navController.navigate("settings") },
-                        firebaseAuthHelper = firebaseAuthHelper,
-                        navController
-                    )
-                },
-                colors = TopAppBarDefaults.topAppBarColors(Color(0xFF1c1c1c)),
-            )
+            WorkoutTopBar(navController, firebaseAuthHelper)
         },
         content = { innerPadding ->
-            LazyColumn(
+            Column(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(innerPadding)
-                    .padding(16.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp),
-                horizontalAlignment = Alignment.Start
+                    .padding(16.dp)
             ) {
+                WorkoutDropdownMenu(
+                    selectedWorkout = selectedWorkout,
+                    expanded = expanded,
+                    onExpandedChange = { expanded = it },
+                    workoutNames = hardcodedWorkoutNames,
+                    onWorkoutSelected = { selectedWorkout = it }
+                )
+
                 if (showVideoSpinner) {
-                    item {
-                        Column(
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            CircularProgressIndicator()
-                            Text("Loading videos...")
-                        }
-                    }
+                    LoadingSpinner()
                 } else {
-                    workoutVideos.forEach { (workoutName, videoIds) ->
-                        item {
-                            Text(
-                                text = workoutName,
-                                fontWeight = FontWeight.Bold,
-                                fontSize = 18.sp,
-                                modifier = Modifier.padding(vertical = 8.dp)
-                            )
-                        }
-                        items(videoIds) { videoId ->
-                            YoutubePlayer(videoId = videoId)
-                        }
-                    }
-                    if (workoutVideos.isEmpty()) {
-                        item {
-                            Text("No videos found for these exercises!")
-                        }
-                    }
+                    VideoList(allVideos = allVideos, selectedWorkout = selectedWorkout)
                 }
             }
         }
     )
 }
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun WorkoutTopBar(navController: NavController, firebaseAuthHelper: FirebaseAuthHelper) {
+    TopAppBar(
+        title = { Text("GymSmart", fontWeight = FontWeight.Bold, fontSize = 20.sp, color = Color.White) },
+        navigationIcon = {
+            IconButton(onClick = { navController.popBackStack() }) {
+                Icon(imageVector = Lucide.MoveLeft, contentDescription = "Move Back to Previous Page")
+            }
+        },
+        actions = {
+            UserSettingsDropdownMenu(
+                { setting -> if (setting == "Settings") navController.navigate("settings") },
+                firebaseAuthHelper = firebaseAuthHelper,
+                navController
+            )
+        },
+        colors = TopAppBarDefaults.topAppBarColors(Color(0xFF1c1c1c)),
+    )
+}
+
+@Composable
+fun WorkoutDropdownMenu(
+    selectedWorkout: String,
+    expanded: Boolean,
+    onExpandedChange: (Boolean) -> Unit,
+    workoutNames: List<String>,
+    onWorkoutSelected: (String) -> Unit
+) {
+    Box(modifier = Modifier.fillMaxWidth().padding(8.dp)) {
+        Text(
+            text = "Filter by Muscle Group: $selectedWorkout",
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable { onExpandedChange(true) }
+                .padding(8.dp)
+        )
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { onExpandedChange(false) },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            workoutNames.forEach { workoutName ->
+                DropdownMenuItem(
+                    text = { Text(workoutName) },
+                    onClick = {
+                        onWorkoutSelected(workoutName)
+                        onExpandedChange(false)
+                    }
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun LoadingSpinner() {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        CircularProgressIndicator()
+        Text("Loading videos...")
+    }
+}
+
+@Composable
+fun VideoList(allVideos: Map<String, List<String>>, selectedWorkout: String) {
+    LazyColumn(
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+        horizontalAlignment = Alignment.Start
+    ) {
+        val workoutsToShow = if (selectedWorkout == "All Workouts") {
+            allVideos
+        } else {
+            mapOf(selectedWorkout to allVideos[selectedWorkout].orEmpty())
+        }
+
+        workoutsToShow.forEach { (workoutName, workoutVideoIds) ->
+            item {
+                Text(
+                    text = workoutName,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 18.sp,
+                    modifier = Modifier.padding(vertical = 8.dp)
+                )
+            }
+            items(workoutVideoIds, key = { it }) { videoId ->
+                YoutubePlayer(videoId = videoId)
+            }
+        }
+    }
+}
+
+
