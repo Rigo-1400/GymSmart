@@ -30,6 +30,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.gson.Gson
 import kotlinx.coroutines.launch
 
+
 /**
  * Main activity
  *
@@ -40,6 +41,9 @@ class MainActivity : ComponentActivity() {
     private lateinit var firebaseAuthHelper: FirebaseAuthHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
+
+
         super.onCreate(savedInstanceState)
 
         setContent {
