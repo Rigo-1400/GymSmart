@@ -1,6 +1,4 @@
 package com.example.gymsmart.firebase
-
-import androidx.compose.ui.text.font.FontWeight
 import com.google.firebase.Timestamp
 
 /**
@@ -13,6 +11,7 @@ import com.google.firebase.Timestamp
  * @property muscleGroup
  * @property sets
  * @property reps
+ * @property isPR
  * @constructor Create empty Workout data
  */
 data class WorkoutData(
@@ -23,5 +22,7 @@ data class WorkoutData(
     var muscleGroup: String = "",
     var sets: Int = 0,
     var reps: Int = 0,
-    var weight: Int = 0
+    var weight: Int = 0,
+    @field:JvmField
+    var isPR: Boolean = false
 )

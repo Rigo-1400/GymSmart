@@ -10,7 +10,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.gymsmart.firebase.WorkoutData
 import com.google.gson.Gson
@@ -42,6 +45,14 @@ fun WorkoutItem(workout: WorkoutData, navController: NavController) {
             Text(workout.name, style = MaterialTheme.typography.titleMedium)
             Text("Muscle Group: ${workout.muscleGroup}", style = MaterialTheme.typography.bodyMedium)
             Text(formattedDate, style = MaterialTheme.typography.bodyMedium)
+            if (workout.isPR) {
+                Text(
+                    text = "🎉 Personal Record!",
+                    color = Color(0xFF4CAF50), // Green color for PR message
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 14.sp
+                )
+            }
         }
     }
 }

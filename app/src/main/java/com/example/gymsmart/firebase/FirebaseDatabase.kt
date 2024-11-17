@@ -18,7 +18,7 @@ import kotlinx.coroutines.tasks.await
  * @param sets
  * @param reps
  */
-fun saveWorkoutToFirebase(
+suspend fun saveWorkoutToFirebase(
     db: FirebaseFirestore,
     userId: String,
     dateAdded: Timestamp,
@@ -27,27 +27,49 @@ fun saveWorkoutToFirebase(
     muscleGroup: String,
     sets: Int,
     reps: Int,
-    weight: Int
+    weight: Int,
+    isPR: Boolean
 ) {
-    val workout = hashMapOf(
-        "partOfTheBody" to partOfTheBody,
-        "dateAdded" to dateAdded,
-        "name" to workoutName,
-        "muscleGroup" to muscleGroup,
-        "sets" to sets,
-        "reps" to reps,
-        "weight" to weight
+    val workoutData = WorkoutData(
+        dateAdded = dateAdded,
+        partOfTheBody = partOfTheBody,
+        name = workoutName,
+        muscleGroup = muscleGroup,
+        sets = sets,
+        reps = reps,
+        weight = weight,
+        isPR = isPR
     )
 
-    db.collection("users").document(userId).collection("workouts")
-        .add(workout)
-        .addOnSuccessListener { documentReference ->
-            Log.d("WorkoutPage", "DocumentSnapshot added with ID: ${documentReference.id}")
+    // Check for previous PR
+    val (isNewPR, previousPRId) = checkForPR(workoutName, weight, reps, userId)
+
+    if (isNewPR && previousPRId != null) {
+        // Update the old PR entry's isPR field to false
+        db.collection("users").document(userId)
+            .collection("workouts").document(previousPRId)
+            .update("isPR", false)
+            .addOnSuccessListener {
+                Log.d("PRCheck", "Old PR updated successfully (isPR set to false).")
+            }
+            .addOnFailureListener { e ->
+                Log.w("PRCheck", "Failed to update old PR: $e")
+            }
+    }
+
+
+    // Save the new workout (with the new PR if applicable)
+    db.collection("users").document(userId)
+        .collection("workouts")
+        .add(workoutData)
+        .addOnSuccessListener {
+            Log.d("Firestore", "Workout saved successfully.")
         }
         .addOnFailureListener { e ->
-            Log.w("WorkoutPage", "Error adding document", e)
+            Log.w("Firestore", "Failed to save workout: $e")
         }
 }
+
 
 fun deleteWorkout(workoutId: String, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
     val db = FirebaseFirestore.getInstance()
@@ -104,23 +126,69 @@ fun updateWorkout(
         onFailure(exception)
     }
 }
-suspend fun getWorkoutData(workoutId: String, userId: String): WorkoutData? {
+suspend fun getPreviousWorkouts(workoutName: String, userId: String): List<WorkoutData> {
     val db = FirebaseFirestore.getInstance()
-    return try {
-        val document = db.collection("users")
-            .document(userId)
-            .collection("workouts")
-            .document(workoutId)
-            .get()
-            .await()
+    val querySnapshot = db
+        .collection("users")
+        .document(userId)
+        .collection("workouts")
+        .whereEqualTo("name", workoutName)
+        .get()
+        .await()
 
-        if (document.exists()) {
-            document.toObject(WorkoutData::class.java)
-        } else {
-            null
-        }
-    } catch (e: Exception) {
-        e.printStackTrace()
-        null
+    // Map the query results to your WorkoutData model
+    val workoutList = querySnapshot.documents.map { doc ->
+        WorkoutData(
+            id = doc.id,
+            dateAdded = doc.getTimestamp("dateAdded") ?: Timestamp.now(),
+            partOfTheBody = doc.getString("partOfTheBody") ?: "",
+            name = doc.getString("name") ?: "",
+            muscleGroup = doc.getString("muscleGroup") ?: "",
+            sets = doc.getLong("sets")?.toInt() ?: 0,
+            reps = doc.getLong("reps")?.toInt() ?: 0,
+            weight = doc.getLong("weight")?.toInt() ?: 0,
+            isPR = doc.getBoolean("isPR") ?: false // Explicitly fetch as Boolean
+        )
     }
+
+    // Debug log to verify fetched data
+    workoutList.forEach { workout ->
+        Log.d("PRCheck", "Fetched workout: ${workout.name}, isPR: ${workout.isPR}")
+    }
+
+    return workoutList
 }
+
+suspend fun checkForPR(workoutName: String, weight: Int, reps: Int, userId: String): Pair<Boolean, String?> {
+    // Fetch previous records for the given workout
+    val previousRecords = getPreviousWorkouts(workoutName, userId)
+
+    // If there are no previous records, return false (no PR check needed)
+    if (previousRecords.isEmpty()) {
+        return Pair(false, null)
+    }
+
+    // Find the previous max weight and corresponding PR ID
+    val maxPreviousWeight = previousRecords.maxOfOrNull { it.weight } ?: 0
+    val maxPreviousReps = previousRecords.filter { it.weight == maxPreviousWeight }.maxOfOrNull { it.reps } ?: 0
+    val previousPRId = previousRecords.find { it.weight == maxPreviousWeight && it.reps == maxPreviousReps }?.id
+
+    // Determine if the new entry is a PR based on the updated logic
+    val isNewPR = when {
+        // New weight is higher than the previous max weight
+        weight > maxPreviousWeight -> true
+
+        // Same weight, but more reps
+        weight == maxPreviousWeight && reps > maxPreviousReps -> true
+
+        // Any other case is not a PR
+        else -> false
+    }
+
+    // Return whether it's a PR and the ID of the previous PR (if any)
+    return Pair(isNewPR, previousPRId)
+}
+
+
+
+

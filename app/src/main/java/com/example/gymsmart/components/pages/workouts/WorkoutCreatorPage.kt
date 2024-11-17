@@ -1,5 +1,6 @@
 package com.example.gymsmart.components.pages.workouts
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
@@ -7,6 +8,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -18,14 +20,18 @@ import com.composables.icons.lucide.Plus
 import com.example.gymsmart.components.ui.MuscleGroupSelectorDropdownMenu
 import com.example.gymsmart.components.ui.UserSettingsDropdownMenu
 import com.example.gymsmart.firebase.FirebaseAuthHelper
+import com.example.gymsmart.firebase.checkForPR
 import com.example.gymsmart.firebase.saveWorkoutToFirebase
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WorkoutCreatorPage(navController: NavController, firebaseAuthHelper: FirebaseAuthHelper) {
+    val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
     var workoutName by remember { mutableStateOf("") }
     var muscleGroup by remember { mutableStateOf("") }
     var partOfTheBody by remember { mutableStateOf("") }
@@ -109,11 +115,18 @@ fun WorkoutCreatorPage(navController: NavController, firebaseAuthHelper: Firebas
                 Button(
                     onClick = {
                         if (userId != null && sets > 0 && reps > 0) {
-                            saveWorkoutToFirebase(
-                                db, userId, Timestamp.now(),
-                                partOfTheBody, workoutName, muscleGroup, sets, reps, weight
-                            )
-                            navController.navigate("workouts")
+
+                            // When the user is about to save the workout
+                            coroutineScope.launch {
+                                val (isPR, _) = checkForPR(workoutName, weight, reps, userId)
+
+                                if (isPR) {
+                                    Toast.makeText(context, "🎉 New PR! You hit a personal record for $workoutName!", Toast.LENGTH_SHORT).show()
+                                }
+
+                                saveWorkoutToFirebase(db, userId, Timestamp.now(), partOfTheBody, workoutName, muscleGroup, sets, reps, weight, isPR)
+                                navController.navigate("workouts")
+                            }
                         }
                     },
                     modifier = Modifier
@@ -170,3 +183,4 @@ fun RowScope.CounterSection(
         Icon(Lucide.Plus, contentDescription = "Increase $label", tint = Color.White)
     }
 }
+

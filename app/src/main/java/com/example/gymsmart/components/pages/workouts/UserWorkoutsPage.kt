@@ -57,6 +57,10 @@ fun UserWorkoutsPage(navController: NavController) {
                             it.id = document.id
                         }
                     }
+                    documents.mapNotNull{document ->
+                        val workout = document.toObject(WorkoutData::class.java)
+                        Log.d("FirestoreData", "Workout fetched: ${workout.isPR}")
+                    }
                     workouts = fetchedWorkouts.sortedByDescending { it.dateAdded }
                     filteredWorkouts = workouts
                     showSpinner = false
