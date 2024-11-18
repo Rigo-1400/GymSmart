@@ -1,9 +1,7 @@
 package com.example.gymsmart.components.pages
 
-import BottomNavigationBar
 import android.util.Log
 import androidx.compose.foundation.layout.*
-
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -13,6 +11,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.gymsmart.components.ui.BottomNavigationBar
 import com.example.gymsmart.components.ui.UserSettingsDropdownMenu
 import com.example.gymsmart.firebase.FirebaseAuthHelper
 import com.example.gymsmart.firebase.UserSession

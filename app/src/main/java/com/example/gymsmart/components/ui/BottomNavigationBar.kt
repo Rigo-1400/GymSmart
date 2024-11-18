@@ -1,3 +1,4 @@
+package com.example.gymsmart.components.ui
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
@@ -5,7 +6,6 @@ import androidx.navigation.NavController
 import com.composables.icons.lucide.Dumbbell
 import com.composables.icons.lucide.House
 import com.composables.icons.lucide.Lucide
-import com.composables.icons.lucide.Settings
 import com.composables.icons.lucide.User
 
 @Composable
