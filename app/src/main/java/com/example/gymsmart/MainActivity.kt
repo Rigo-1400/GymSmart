@@ -14,6 +14,7 @@ import com.example.gymsmart.components.pages.HomePage
 import com.example.gymsmart.firebase.FirebaseAuthHelper
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
+import com.example.gymsmart.components.Attatchements
 import com.example.gymsmart.components.pages.LoginPage
 import com.example.gymsmart.components.pages.UserSettingsPage
 import com.example.gymsmart.components.pages.workouts.UserWorkoutsPage
@@ -21,6 +22,7 @@ import com.example.gymsmart.components.pages.workouts.WorkoutCreatorPage
 import com.example.gymsmart.components.pages.workouts.WorkoutVideoPage
 import com.example.gymsmart.firebase.WorkoutData
 import com.google.gson.Gson
+
 
 
 /**
@@ -89,6 +91,10 @@ class MainActivity : ComponentActivity() {
                     }
                     // User Settings Page
                     composable("settings") { UserSettingsPage(navController, firebaseAuthHelper) }
+
+
+                    composable("attatchements") { Attatchements( navController)}
+
                 }
             }
         }

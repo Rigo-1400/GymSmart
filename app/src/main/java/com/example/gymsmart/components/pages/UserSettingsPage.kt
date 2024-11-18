@@ -97,7 +97,7 @@ fun UserSettingsPage(
                     text = "Accessories",
                     description = "View or edit your gym accessories",
                     icon = Lucide.Dumbbell,
-                    onClick = { navController.navigate("profile") }
+                    onClick = { navController.navigate("attatchements") }
                 )
                 SettingsListItem(
                     text = "Gym Machine Settings",
@@ -111,7 +111,7 @@ fun UserSettingsPage(
                     icon = Lucide.LogOut,
                     onClick = {
                         firebaseAuthHelper.signOut()
-                        navController.navigate("login")
+                        navController.navigate("logout")
                     }
                 )
             }

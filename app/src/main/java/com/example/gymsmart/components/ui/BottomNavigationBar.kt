@@ -34,6 +34,7 @@ fun BottomNavigationBar(
             label = { Text("Profile", color = Color.Black) },
             selected = currentRoute == "Profile",
             onClick = { navController.navigate("Settings") }
+
         )
     }
 }
