@@ -2,6 +2,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavController
+import com.composables.icons.lucide.Contact
 import com.composables.icons.lucide.Dumbbell
 import com.composables.icons.lucide.House
 import com.composables.icons.lucide.Lucide
@@ -29,8 +30,8 @@ fun BottomNavigationBar(
             onClick = { navController.navigate("workouts") }
         )
         NavigationBarItem(
-            icon = { Icon(Lucide.Settings, "Settings", tint = Color.Black) },
-            label = { Text("Settings", color = Color.Black) },
+            icon = { Icon(Lucide.Contact, "Settings", tint = Color.Black) },
+            label = { Text("Profile", color = Color.Black) },
             selected = currentRoute == "settings",
             onClick = { navController.navigate("settings") }
         )

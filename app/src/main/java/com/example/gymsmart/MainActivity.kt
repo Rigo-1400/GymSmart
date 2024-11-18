@@ -18,6 +18,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import com.example.gymsmart.components.Attatchements
 import com.example.gymsmart.components.pages.LoginPage
 import com.example.gymsmart.components.pages.UserSettingsPage
 import com.example.gymsmart.components.pages.workouts.EditWorkoutPage
@@ -28,6 +29,7 @@ import com.example.gymsmart.firebase.getWorkoutData
 import com.google.firebase.auth.FirebaseAuth
 import com.google.gson.Gson
 import kotlinx.coroutines.launch
+import java.lang.reflect.Type
 
 /**
  * Main activity
@@ -85,6 +87,9 @@ class MainActivity : ComponentActivity() {
                     }
                     // User Settings Page
                     composable("settings") { UserSettingsPage(navController, firebaseAuthHelper) }
+
+
+                    composable("attatchements") { Attatchements( navController)}
                 }
             }
         }

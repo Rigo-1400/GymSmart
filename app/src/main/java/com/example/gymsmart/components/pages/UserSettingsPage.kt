@@ -27,7 +27,7 @@ fun UserSettingsPage(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("User Settings") },
+                title = { Text("Profile") },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
                         Icon(
@@ -51,7 +51,7 @@ fun UserSettingsPage(
                     text = "Accessories",
                     description = "View or edit your gym accessories",
                     icon = Lucide.Dumbbell,
-                    onClick = { navController.navigate("profile") }
+                    onClick = { navController.navigate("attatchements") }
                 )
 
                 // List item for navigation to the Users Gym machine settings screen
@@ -69,7 +69,7 @@ fun UserSettingsPage(
                     icon = Lucide.LogOut,
                     onClick = {
                         firebaseAuthHelper.signOut()
-                        navController.navigate("login")
+                        navController.navigate("logout")
                     }
                 )
             }
