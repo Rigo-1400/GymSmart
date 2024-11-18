@@ -7,7 +7,7 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import org.json.JSONObject
 
-suspend fun searchYouTubeVideos(exerciseName: String, apiKey: String, maxResults: Int = 2): List<String> {
+suspend fun searchYouTubeVideos(exerciseName: String, apiKey: String, maxResults: Int = 1): List<String> {
     return withContext(Dispatchers.IO) {
         val client = OkHttpClient()
 

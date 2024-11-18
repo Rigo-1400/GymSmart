@@ -1,3 +1,4 @@
+package com.example.gymsmart.components.ui
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
@@ -6,7 +7,7 @@ import com.composables.icons.lucide.Contact
 import com.composables.icons.lucide.Dumbbell
 import com.composables.icons.lucide.House
 import com.composables.icons.lucide.Lucide
-import com.composables.icons.lucide.Settings
+import com.composables.icons.lucide.User
 
 @Composable
 fun BottomNavigationBar(
@@ -30,10 +31,10 @@ fun BottomNavigationBar(
             onClick = { navController.navigate("workouts") }
         )
         NavigationBarItem(
-            icon = { Icon(Lucide.Contact, "Settings", tint = Color.Black) },
+            icon = { Icon(Lucide.User, "Profile", tint = Color.Black) },
             label = { Text("Profile", color = Color.Black) },
-            selected = currentRoute == "settings",
-            onClick = { navController.navigate("settings") }
+            selected = currentRoute == "Profile",
+            onClick = { navController.navigate("Settings") }
         )
     }
 }
