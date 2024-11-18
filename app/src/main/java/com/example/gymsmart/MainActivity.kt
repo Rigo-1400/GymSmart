@@ -94,6 +94,7 @@ class MainActivity : ComponentActivity() {
 
 
                     composable("attatchements") { Attatchements( navController)}
+
                 }
             }
         }
