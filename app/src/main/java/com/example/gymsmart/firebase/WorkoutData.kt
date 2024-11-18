@@ -23,6 +23,7 @@ data class WorkoutData(
     var sets: Int = 0,
     var reps: Int = 0,
     var weight: Int = 0,
+    var prDetails: String = "",
     @field:JvmField
     var isPR: Boolean = false
 )

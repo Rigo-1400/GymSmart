@@ -118,13 +118,13 @@ fun WorkoutCreatorPage(navController: NavController, firebaseAuthHelper: Firebas
 
                             // When the user is about to save the workout
                             coroutineScope.launch {
-                                val (isPR, _) = checkForPR(workoutName, weight, reps, userId)
+                                val (isPR, _, prDetails) = checkForPR(workoutName, weight, reps, userId)
 
                                 if (isPR) {
                                     Toast.makeText(context, "🎉 New PR! You hit a personal record for $workoutName!", Toast.LENGTH_SHORT).show()
                                 }
 
-                                saveWorkoutToFirebase(db, userId, Timestamp.now(), partOfTheBody, workoutName, muscleGroup, sets, reps, weight, isPR)
+                                saveWorkoutToFirebase(db, userId, Timestamp.now(), partOfTheBody, workoutName, muscleGroup, sets, reps, weight, isPR, prDetails)
                                 navController.navigate("workouts")
                             }
                         }

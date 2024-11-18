@@ -142,10 +142,11 @@ fun WorkoutDetailsPage(workoutData: WorkoutData?, navController: NavController, 
                                 fontWeight = FontWeight.Bold,
                                 fontSize = 16.sp
                             )
+                            Text(text = "PR Details: ${workoutData.prDetails}", fontSize = 16.sp)
                         }
                         Text("Sets: ${it.sets}")
                         Text("Reps: ${it.reps}")
-                        Text("Weight: ${it.weight}")
+                        Text("Weight: ${it.weight}Lbs")
                         Text("Muscle Group: ${it.muscleGroup}")
                     }
                 }

@@ -21,24 +21,26 @@ import kotlinx.coroutines.tasks.await
 suspend fun saveWorkoutToFirebase(
     db: FirebaseFirestore,
     userId: String,
-    dateAdded: Timestamp,
+    timestamp: Timestamp,
     partOfTheBody: String,
     workoutName: String,
     muscleGroup: String,
     sets: Int,
     reps: Int,
     weight: Int,
-    isPR: Boolean
+    isPR: Boolean,
+    prDetails: String
 ) {
     val workoutData = WorkoutData(
-        dateAdded = dateAdded,
+        dateAdded = timestamp,
         partOfTheBody = partOfTheBody,
         name = workoutName,
         muscleGroup = muscleGroup,
         sets = sets,
         reps = reps,
         weight = weight,
-        isPR = isPR
+        isPR = isPR,
+        prDetails = prDetails
     )
 
     // Check for previous PR
@@ -159,34 +161,35 @@ suspend fun getPreviousWorkouts(workoutName: String, userId: String): List<Worko
     return workoutList
 }
 
-suspend fun checkForPR(workoutName: String, weight: Int, reps: Int, userId: String): Pair<Boolean, String?> {
-    // Fetch previous records for the given workout
+suspend fun checkForPR(workoutName: String, weight: Int, reps: Int, userId: String): Triple<Boolean, String?, String> {
     val previousRecords = getPreviousWorkouts(workoutName, userId)
-
-    // If there are no previous records, return false (no PR check needed)
     if (previousRecords.isEmpty()) {
-        return Pair(false, null)
+        // If this is the first record, it's a PR by default
+        return Triple(false, null, "")
     }
 
-    // Find the previous max weight and corresponding PR ID
     val maxPreviousWeight = previousRecords.maxOfOrNull { it.weight } ?: 0
-    val maxPreviousReps = previousRecords.filter { it.weight == maxPreviousWeight }.maxOfOrNull { it.reps } ?: 0
-    val previousPRId = previousRecords.find { it.weight == maxPreviousWeight && it.reps == maxPreviousReps }?.id
+    val maxPreviousReps = previousRecords.filter { it.weight == weight }.maxOfOrNull { it.reps } ?: 0
 
-    // Determine if the new entry is a PR based on the updated logic
-    val isNewPR = when {
-        // New weight is higher than the previous max weight
-        weight > maxPreviousWeight -> true
-
-        // Same weight, but more reps
-        weight == maxPreviousWeight && reps > maxPreviousReps -> true
-
-        // Any other case is not a PR
+    var prDetails = ""
+    val isPR = when {
+        weight > maxPreviousWeight && reps > maxPreviousReps -> {
+            prDetails = "+${weight - maxPreviousWeight} lbs, +${reps - maxPreviousReps} reps"
+            true
+        }
+        weight > maxPreviousWeight -> {
+            prDetails = "+${weight - maxPreviousWeight} lbs"
+            true
+        }
+        weight == maxPreviousWeight && reps > maxPreviousReps -> {
+            prDetails = "+${reps - maxPreviousReps} reps"
+            true
+        }
         else -> false
     }
 
-    // Return whether it's a PR and the ID of the previous PR (if any)
-    return Pair(isNewPR, previousPRId)
+    val previousPRId = previousRecords.firstOrNull { it.isPR }?.id
+    return Triple(isPR, previousPRId, prDetails)
 }
 
 

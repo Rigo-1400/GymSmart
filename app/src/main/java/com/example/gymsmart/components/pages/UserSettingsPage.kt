@@ -69,7 +69,7 @@ fun UserSettingsPage(
 
                 // User information
                 Text(
-                    text = "Welcome to your profile page!\n\n ${UserSession.userName}",
+                    text = "${UserSession.userName}",
                     style = MaterialTheme.typography.titleMedium.copy(fontSize = 25.sp)
                 )
                 Text(
