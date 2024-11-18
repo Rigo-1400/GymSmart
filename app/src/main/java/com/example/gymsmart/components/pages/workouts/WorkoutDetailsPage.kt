@@ -35,6 +35,8 @@ import com.composables.icons.lucide.MoveLeft
 import androidx.navigation.NavController
 import com.example.gymsmart.components.ui.UserSettingsDropdownMenu
 import com.example.gymsmart.firebase.FirebaseAuthHelper
+import androidx.compose.material3.TextButton
+import com.example.gymsmart.firebase.deleteWorkout
 
 
 /**
@@ -42,9 +44,6 @@ import com.example.gymsmart.firebase.FirebaseAuthHelper
  *
  * @param workoutData
  */
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.TextButton
-import com.example.gymsmart.firebase.deleteWorkout
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -136,9 +135,18 @@ fun WorkoutDetailsPage(workoutData: WorkoutData?, navController: NavController, 
 
                 Card(Modifier.fillMaxWidth()) {
                     Column(Modifier.padding(16.dp)) {
+                        if (workoutData.isPR) {
+                            Text(
+                                text = "🎉 New PR!",
+                                color = Color(0xFF4CAF50), // Green color for the PR badge
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 16.sp
+                            )
+                            Text(text = "PR Details: ${workoutData.prDetails}", fontSize = 16.sp)
+                        }
                         Text("Sets: ${it.sets}")
                         Text("Reps: ${it.reps}")
-                        Text("Weight: ${it.weight}")
+                        Text("Weight: ${it.weight}Lbs")
                         Text("Muscle Group: ${it.muscleGroup}")
                     }
                 }

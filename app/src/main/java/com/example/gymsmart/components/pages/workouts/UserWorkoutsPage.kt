@@ -12,13 +12,13 @@ import androidx.compose.ui.unit.dp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import android.util.Log
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.AddCircle
-import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
+import com.composables.icons.lucide.Lucide
+import com.composables.icons.lucide.Play
+import com.composables.icons.lucide.Plus
 import com.example.gymsmart.components.ui.WorkoutDatePicker
 import com.example.gymsmart.components.ui.FilterDropdownMenu
 import com.example.gymsmart.components.ui.SearchBarWithIcon
@@ -56,6 +56,10 @@ fun UserWorkoutsPage(navController: NavController) {
                         document.toObject(WorkoutData::class.java).also {
                             it.id = document.id
                         }
+                    }
+                    documents.mapNotNull{document ->
+                        val workout = document.toObject(WorkoutData::class.java)
+                        Log.d("FirestoreData", "Workout fetched: ${workout.isPR}")
                     }
                     workouts = fetchedWorkouts.sortedByDescending { it.dateAdded }
                     filteredWorkouts = workouts
@@ -223,7 +227,7 @@ fun FloatingActionButtonWithMenu(navController: NavController) {
                 containerColor = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.width(buttonWidth)
             ) {
-                Icon(Icons.Filled.PlayArrow, contentDescription = "Video")
+                Icon(Lucide.Play, contentDescription = "Video")
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(text = "Video")
             }
@@ -234,7 +238,7 @@ fun FloatingActionButtonWithMenu(navController: NavController) {
                 containerColor = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.width(buttonWidth)
             ) {
-                Icon(Icons.Filled.AddCircle, contentDescription = "Create")
+                Icon(Lucide.Plus, contentDescription = "Create")
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(text = "Create ")
             }
@@ -244,8 +248,9 @@ fun FloatingActionButtonWithMenu(navController: NavController) {
         FloatingActionButton(
             onClick = { isMenuExpanded = !isMenuExpanded },
             containerColor = MaterialTheme.colorScheme.primary,
+            shape = CircleShape
         ) {
-            Icon(Icons.Filled.Add, contentDescription = "Expand Menu")
+            Icon(Lucide.Plus, contentDescription = "Expand Menu")
         }
     }
 }
