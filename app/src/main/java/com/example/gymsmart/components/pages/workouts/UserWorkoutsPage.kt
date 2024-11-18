@@ -1,7 +1,6 @@
 package com.example.gymsmart.components.pages.workouts
 
 
-import BottomNavigationBar
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -19,6 +18,7 @@ import androidx.navigation.NavController
 import com.composables.icons.lucide.Lucide
 import com.composables.icons.lucide.Play
 import com.composables.icons.lucide.Plus
+import com.example.gymsmart.components.ui.BottomNavigationBar
 import com.example.gymsmart.components.ui.WorkoutDatePicker
 import com.example.gymsmart.components.ui.FilterDropdownMenu
 import com.example.gymsmart.components.ui.SearchBarWithIcon
@@ -211,46 +211,27 @@ fun UserWorkoutsPage(navController: NavController) {
 
 @Composable
 fun FloatingActionButtonWithMenu(navController: NavController) {
-    var isMenuExpanded by remember { mutableStateOf(false) }
-    val buttonWidth = 150.dp
-
     Column(
         horizontalAlignment = Alignment.End,
         verticalArrangement = Arrangement.spacedBy(8.dp),
         modifier = Modifier.padding(24.dp),
 
     ) {
-        if (isMenuExpanded) {
-            // Button for "Video Library"
-            ExtendedFloatingActionButton(
-                onClick = { navController.navigate("workoutVideo") },
-                containerColor = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.width(buttonWidth)
-            ) {
-                Icon(Lucide.Play, contentDescription = "Video")
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(text = "Video")
-            }
-
-            // Button for "Add Workout"
-            ExtendedFloatingActionButton(
-                onClick = { navController.navigate("workoutCreator") },
-                containerColor = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.width(buttonWidth)
-            ) {
-                Icon(Lucide.Plus, contentDescription = "Create")
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(text = "Create ")
-            }
-        }
-
+        // Main Floating Action Button to expand/collapse the menu
         // Main Floating Action Button to expand/collapse the menu
         FloatingActionButton(
-            onClick = { isMenuExpanded = !isMenuExpanded },
+            onClick = { navController.navigate("workoutVideo") },
             containerColor = MaterialTheme.colorScheme.primary,
             shape = CircleShape
         ) {
-            Icon(Lucide.Plus, contentDescription = "Expand Menu")
+            Icon(Lucide.Play, contentDescription = "Create Workout")
+        }
+        FloatingActionButton(
+            onClick = { navController.navigate("workoutCreator") },
+            containerColor = MaterialTheme.colorScheme.primary,
+            shape = CircleShape
+        ) {
+            Icon(Lucide.Plus, contentDescription = "Create Workout")
         }
     }
 }
