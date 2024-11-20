@@ -1,4 +1,5 @@
 package com.example.gymsmart
+import HomePage
 import WorkoutDetailsPage
 import android.os.Bundle
 import android.util.Log
@@ -10,24 +11,19 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.example.gymsmart.components.pages.HomePage
 import com.example.gymsmart.firebase.FirebaseAuthHelper
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import com.example.gymsmart.components.Attatchements
 import com.example.gymsmart.components.pages.LoginPage
 import com.example.gymsmart.components.pages.UserSettingsPage
-import com.example.gymsmart.components.pages.workouts.EditWorkoutPage
 import com.example.gymsmart.components.pages.workouts.UserWorkoutsPage
 import com.example.gymsmart.components.pages.workouts.WorkoutCreatorPage
+import com.example.gymsmart.components.pages.workouts.WorkoutVideoPage
 import com.example.gymsmart.firebase.WorkoutData
-import com.example.gymsmart.firebase.getWorkoutData
-import com.google.firebase.auth.FirebaseAuth
 import com.google.gson.Gson
-import kotlinx.coroutines.launch
+
+
 
 /**
  * Main activity
@@ -39,6 +35,9 @@ class MainActivity : ComponentActivity() {
     private lateinit var firebaseAuthHelper: FirebaseAuthHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
+
+
         super.onCreate(savedInstanceState)
 
         setContent {
@@ -68,10 +67,17 @@ class MainActivity : ComponentActivity() {
                     }
 
                     // Workout Creator Page
-                    composable("workoutCreator") { WorkoutCreatorPage(navController) }
+                    composable("workoutCreator") { WorkoutCreatorPage(navController, firebaseAuthHelper) }
 
                     // User Workouts Page
-                    composable("workouts") { UserWorkoutsPage(navController)
+                    composable("workouts") { UserWorkoutsPage(navController) }
+
+                    // Workout Video Page
+                    composable("workoutVideo") {
+                        WorkoutVideoPage(
+                            navController = navController,
+                            firebaseAuthHelper = firebaseAuthHelper
+                        )
                     }
 
                         // Workout Details Page
@@ -85,6 +91,12 @@ class MainActivity : ComponentActivity() {
                     }
                     // User Settings Page
                     composable("settings") { UserSettingsPage(navController, firebaseAuthHelper) }
+
+
+                    composable("attatchements") { Attatchements( navController)}
+
+
+
                 }
             }
         }
@@ -101,5 +113,6 @@ class MainActivity : ComponentActivity() {
             }
         }
 }
+
 
 

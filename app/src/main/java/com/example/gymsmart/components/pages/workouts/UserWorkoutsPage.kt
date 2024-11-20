@@ -1,7 +1,6 @@
 package com.example.gymsmart.components.pages.workouts
 
 
-import BottomNavigationBar
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -12,9 +11,14 @@ import androidx.compose.ui.unit.dp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import android.util.Log
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
+import com.composables.icons.lucide.Lucide
+import com.composables.icons.lucide.Play
+import com.composables.icons.lucide.Plus
+import com.example.gymsmart.components.ui.BottomNavigationBar
 import com.example.gymsmart.components.ui.WorkoutDatePicker
 import com.example.gymsmart.components.ui.FilterDropdownMenu
 import com.example.gymsmart.components.ui.SearchBarWithIcon
@@ -52,6 +56,10 @@ fun UserWorkoutsPage(navController: NavController) {
                         document.toObject(WorkoutData::class.java).also {
                             it.id = document.id
                         }
+                    }
+                    documents.mapNotNull{document ->
+                        val workout = document.toObject(WorkoutData::class.java)
+                        Log.d("FirestoreData", "Workout fetched: ${workout.isPR}")
                     }
                     workouts = fetchedWorkouts.sortedByDescending { it.dateAdded }
                     filteredWorkouts = workouts
@@ -104,14 +112,11 @@ fun UserWorkoutsPage(navController: NavController) {
 
 
     Scaffold(
-        modifier = Modifier
-            .fillMaxWidth()
-            .wrapContentHeight(),
-        bottomBar = { navController.currentBackStackEntry?.destination?.route?.let {
-            BottomNavigationBar(navController,
-                it
-            )
-        } }
+        modifier = Modifier.fillMaxSize(),
+        bottomBar = { navController.currentBackStackEntry?.destination?.route?.let { BottomNavigationBar(navController, it) } },
+        floatingActionButton = {
+            FloatingActionButtonWithMenu(navController)
+        }
     ) { innerPadding ->
         Column(modifier = Modifier
             .padding(innerPadding)
@@ -203,6 +208,35 @@ fun UserWorkoutsPage(navController: NavController) {
         }
     }
 }
+
+@Composable
+fun FloatingActionButtonWithMenu(navController: NavController) {
+    Column(
+        horizontalAlignment = Alignment.End,
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+        modifier = Modifier.padding(24.dp),
+
+    ) {
+        // Main Floating Action Button to expand/collapse the menu
+        // Main Floating Action Button to expand/collapse the menu
+        FloatingActionButton(
+            onClick = { navController.navigate("workoutVideo") },
+            containerColor = MaterialTheme.colorScheme.primary,
+            shape = CircleShape
+        ) {
+            Icon(Lucide.Play, contentDescription = "Create Workout")
+        }
+        FloatingActionButton(
+            onClick = { navController.navigate("workoutCreator") },
+            containerColor = MaterialTheme.colorScheme.primary,
+            shape = CircleShape
+        ) {
+            Icon(Lucide.Plus, contentDescription = "Create Workout")
+        }
+    }
+}
+
+
 
 
 

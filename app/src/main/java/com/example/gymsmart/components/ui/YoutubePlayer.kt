@@ -1,5 +1,6 @@
 package com.example.gymsmart.components.ui
 
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
@@ -14,26 +15,24 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTube
 fun YoutubePlayer(
     videoId: String,
 ) {
-
-    LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
-    AndroidView(factory = {
-        val view = YouTubePlayerView(it)
 
-        lifecycleOwner.lifecycle.addObserver(object : DefaultLifecycleObserver {
-            override fun onDestroy(owner: LifecycleOwner) {
-                view.release()
+    AndroidView(factory = { context ->
+        val youTubePlayerView = YouTubePlayerView(context).apply {
+            lifecycleOwner.lifecycle.addObserver(object : DefaultLifecycleObserver {
+                override fun onDestroy(owner: LifecycleOwner) {
+                    this@apply.release()
+                }
+            })
+        }
+        youTubePlayerView
+    }, update = { youTubePlayerView ->
+        youTubePlayerView.addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
+            override fun onReady(youTubePlayer: YouTubePlayer) {
+                youTubePlayer.cueVideo(videoId, 0f) // Or use loadVideo(videoId, 0f) for auto-play
             }
         })
-
-        view.addYouTubePlayerListener(
-            object : AbstractYouTubePlayerListener() {
-                override fun onReady(youTubePlayer: YouTubePlayer) {
-                    super.onReady(youTubePlayer)
-                    youTubePlayer.cueVideo(videoId, 0f)
-                }
-            }
-        )
-        view
     })
 }
+
+
