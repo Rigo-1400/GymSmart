@@ -1,4 +1,5 @@
 package com.example.gymsmart
+import HomePage
 import WorkoutDetailsPage
 import android.os.Bundle
 import android.util.Log
@@ -10,7 +11,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.example.gymsmart.components.pages.HomePage
 import com.example.gymsmart.firebase.FirebaseAuthHelper
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
@@ -95,6 +95,8 @@ class MainActivity : ComponentActivity() {
 
                     composable("attatchements") { Attatchements( navController)}
 
+
+
                 }
             }
         }
@@ -111,5 +113,6 @@ class MainActivity : ComponentActivity() {
             }
         }
 }
+
 
 
