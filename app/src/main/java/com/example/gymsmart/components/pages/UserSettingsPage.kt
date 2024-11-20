@@ -81,6 +81,14 @@ fun UserSettingsPage(
                     color = Color.Gray
                 )
 
+                Divider(
+                    color = Color.White,
+                    thickness = 1.dp,
+                    modifier = Modifier.padding(vertical = 8.dp)
+                )
+
+
+
                 Spacer(modifier = Modifier.height(16.dp))
 
                 // Optional Async Image for user profile from URL
