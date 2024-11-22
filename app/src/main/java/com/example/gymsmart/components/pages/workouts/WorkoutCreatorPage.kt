@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -98,25 +99,47 @@ fun WorkoutCreatorPage(navController: NavController, firebaseAuthHelper: Firebas
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
-                ) { CounterSection("Sets", sets, { if (sets > 1) sets-- }, { sets++ }) }
+                ) {
+                    CounterSection(
+                        label = "Sets",
+                        value = sets,
+                        onDecrement = { if (sets > 1) sets-- },
+                        onIncrement = { sets++ },
+                        onValueChanged = { sets = it }
+                    )
+                }
 
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
-                ) { CounterSection("Reps", reps, { if (reps > 1) reps-- }, { reps++ }) }
+                ) {
+                    CounterSection(
+                        label = "Reps",
+                        value = reps,
+                        onDecrement = { if (reps > 1) reps-- },
+                        onIncrement = { reps++ },
+                        onValueChanged = { reps = it }
+                    )
+                }
 
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
-                ) { CounterSection("Weight", weight, { if (weight > 0) weight -= 5 }, { weight += 5 }, " lbs") }
+                ) {
+                    CounterSection(
+                        label = "Weight",
+                        value = weight,
+                        onDecrement = { if (weight > 0) weight -= 5 },
+                        onIncrement = { weight += 5 },
+                        onValueChanged = { weight = it },
+                    )
+                }
 
                 Button(
                     onClick = {
                         if (userId != null && sets > 0 && reps > 0) {
-
-                            // When the user is about to save the workout
                             coroutineScope.launch {
                                 val (isPR, _, prDetails) = checkForPR(workoutName, weight, reps, userId)
 
@@ -154,7 +177,7 @@ fun RowScope.CounterSection(
     value: Int,
     onDecrement: () -> Unit,
     onIncrement: () -> Unit,
-    unit: String? = null
+    onValueChanged: (Int) -> Unit
 ) {
     Text(
         text = "$label:",
@@ -169,11 +192,32 @@ fun RowScope.CounterSection(
     ) {
         Icon(Lucide.Minus, contentDescription = "Decrease $label", tint = Color.White)
     }
-    Text(
-        "$value${unit ?: ""}",
-        fontSize = 18.sp,
-        fontWeight = FontWeight.Medium,
-        modifier = Modifier.padding(horizontal = 8.dp)
+    TextField(
+        value = value.toString(),
+        onValueChange = {
+            val newValue = it.toIntOrNull()
+            if (newValue != null && newValue >= 0) {
+                onValueChanged(newValue)
+            }
+        },
+        modifier = Modifier
+            .weight(1f)
+            .padding(horizontal = 8.dp)
+            .height(56.dp), // Increased height for the text field
+        singleLine = true,
+        textStyle = MaterialTheme.typography.bodyLarge.copy(
+            fontSize = 20.sp, // Larger font size
+            textAlign = TextAlign.Center // Center the text inside the text field
+        ),
+        colors = TextFieldDefaults.colors(
+            focusedContainerColor = Color(0xFF2C2C2C), // Darker background color when focused
+            unfocusedContainerColor = Color(0xFF2C2C2C), // Darker background color when not focused
+            focusedTextColor = MaterialTheme.colorScheme.onSurface,
+            unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
+            focusedIndicatorColor = MaterialTheme.colorScheme.primary, // Focused border color
+            unfocusedIndicatorColor = Color.Transparent, // Removes border when not focused
+            cursorColor = MaterialTheme.colorScheme.primary // Cursor color
+        )
     )
     IconButton(
         onClick = onIncrement,
