@@ -33,24 +33,59 @@ import kotlinx.coroutines.launch
 fun WorkoutCreatorPage(navController: NavController, firebaseAuthHelper: FirebaseAuthHelper) {
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
+
+    // Track field values
     var workoutName by remember { mutableStateOf("") }
     var muscleGroup by remember { mutableStateOf("") }
     var partOfTheBody by remember { mutableStateOf("") }
-    var sets by remember { mutableIntStateOf(1) }
-    var reps by remember { mutableIntStateOf(1) }
-    var weight by remember { mutableIntStateOf(10) }
+    var sets by remember { mutableStateOf(1) }
+    var reps by remember { mutableStateOf(1) }
+    var weight by remember { mutableStateOf(10) }
+
+    // Track if changes were made
+    var hasUnsavedChanges by remember { mutableStateOf(false) }
+    var showDialog by remember { mutableStateOf(false) }
 
     val db = FirebaseFirestore.getInstance()
     val firebaseAuth = FirebaseAuth.getInstance()
     val userId = firebaseAuth.currentUser?.uid
 
+    // Confirmation Dialog
+    if (showDialog) {
+        AlertDialog(
+            onDismissRequest = { showDialog = false },
+            title = { Text("Unsaved Changes") },
+            text = { Text("You have unsaved changes. Are you sure you want to leave this page?") },
+            confirmButton = {
+                Button(onClick = {
+                    showDialog = false
+                    navController.popBackStack() // Navigate back
+                }) {
+                    Text("Leave")
+                }
+            },
+            dismissButton = {
+                Button(onClick = { showDialog = false }) {
+                    Text("Stay")
+                }
+            }
+        )
+    }
+
+    // Scaffold Layout
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
             TopAppBar(
                 title = { Text("GymSmart", fontWeight = FontWeight.Bold, fontSize = 20.sp, color = Color.White) },
                 navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
+                    IconButton(onClick = {
+                        if (hasUnsavedChanges) {
+                            showDialog = true // Show confirmation dialog if there are unsaved changes
+                        } else {
+                            navController.popBackStack() // Navigate back directly if no changes
+                        }
+                    }) {
                         Icon(imageVector = Lucide.MoveLeft, contentDescription = "Move Back to Previous Page")
                     }
                 },
@@ -83,11 +118,15 @@ fun WorkoutCreatorPage(navController: NavController, firebaseAuthHelper: Firebas
                 MuscleGroupSelectorDropdownMenu { muscleGroupSelected, muscleGroupPartOfBody ->
                     muscleGroup = muscleGroupSelected
                     partOfTheBody = muscleGroupPartOfBody
+                    hasUnsavedChanges = true // Mark changes
                 }
 
                 TextField(
                     value = workoutName,
-                    onValueChange = { workoutName = it },
+                    onValueChange = {
+                        workoutName = it
+                        hasUnsavedChanges = true // Mark changes
+                    },
                     label = { Text("Workout Name") },
                     placeholder = { Text("e.g., Bench Press") },
                     modifier = Modifier
@@ -100,13 +139,10 @@ fun WorkoutCreatorPage(navController: NavController, firebaseAuthHelper: Firebas
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    CounterSection(
-                        label = "Sets",
-                        value = sets,
-                        onDecrement = { if (sets > 1) sets-- },
-                        onIncrement = { sets++ },
-                        onValueChanged = { sets = it }
-                    )
+                    CounterSection("Sets", sets, { if (sets > 1) sets-- }, { sets++ }) { newValue ->
+                        sets = newValue
+                        hasUnsavedChanges = true // Mark changes
+                    }
                 }
 
                 Row(
@@ -114,13 +150,10 @@ fun WorkoutCreatorPage(navController: NavController, firebaseAuthHelper: Firebas
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    CounterSection(
-                        label = "Reps",
-                        value = reps,
-                        onDecrement = { if (reps > 1) reps-- },
-                        onIncrement = { reps++ },
-                        onValueChanged = { reps = it }
-                    )
+                    CounterSection("Reps", reps, { if (reps > 1) reps-- }, { reps++ }) { newValue ->
+                        reps = newValue
+                        hasUnsavedChanges = true // Mark changes
+                    }
                 }
 
                 Row(
@@ -128,13 +161,10 @@ fun WorkoutCreatorPage(navController: NavController, firebaseAuthHelper: Firebas
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    CounterSection(
-                        label = "Weight",
-                        value = weight,
-                        onDecrement = { if (weight > 0) weight -= 5 },
-                        onIncrement = { weight += 5 },
-                        onValueChanged = { weight = it },
-                    )
+                    CounterSection("Weight", weight, { if (weight > 0) weight -= 5 }, { weight += 5 }) { newValue ->
+                        weight = newValue
+                        hasUnsavedChanges = true // Mark changes
+                    }
                 }
 
                 Button(
@@ -148,6 +178,7 @@ fun WorkoutCreatorPage(navController: NavController, firebaseAuthHelper: Firebas
                                 }
 
                                 saveWorkoutToFirebase(db, userId, Timestamp.now(), partOfTheBody, workoutName, muscleGroup, sets, reps, weight, isPR, prDetails)
+                                hasUnsavedChanges = false // Reset changes
                                 navController.navigate("workouts")
                             }
                         }
