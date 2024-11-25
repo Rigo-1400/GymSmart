@@ -1,4 +1,5 @@
-package com.example.gymsmart
+package com.example.caloriecalculator_dataflair
+
 import HomePage
 import WorkoutDetailsPage
 import android.os.Bundle
@@ -11,58 +12,47 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.gymsmart.components.pages.*
 import com.example.gymsmart.firebase.FirebaseAuthHelper
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
-import com.example.gymsmart.components.pages.AttachmentsPage
-import com.example.gymsmart.components.pages.LoginPage
-import com.example.gymsmart.components.pages.UserSettingsPage
+import com.example.gymsmart.DarkColorScheme
+import com.example.gymsmart.LightColorScheme
 import com.example.gymsmart.components.pages.workouts.UserWorkoutsPage
 import com.example.gymsmart.components.pages.workouts.WorkoutCreatorPage
 import com.example.gymsmart.components.pages.workouts.WorkoutVideoPage
 import com.example.gymsmart.firebase.WorkoutData
 import com.google.gson.Gson
+import com.example.gymsmart.components.pages.CalorieCalculatorPage // Import CalorieCalculatorPage
 
-
-
-/**
- * Main activity
- *
- * @constructor Create empty Main activity
- */
 class MainActivity : ComponentActivity() {
 
     private lateinit var firebaseAuthHelper: FirebaseAuthHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
-
-
         super.onCreate(savedInstanceState)
 
         setContent {
-            // Create NavController in the setContent block
+            // Create NavController
             val navController = rememberNavController()
 
-            // Initialize com.example.gymsmart.firebase.FirebaseAuthHelper with the navController
+            // Initialize FirebaseAuthHelper
             firebaseAuthHelper = FirebaseAuthHelper(this, navController, signInLauncher)
 
             val isDarkTheme = isSystemInDarkTheme()
 
-
-            MaterialTheme(colorScheme = if(isDarkTheme) DarkColorScheme else LightColorScheme) {
-                // Set up NavHost for navigation
+            MaterialTheme(colorScheme = if (isDarkTheme) DarkColorScheme else LightColorScheme) {
                 NavHost(navController = navController, startDestination = "login") {
 
                     // Login Page
                     composable("login") {
                         LoginPage(onGoogleSignInClick = {
-                            firebaseAuthHelper.signIn() // Trigger Google Sign-In
+                            firebaseAuthHelper.signIn()
                         })
                     }
+
                     // Home Page
                     composable("home") {
-                        // Home Screen
                         HomePage(navController, firebaseAuthHelper)
                     }
 
@@ -74,45 +64,42 @@ class MainActivity : ComponentActivity() {
 
                     // Workout Video Page
                     composable("workoutVideo") {
-                        WorkoutVideoPage(
-                            navController = navController,
-                            firebaseAuthHelper = firebaseAuthHelper
-                        )
+                        WorkoutVideoPage(navController = navController, firebaseAuthHelper = firebaseAuthHelper)
                     }
 
-                        // Workout Details Page
+                    // Workout Details Page
                     composable(
                         route = "workoutDetails/{workoutJson}",
                         arguments = listOf(navArgument("workoutJson") { type = NavType.StringType })
                     ) { backStackEntry ->
                         val workoutJson = backStackEntry.arguments?.getString("workoutJson")
                         val workout = Gson().fromJson(workoutJson, WorkoutData::class.java)
-                        WorkoutDetailsPage(workoutData = workout, navController = navController, firebaseAuthHelper )
+                        WorkoutDetailsPage(workoutData = workout, navController = navController, firebaseAuthHelper)
                     }
+
                     // User Settings Page
                     composable("settings") { UserSettingsPage(navController, firebaseAuthHelper) }
 
+                    // Attachments Page
+                    composable("attachments") { AttachmentsPage(navController) }
 
-                    composable("attachments") { AttachmentsPage( navController) }
-
-
-
+                    // Calorie Calculator Page
+                    composable("calorieCalculator") {
+                        CalorieCalculatorPage()
+                    }
                 }
             }
         }
     }
 
-    // In your Activity, define the launcher using the new Activity Result API
+    // Sign-In Launcher
     private val signInLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == RESULT_OK) {
-                // Handle the result using the com.example.gymsmart.firebase.FirebaseAuthHelper
                 firebaseAuthHelper.handleSignInResult(result.data)
             } else {
                 Log.w("MainActivity", "Google sign-in canceled or failed")
             }
         }
 }
-
-
 
