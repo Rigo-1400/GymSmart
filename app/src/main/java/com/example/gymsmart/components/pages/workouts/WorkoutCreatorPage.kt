@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -32,6 +33,8 @@ import kotlinx.coroutines.launch
 fun WorkoutCreatorPage(navController: NavController, firebaseAuthHelper: FirebaseAuthHelper) {
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
+
+    // Track field values
     var workoutName by remember { mutableStateOf("") }
     var muscleGroup by remember { mutableStateOf("") }
     var partOfTheBody by remember { mutableStateOf("") }
@@ -39,17 +42,50 @@ fun WorkoutCreatorPage(navController: NavController, firebaseAuthHelper: Firebas
     var reps by remember { mutableStateOf(1) }
     var weight by remember { mutableStateOf(10) }
 
+    // Track if changes were made
+    var hasUnsavedChanges by remember { mutableStateOf(false) }
+    var showDialog by remember { mutableStateOf(false) }
+
     val db = FirebaseFirestore.getInstance()
     val firebaseAuth = FirebaseAuth.getInstance()
     val userId = firebaseAuth.currentUser?.uid
 
+    // Confirmation Dialog
+    if (showDialog) {
+        AlertDialog(
+            onDismissRequest = { showDialog = false },
+            title = { Text("Unsaved Changes") },
+            text = { Text("You have unsaved changes. Are you sure you want to leave this page?") },
+            confirmButton = {
+                Button(onClick = {
+                    showDialog = false
+                    navController.popBackStack() // Navigate back
+                }) {
+                    Text("Leave")
+                }
+            },
+            dismissButton = {
+                Button(onClick = { showDialog = false }) {
+                    Text("Stay")
+                }
+            }
+        )
+    }
+
+    // Scaffold Layout
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
             TopAppBar(
                 title = { Text("GymSmart", fontWeight = FontWeight.Bold, fontSize = 20.sp, color = Color.White) },
                 navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
+                    IconButton(onClick = {
+                        if (hasUnsavedChanges) {
+                            showDialog = true // Show confirmation dialog if there are unsaved changes
+                        } else {
+                            navController.popBackStack() // Navigate back directly if no changes
+                        }
+                    }) {
                         Icon(imageVector = Lucide.MoveLeft, contentDescription = "Move Back to Previous Page")
                     }
                 },
@@ -82,11 +118,15 @@ fun WorkoutCreatorPage(navController: NavController, firebaseAuthHelper: Firebas
                 MuscleGroupSelectorDropdownMenu { muscleGroupSelected, muscleGroupPartOfBody ->
                     muscleGroup = muscleGroupSelected
                     partOfTheBody = muscleGroupPartOfBody
+                    hasUnsavedChanges = true // Mark changes
                 }
 
                 TextField(
                     value = workoutName,
-                    onValueChange = { workoutName = it },
+                    onValueChange = {
+                        workoutName = it
+                        hasUnsavedChanges = true // Mark changes
+                    },
                     label = { Text("Workout Name") },
                     placeholder = { Text("e.g., Bench Press") },
                     modifier = Modifier
@@ -98,25 +138,38 @@ fun WorkoutCreatorPage(navController: NavController, firebaseAuthHelper: Firebas
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
-                ) { CounterSection("Sets", sets, { if (sets > 1) sets-- }, { sets++ }) }
+                ) {
+                    CounterSection("Sets", sets, { if (sets > 1) sets-- }, { sets++ }) { newValue ->
+                        sets = newValue
+                        hasUnsavedChanges = true // Mark changes
+                    }
+                }
 
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
-                ) { CounterSection("Reps", reps, { if (reps > 1) reps-- }, { reps++ }) }
+                ) {
+                    CounterSection("Reps", reps, { if (reps > 1) reps-- }, { reps++ }) { newValue ->
+                        reps = newValue
+                        hasUnsavedChanges = true // Mark changes
+                    }
+                }
 
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
-                ) { CounterSection("Weight", weight, { if (weight > 0) weight -= 5 }, { weight += 5 }, " lbs") }
+                ) {
+                    CounterSection("Weight", weight, { if (weight > 0) weight -= 5 }, { weight += 5 }) { newValue ->
+                        weight = newValue
+                        hasUnsavedChanges = true // Mark changes
+                    }
+                }
 
                 Button(
                     onClick = {
                         if (userId != null && sets > 0 && reps > 0) {
-
-                            // When the user is about to save the workout
                             coroutineScope.launch {
                                 val (isPR, _, prDetails) = checkForPR(workoutName, weight, reps, userId)
 
@@ -125,6 +178,7 @@ fun WorkoutCreatorPage(navController: NavController, firebaseAuthHelper: Firebas
                                 }
 
                                 saveWorkoutToFirebase(db, userId, Timestamp.now(), partOfTheBody, workoutName, muscleGroup, sets, reps, weight, isPR, prDetails)
+                                hasUnsavedChanges = false // Reset changes
                                 navController.navigate("workouts")
                             }
                         }
@@ -154,7 +208,7 @@ fun RowScope.CounterSection(
     value: Int,
     onDecrement: () -> Unit,
     onIncrement: () -> Unit,
-    unit: String? = null
+    onValueChanged: (Int) -> Unit
 ) {
     Text(
         text = "$label:",
@@ -169,11 +223,32 @@ fun RowScope.CounterSection(
     ) {
         Icon(Lucide.Minus, contentDescription = "Decrease $label", tint = Color.White)
     }
-    Text(
-        "$value${unit ?: ""}",
-        fontSize = 18.sp,
-        fontWeight = FontWeight.Medium,
-        modifier = Modifier.padding(horizontal = 8.dp)
+    TextField(
+        value = value.toString(),
+        onValueChange = {
+            val newValue = it.toIntOrNull()
+            if (newValue != null && newValue >= 0) {
+                onValueChanged(newValue)
+            }
+        },
+        modifier = Modifier
+            .weight(1f)
+            .padding(horizontal = 8.dp)
+            .height(56.dp), // Increased height for the text field
+        singleLine = true,
+        textStyle = MaterialTheme.typography.bodyLarge.copy(
+            fontSize = 20.sp, // Larger font size
+            textAlign = TextAlign.Center // Center the text inside the text field
+        ),
+        colors = TextFieldDefaults.colors(
+            focusedContainerColor = Color(0xFF2C2C2C), // Darker background color when focused
+            unfocusedContainerColor = Color(0xFF2C2C2C), // Darker background color when not focused
+            focusedTextColor = MaterialTheme.colorScheme.onSurface,
+            unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
+            focusedIndicatorColor = MaterialTheme.colorScheme.primary, // Focused border color
+            unfocusedIndicatorColor = Color.Transparent, // Removes border when not focused
+            cursorColor = MaterialTheme.colorScheme.primary // Cursor color
+        )
     )
     IconButton(
         onClick = onIncrement,

@@ -14,7 +14,7 @@ import androidx.navigation.navArgument
 import com.example.gymsmart.firebase.FirebaseAuthHelper
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
-import com.example.gymsmart.components.Attatchements
+import com.example.gymsmart.components.pages.AttachmentsPage
 import com.example.gymsmart.components.pages.LoginPage
 import com.example.gymsmart.components.pages.UserSettingsPage
 import com.example.gymsmart.components.pages.workouts.UserWorkoutsPage
@@ -93,7 +93,7 @@ class MainActivity : ComponentActivity() {
                     composable("settings") { UserSettingsPage(navController, firebaseAuthHelper) }
 
 
-                    composable("attatchements") { Attatchements( navController)}
+                    composable("attachments") { AttachmentsPage( navController) }
 
 
 
