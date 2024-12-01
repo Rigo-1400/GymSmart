@@ -1,6 +1,5 @@
 package com.example.gymsmart.components.pages.workouts
 
-
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -217,7 +216,6 @@ fun FloatingActionButtonWithMenu(navController: NavController) {
         modifier = Modifier.padding(24.dp),
 
     ) {
-        // Main Floating Action Button to expand/collapse the menu
         // Main Floating Action Button to expand/collapse the menu
         FloatingActionButton(
             onClick = { navController.navigate("workoutVideo") },
