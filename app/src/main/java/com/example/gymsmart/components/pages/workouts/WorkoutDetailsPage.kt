@@ -1,3 +1,4 @@
+import android.content.Intent
 import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -36,7 +37,9 @@ import androidx.navigation.NavController
 import com.example.gymsmart.components.ui.UserSettingsDropdownMenu
 import com.example.gymsmart.firebase.FirebaseAuthHelper
 import androidx.compose.material3.TextButton
+import androidx.compose.ui.platform.LocalContext
 import com.composables.icons.lucide.Pencil
+import com.composables.icons.lucide.Share
 import com.example.gymsmart.firebase.deleteWorkout
 import com.google.firebase.auth.FirebaseAuth
 
@@ -50,6 +53,7 @@ import com.google.firebase.auth.FirebaseAuth
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WorkoutDetailsPage(workoutData: WorkoutData?, navController: NavController, firebaseAuthHelper: FirebaseAuthHelper) {
+    val context = LocalContext.current
     val apiKey = BuildConfig.GOOGLE_API_KEY
     Log.w("WorkoutDetailsPageAPIKEY", apiKey)
 
@@ -125,18 +129,44 @@ fun WorkoutDetailsPage(workoutData: WorkoutData?, navController: NavController, 
                     )
 
                     Row {
+                        IconButton(onClick = {
+                            workoutData.let {
+                                val shareIntent = Intent(Intent.ACTION_SEND).apply {
+                                    type = "text/plain"
+                                    putExtra(Intent.EXTRA_SUBJECT, "Check out my workout on GymSmart!")
+                                    putExtra(
+                                        Intent.EXTRA_TEXT,
+                                        """
+                                        🏋️ Workout Details 🏋️
+                                        Name: ${it.name}
+                                        Sets: ${it.sets}
+                                        Reps: ${it.reps}
+                                        Weight: ${it.weight}Lbs
+                                        Muscle Group: ${it.muscleGroup}
+                                        ${if (it.isPR) "🎉 New PR achieved! PR Details: ${it.prDetails}" else ""}
+                                        Video: https://www.youtube.com/watch?v=${videoIds[0]}
+                                        """.trimIndent()
+                                    )
+                                }
+                                context.startActivity(Intent.createChooser(shareIntent, "Share your workout via"))
+                            }
+                        }) {
+                            Icon(
+                                imageVector = Lucide.Share,
+                                contentDescription = "Share Workout"
+                            )
+                        }
                         IconButton(
                             onClick = {
                                 val userId = FirebaseAuth.getInstance().currentUser?.uid
                                 workoutData.id.let { workoutId ->
                                     navController.navigate("editWorkout/$userId/$workoutId")
-                                } ?: Log.w("WorkoutDetailsPage", "Workout ID is null")
+                                }
                             }
                         ) {
                             Icon(
                                 imageVector = Lucide.Pencil,
-                                contentDescription = "Edit Workout",
-                                tint = Color.Blue
+                                contentDescription = "Edit Workout"
                             )
                         }
                         IconButton(onClick = { showDeleteDialog = true }) {
