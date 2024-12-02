@@ -123,6 +123,11 @@ fun UserSettingsPage(
                                 .size(50.dp))
                     }
                 }
+                HorizontalDivider(
+                    modifier = Modifier.padding(vertical = 8.dp),
+                    thickness = 1.dp,
+                    color = Color.White
+                )
 
 
                 // List items for user settings
