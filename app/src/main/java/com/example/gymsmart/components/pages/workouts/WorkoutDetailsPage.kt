@@ -1,17 +1,25 @@
 import android.util.Log
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -36,6 +44,11 @@ import androidx.navigation.NavController
 import com.example.gymsmart.components.ui.UserSettingsDropdownMenu
 import com.example.gymsmart.firebase.FirebaseAuthHelper
 import androidx.compose.material3.TextButton
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.window.Dialog
+import com.example.gymsmart.R
 import com.example.gymsmart.firebase.deleteWorkout
 
 
@@ -136,11 +149,15 @@ fun WorkoutDetailsPage(workoutData: WorkoutData?, navController: NavController, 
                 Card(Modifier.fillMaxWidth()) {
                     Column(Modifier.padding(16.dp)) {
                         if (workoutData.isPR) {
+
                             Text(
                                 text = "🎉 New PR!",
                                 color = Color(0xFF4CAF50), // Green color for the PR badge
                                 fontWeight = FontWeight.Bold,
-                                fontSize = 16.sp
+                                fontSize = 16.sp,
+
+
+
                             )
                             Text(text = "PR Details: ${workoutData.prDetails}", fontSize = 16.sp)
                         }
@@ -202,3 +219,115 @@ fun WorkoutDetailsPage(workoutData: WorkoutData?, navController: NavController, 
         )
     }
 }
+
+
+@Composable
+private fun MyCustomDialog() {
+    var openAlert = remember {
+        mutableStateOf(false)
+    }
+
+
+    Button(
+        onClick = { openAlert.value = true },
+
+        modifier = Modifier
+            .width(200.dp)
+            .height(100.dp),
+    ) {
+        Text(text = "Click me!")
+    }
+
+    if (openAlert.value) {
+        CustomDialogUI(openAlert)
+    }
+
+
+}
+
+@Composable
+private fun CustomDialogUI(openDialogBox: MutableState<Boolean>) {
+    Dialog(onDismissRequest = { openDialogBox.value = false }) {
+        CustomUI(openDialogBox)
+    }
+
+
+}
+
+@Composable
+private fun CustomUI(openDialog: MutableState<Boolean>) {
+    Card(
+        shape = RoundedCornerShape(10.dp),
+        modifier = Modifier.padding(10.dp, 5.dp, 10.dp, 5.dp),
+        elevation = CardDefaults.cardElevation(8.dp)
+    ) {
+        Column(
+            modifier = Modifier.background(Color.White)
+        ) {
+
+            /**Image*/
+            Image(
+                painter = painterResource(id = R.drawable.gymblck),
+                contentDescription = "",
+                contentScale = ContentScale.Fit,
+                modifier = Modifier
+                    .padding(top = 35.dp)
+                    .height(70.dp)
+                    .fillMaxWidth()
+            )
+
+            Column(Modifier.padding(16.dp)) {
+                Text(
+                    text = "Congratulations!!", color = Color.Black,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .padding(top = 5.dp)
+                        .fillMaxWidth(),
+                    style = MaterialTheme.typography.titleMedium,
+                )
+
+                Text(
+                    text = "You have earned a badge!", color = Color.Black,
+
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .padding(10.dp, 25.dp, 25.dp, 25.dp)
+                        .fillMaxWidth(),
+                    style = MaterialTheme.typography.bodyMedium
+
+                )
+
+
+            }
+            /** Buttons*/
+            Row(
+                Modifier
+                    .padding(top = 10.dp)
+                    .fillMaxWidth()
+                    .background(MaterialTheme.colorScheme.background),
+                horizontalArrangement = Arrangement.SpaceAround
+            ) {
+                //     TextButton(onClick = { openDialog.value = false }) {
+                //          Text(
+                //             text = "Not now", fontWeight = FontWeight.Bold, color = Color.White,
+                //                modifier = Modifier.padding(top = 5.dp, bottom = 5.dp)
+                //           )
+                //       }
+
+                TextButton(onClick = { openDialog.value = false }) {
+                    Text(
+                        text = "Thanks!!", fontWeight = FontWeight.Bold, color = Color.White,
+                        modifier = Modifier.padding(top = 5.dp, bottom = 5.dp)
+                    )
+                }
+
+            }
+
+
+        }
+
+
+    }
+
+}
+

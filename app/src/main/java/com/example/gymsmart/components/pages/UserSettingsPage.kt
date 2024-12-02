@@ -1,5 +1,6 @@
 package com.example.gymsmart.components.pages
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -9,6 +10,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage // Import this for AsyncImage support
@@ -21,6 +24,7 @@ import com.example.gymsmart.firebase.UserSession
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.sp
+import com.example.gymsmart.R
 
 /**
  * User Settings Page
@@ -56,6 +60,8 @@ fun UserSettingsPage(
                     .padding(16.dp),
                 verticalArrangement = Arrangement.spacedBy(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
+
+
             ) {
                 // Profile picture
 
@@ -92,6 +98,25 @@ fun UserSettingsPage(
                         .size(125.dp)
                         .clip(CircleShape)
                 )
+                //Part for badges here
+                Column {
+                    Row {
+                        Image(painter = painterResource(id = R.drawable.dumbell), contentDescription = null,
+                            modifier = Modifier
+                                .alignByBaseline()
+                                .size(50.dp))
+                        
+                        Image(painter = painterResource(id = R.drawable.pump), contentDescription =null,
+                            modifier = Modifier
+                                .alignByBaseline()
+                                .size(50.dp))
+                        Image(painter = painterResource(id = R.drawable.heart), contentDescription = null,
+                            modifier = Modifier
+                                .alignByBaseline()
+                                .size(50.dp))
+                    }
+                }
+
 
                 // List items for user settings
                 SettingsListItem(
