@@ -77,7 +77,7 @@ fun WorkoutCreatorPage(navController: NavController, firebaseAuthHelper: Firebas
         modifier = Modifier.fillMaxSize(),
         topBar = {
             TopAppBar(
-                title = { Text("GymSmart", fontWeight = FontWeight.Bold, fontSize = 20.sp, color = Color.White) },
+                title = { Text("GymSmart", fontWeight = FontWeight.Bold, fontSize = 20.sp) },
                 navigationIcon = {
                     IconButton(onClick = {
                         if (hasUnsavedChanges) {
@@ -95,8 +95,7 @@ fun WorkoutCreatorPage(navController: NavController, firebaseAuthHelper: Firebas
                         firebaseAuthHelper = firebaseAuthHelper,
                         navController
                     )
-                },
-                colors = TopAppBarDefaults.topAppBarColors(Color(0xFF1c1c1c)),
+                }
             )
         },
         content = { innerPadding ->
