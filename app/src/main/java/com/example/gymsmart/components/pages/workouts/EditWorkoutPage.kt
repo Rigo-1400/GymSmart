@@ -94,7 +94,7 @@ fun EditWorkoutPage(
         topBar = {
             TopAppBar(
                 title = {
-                    Text("Edit Workout", fontWeight = FontWeight.Bold, fontSize = 20.sp, color = Color.White)
+                    Text("Edit Workout", fontWeight = FontWeight.Bold, fontSize = 20.sp)
                 },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
