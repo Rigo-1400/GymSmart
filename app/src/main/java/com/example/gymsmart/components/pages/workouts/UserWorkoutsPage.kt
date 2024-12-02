@@ -287,6 +287,15 @@ private fun CustomDialogUI(openDialogBox: MutableState<Boolean>) {
 
 @Composable
 private fun CustomUI(openDialog: MutableState<Boolean>) {
+    val images = listOf(
+        R.drawable.image1,
+        R.drawable.image2,
+        R.drawable.image3,
+        R.drawable.image4,
+        R.drawable.image5
+    )
+
+    val randomImage = remember { mutableStateOf(images.random())}
     Card(
         shape = RoundedCornerShape(10.dp),
         modifier = Modifier.padding(10.dp, 5.dp, 10.dp, 5.dp),
@@ -296,9 +305,8 @@ private fun CustomUI(openDialog: MutableState<Boolean>) {
             modifier = Modifier.background(Color.White)
         ) {
 
-            /**Image*/
             Image(
-                painter = painterResource(id = R.drawable.dumbell),
+                painter = painterResource(id = randomImage.value),
                 contentDescription = "",
                 contentScale = ContentScale.Fit,
                 modifier = Modifier

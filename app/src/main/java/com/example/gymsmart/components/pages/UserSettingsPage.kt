@@ -10,7 +10,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -101,16 +100,24 @@ fun UserSettingsPage(
                 //Part for badges here
                 Column {
                     Row {
-                        Image(painter = painterResource(id = R.drawable.dumbell), contentDescription = null,
+                        Image(painter = painterResource(id = R.drawable.image1), contentDescription = null,
                             modifier = Modifier
                                 .alignByBaseline()
                                 .size(50.dp))
                         
-                        Image(painter = painterResource(id = R.drawable.pump), contentDescription =null,
+                        Image(painter = painterResource(id = R.drawable.image3), contentDescription =null,
                             modifier = Modifier
                                 .alignByBaseline()
                                 .size(50.dp))
-                        Image(painter = painterResource(id = R.drawable.heart), contentDescription = null,
+                        Image(painter = painterResource(id = R.drawable.image2), contentDescription = null,
+                            modifier = Modifier
+                                .alignByBaseline()
+                                .size(50.dp))
+                        Image(painter = painterResource(id = R.drawable.image4), contentDescription = null,
+                            modifier = Modifier
+                                .alignByBaseline()
+                                .size(50.dp))
+                        Image(painter = painterResource(id = R.drawable.image5), contentDescription = null,
                             modifier = Modifier
                                 .alignByBaseline()
                                 .size(50.dp))
