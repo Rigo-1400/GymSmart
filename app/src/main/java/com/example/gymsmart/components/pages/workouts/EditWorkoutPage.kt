@@ -108,7 +108,7 @@ fun EditWorkoutPage(
                         navController
                     )
                 },
-                colors = TopAppBarDefaults.topAppBarColors(Color(0xFF1c1c1c)),
+                //colors = TopAppBarDefaults.topAppBarColors(Color(0xFF1c1c1c)),
             )
         }
     ) { innerPadding ->
