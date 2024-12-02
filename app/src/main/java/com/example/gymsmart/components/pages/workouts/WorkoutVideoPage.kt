@@ -9,7 +9,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -21,7 +20,6 @@ import com.example.gymsmart.api.searchYouTubeVideos
 import com.example.gymsmart.components.ui.UserSettingsDropdownMenu
 import com.example.gymsmart.components.ui.YoutubePlayer
 import com.example.gymsmart.firebase.FirebaseAuthHelper
-import kotlinx.coroutines.launch
 
 @Composable
 fun WorkoutVideoPage(navController: NavController, firebaseAuthHelper: FirebaseAuthHelper) {
@@ -85,7 +83,7 @@ fun WorkoutVideoPage(navController: NavController, firebaseAuthHelper: FirebaseA
 @Composable
 fun WorkoutTopBar(navController: NavController, firebaseAuthHelper: FirebaseAuthHelper) {
     TopAppBar(
-        title = { Text("GymSmart", fontWeight = FontWeight.Bold, fontSize = 20.sp, color = Color.White) },
+        title = { Text("GymSmart", fontWeight = FontWeight.Bold, fontSize = 20.sp) },
         navigationIcon = {
             IconButton(onClick = { navController.popBackStack() }) {
                 Icon(imageVector = Lucide.MoveLeft, contentDescription = "Move Back to Previous Page")
@@ -97,8 +95,7 @@ fun WorkoutTopBar(navController: NavController, firebaseAuthHelper: FirebaseAuth
                 firebaseAuthHelper = firebaseAuthHelper,
                 navController
             )
-        },
-        colors = TopAppBarDefaults.topAppBarColors(Color(0xFF1c1c1c)),
+        }
     )
 }
 
