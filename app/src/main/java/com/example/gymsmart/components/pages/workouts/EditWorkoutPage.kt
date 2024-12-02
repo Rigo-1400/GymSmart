@@ -16,6 +16,7 @@ import com.composables.icons.lucide.Lucide
 import com.composables.icons.lucide.Minus
 import com.composables.icons.lucide.MoveLeft
 import com.composables.icons.lucide.Plus
+import com.example.gymsmart.components.ui.MuscleGroupSelectorDropdownMenu
 import com.example.gymsmart.components.ui.UserSettingsDropdownMenu
 import com.example.gymsmart.firebase.WorkoutData
 import com.google.firebase.firestore.FirebaseFirestore
@@ -79,7 +80,7 @@ fun EditWorkoutPage(
 
     // Editable fields
     var name by remember { mutableStateOf(workoutData.name) }
-    val muscleGroup by remember { mutableStateOf(workoutData.muscleGroup) }
+    var muscleGroup by remember { mutableStateOf(workoutData.muscleGroup) }
     var sets by remember { mutableStateOf(workoutData.sets) }
     var reps by remember { mutableStateOf(workoutData.reps) }
     var weight by remember { mutableStateOf(workoutData.weight) }
@@ -118,6 +119,11 @@ fun EditWorkoutPage(
                 .fillMaxSize(),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
+            // Muscle Group Selector
+            MuscleGroupSelectorDropdownMenu { muscleGroupSelected, _ ->
+                muscleGroup = muscleGroupSelected
+                hasUnsavedChanges = true
+            }
             TextField(
                 value = name,
                 onValueChange = {
