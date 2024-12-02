@@ -171,18 +171,15 @@ fun HomePage(navController: NavController, firebaseAuthHelper: FirebaseAuthHelpe
                             )
                             Text(
                                 text = "Name: ${workout.name}",
-                                fontSize = 16.sp,
-                                color = Color.LightGray
+                                fontSize = 16.sp
                             )
                             Text(
                                 text = "Muscle Group: ${workout.muscleGroup}",
-                                fontSize = 16.sp,
-                                color = Color.LightGray
+                                fontSize = 16.sp
                             )
                             Text(
                                 text = "Date: ${workout.dateAdded.toDate().toString()}",
-                                fontSize = 14.sp,
-                                color = Color.Gray
+                                fontSize = 14.sp
                             )
                             Text(
                                 text = "💪 Keep pushing forward! ",
@@ -196,7 +193,6 @@ fun HomePage(navController: NavController, firebaseAuthHelper: FirebaseAuthHelpe
                 } ?: Text(
                     text = "No recent workouts found.",
                     fontSize = 16.sp,
-                    color = Color.Gray,
                     modifier = Modifier.align(Alignment.CenterHorizontally)
                 )
             }
