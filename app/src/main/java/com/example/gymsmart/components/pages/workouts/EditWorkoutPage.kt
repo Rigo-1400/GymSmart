@@ -285,15 +285,6 @@ fun CounterSection(
             textStyle = MaterialTheme.typography.bodyLarge.copy(
                 fontSize = 20.sp,
                 textAlign = TextAlign.Center
-            ),
-            colors = TextFieldDefaults.colors(
-                focusedContainerColor = Color(0xFF2C2C2C),
-                unfocusedContainerColor = Color(0xFF2C2C2C),
-                focusedTextColor = MaterialTheme.colorScheme.onSurface,
-                unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
-                focusedIndicatorColor = MaterialTheme.colorScheme.primary,
-                unfocusedIndicatorColor = Color.Transparent,
-                cursorColor = MaterialTheme.colorScheme.primary
             )
         )
         IconButton(
