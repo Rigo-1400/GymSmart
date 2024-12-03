@@ -47,8 +47,11 @@ import androidx.compose.material3.TextButton
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.util.fastMaxOf
 import androidx.compose.ui.window.Dialog
 import com.example.gymsmart.R
+import com.example.gymsmart.components.pages.workouts.CustomDialogUI
+import com.example.gymsmart.components.pages.workouts.CustomUI
 import com.example.gymsmart.firebase.deleteWorkout
 
 
@@ -66,6 +69,7 @@ fun WorkoutDetailsPage(workoutData: WorkoutData?, navController: NavController, 
 
     var showVideoSpinner by remember { mutableStateOf(true) }
     val coroutineScope = rememberCoroutineScope()
+    var openAlert = remember { mutableStateOf(false) }
 
     var videoIds by remember { mutableStateOf<List<String>>(emptyList()) }
     var showDeleteDialog by remember { mutableStateOf(false) } // State for dialog visibility
@@ -148,6 +152,7 @@ fun WorkoutDetailsPage(workoutData: WorkoutData?, navController: NavController, 
 
                 Card(Modifier.fillMaxWidth()) {
                     Column(Modifier.padding(16.dp)) {
+
                         if (workoutData.isPR) {
 
                             Text(
@@ -157,15 +162,28 @@ fun WorkoutDetailsPage(workoutData: WorkoutData?, navController: NavController, 
                                 fontSize = 16.sp,
 
 
-
-                            )
+                                )
                             Text(text = "PR Details: ${workoutData.prDetails}", fontSize = 16.sp)
+
                         }
                         Text("Sets: ${it.sets}")
                         Text("Reps: ${it.reps}")
                         Text("Weight: ${it.weight}Lbs")
                         Text("Muscle Group: ${it.muscleGroup}")
+
+                        if (workoutData.isPR&&!openAlert.value)
+                        {
+                            openAlert.value
+                        }
+                        if(openAlert.value)
+                        {
+                            CustomDialogUI(openAlert)
+                        openAlert.value=false
+                        }
+                        openAlert.value=false
                     }
+                    openAlert.value=true
+
                 }
 
                 HorizontalDivider()
@@ -218,35 +236,13 @@ fun WorkoutDetailsPage(workoutData: WorkoutData?, navController: NavController, 
             text = { Text("Are you sure you want to delete this workout? This action cannot be undone.") }
         )
     }
-}
+ //Original end bracket here
+
+
 
 
 @Composable
-private fun MyCustomDialog() {
-    var openAlert = remember {
-        mutableStateOf(false)
-    }
-
-
-    Button(
-        onClick = { openAlert.value = true },
-
-        modifier = Modifier
-            .width(200.dp)
-            .height(100.dp),
-    ) {
-        Text(text = "Click me!")
-    }
-
-    if (openAlert.value) {
-        CustomDialogUI(openAlert)
-    }
-
-
-}
-
-@Composable
-private fun CustomDialogUI(openDialogBox: MutableState<Boolean>) {
+ fun CustomDialogUI(openDialogBox: MutableState<Boolean>) {
     Dialog(onDismissRequest = { openDialogBox.value = false }) {
         CustomUI(openDialogBox)
     }
@@ -255,7 +251,16 @@ private fun CustomDialogUI(openDialogBox: MutableState<Boolean>) {
 }
 
 @Composable
-private fun CustomUI(openDialog: MutableState<Boolean>) {
+ fun CustomUI(openDialog: MutableState<Boolean>) {
+    val images = listOf(
+        R.drawable.image1,
+        R.drawable.image2,
+        R.drawable.image3,
+        R.drawable.image4,
+        R.drawable.image5
+    )
+
+    val randomImage = remember { mutableStateOf(images.random())}
     Card(
         shape = RoundedCornerShape(10.dp),
         modifier = Modifier.padding(10.dp, 5.dp, 10.dp, 5.dp),
@@ -267,7 +272,7 @@ private fun CustomUI(openDialog: MutableState<Boolean>) {
 
             /**Image*/
             Image(
-                painter = painterResource(id = R.drawable.gymblck),
+                painter = painterResource(id = randomImage.value),
                 contentDescription = "",
                 contentScale = ContentScale.Fit,
                 modifier = Modifier
@@ -314,7 +319,7 @@ private fun CustomUI(openDialog: MutableState<Boolean>) {
                 //           )
                 //       }
 
-                TextButton(onClick = { openDialog.value = false }) {
+                TextButton(onClick = { openDialog.value = false  }) {
                     Text(
                         text = "Thanks!!", fontWeight = FontWeight.Bold, color = Color.White,
                         modifier = Modifier.padding(top = 5.dp, bottom = 5.dp)
@@ -331,3 +336,4 @@ private fun CustomUI(openDialog: MutableState<Boolean>) {
 
 }
 
+} //New end bracket here

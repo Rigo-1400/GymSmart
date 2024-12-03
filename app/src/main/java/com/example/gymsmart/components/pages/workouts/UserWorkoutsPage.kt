@@ -221,7 +221,7 @@ fun UserWorkoutsPage(navController: NavController) {
         }
 
     }
-    MyCustomDialog()
+  //  MyCustomDialog()
 }
 
 @Composable
@@ -277,7 +277,7 @@ private fun MyCustomDialog() {
 }
 
 @Composable
-private fun CustomDialogUI(openDialogBox: MutableState<Boolean>) {
+fun CustomDialogUI(openDialogBox: MutableState<Boolean>) {
     Dialog(onDismissRequest = { openDialogBox.value = false }) {
         CustomUI(openDialogBox)
     }
@@ -286,7 +286,7 @@ private fun CustomDialogUI(openDialogBox: MutableState<Boolean>) {
 }
 
 @Composable
-private fun CustomUI(openDialog: MutableState<Boolean>) {
+fun CustomUI(openDialog: MutableState<Boolean>) {
     val images = listOf(
         R.drawable.image1,
         R.drawable.image2,
