@@ -1,6 +1,9 @@
 package com.example.gymsmart.components.pages.workouts
 
+import android.app.AlertDialog
 import android.widget.Toast
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
@@ -8,16 +11,20 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
 import com.composables.icons.lucide.Lucide
 import com.composables.icons.lucide.Minus
 import com.composables.icons.lucide.MoveLeft
 import com.composables.icons.lucide.Plus
+import com.example.gymsmart.R
 import com.example.gymsmart.components.ui.MuscleGroupSelectorDropdownMenu
 import com.example.gymsmart.components.ui.UserSettingsDropdownMenu
 import com.example.gymsmart.firebase.FirebaseAuthHelper
@@ -45,6 +52,7 @@ fun WorkoutCreatorPage(navController: NavController, firebaseAuthHelper: Firebas
     // Track if changes were made
     var hasUnsavedChanges by remember { mutableStateOf(false) }
     var showDialog by remember { mutableStateOf(false) }
+
 
     val db = FirebaseFirestore.getInstance()
     val firebaseAuth = FirebaseAuth.getInstance()
@@ -167,15 +175,25 @@ fun WorkoutCreatorPage(navController: NavController, firebaseAuthHelper: Firebas
                 }
 
                 Button(
+
                     onClick = {
                         if (userId != null && sets > 0 && reps > 0) {
                             coroutineScope.launch {
-                                val (isPR, _, prDetails) = checkForPR(workoutName, weight, reps, userId)
+                                val (isPR, _, prDetails) = checkForPR(
+                                    workoutName,
+                                    weight,
+                                    reps,
+                                    userId
+                                )
 
                                 if (isPR) {
-                                    Toast.makeText(context, "🎉 New PR! You hit a personal record for $workoutName!", Toast.LENGTH_SHORT).show()
-                                }
+                                    Toast.makeText(
+                                        context,
+                                        "🎉 New PR! You hit a personal record for $workoutName!",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
 
+                                }
                                 saveWorkoutToFirebase(db, userId, Timestamp.now(), partOfTheBody, workoutName, muscleGroup, sets, reps, weight, isPR, prDetails)
                                 hasUnsavedChanges = false // Reset changes
                                 navController.navigate("workouts")
@@ -249,4 +267,5 @@ fun RowScope.CounterSection(
     }
 
 }
+
 

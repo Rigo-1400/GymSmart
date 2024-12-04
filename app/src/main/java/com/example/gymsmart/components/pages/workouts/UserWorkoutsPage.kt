@@ -10,13 +10,23 @@ import androidx.compose.ui.unit.dp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import android.util.Log
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
 import com.composables.icons.lucide.Lucide
 import com.composables.icons.lucide.Play
 import com.composables.icons.lucide.Plus
+import com.example.gymsmart.R
 import com.example.gymsmart.components.ui.BottomNavigationBar
 import com.example.gymsmart.components.ui.WorkoutDatePicker
 import com.example.gymsmart.components.ui.FilterDropdownMenu
@@ -137,6 +147,8 @@ fun UserWorkoutsPage(navController: NavController) {
 
                 // Search Bar
                 SearchBarWithIcon(searchQuery) { query -> searchQuery = query }
+
+
             }
             // Date Picker
 
@@ -202,10 +214,13 @@ fun UserWorkoutsPage(navController: NavController) {
                             }
                         }
                     }
+
                 }
             }
         }
+
     }
+  //  MyCustomDialog()
 }
 
 @Composable
@@ -235,7 +250,121 @@ fun FloatingActionButtonWithMenu(navController: NavController) {
 }
 
 
+@Composable
+private fun MyCustomDialog() {
+    var openAlert = remember {
+        mutableStateOf(false)
+    }
 
 
+    Button(
+        onClick = { openAlert.value = true },
 
+        modifier = Modifier
+            .width(200.dp)
+            .height(100.dp),
+        ) {
+        Text(text = "Click me!")
+    }
+
+    if (openAlert.value) {
+        CustomDialogUI(openAlert)
+    }
+
+
+}
+
+@Composable
+fun CustomDialogUI(openDialogBox: MutableState<Boolean>) {
+    Dialog(onDismissRequest = { openDialogBox.value = false }) {
+        CustomUI(openDialogBox)
+    }
+
+
+}
+
+@Composable
+fun CustomUI(openDialog: MutableState<Boolean>) {
+    val images = listOf(
+        R.drawable.image1,
+        R.drawable.image2,
+        R.drawable.image3,
+        R.drawable.image4,
+        R.drawable.image5
+    )
+
+    val randomImage = remember { mutableStateOf(images.random())}
+    Card(
+        shape = RoundedCornerShape(10.dp),
+        modifier = Modifier.padding(10.dp, 5.dp, 10.dp, 5.dp),
+        elevation = CardDefaults.cardElevation(8.dp)
+    ) {
+        Column(
+            modifier = Modifier.background(Color.White)
+        ) {
+
+            Image(
+                painter = painterResource(id = randomImage.value),
+                contentDescription = "",
+                contentScale = ContentScale.Fit,
+                modifier = Modifier
+                    .padding(top = 35.dp)
+                    .height(70.dp)
+                    .fillMaxWidth()
+            )
+
+            Column(Modifier.padding(16.dp)) {
+                Text(
+                    text = "Congratulations!!", color = Color.Black,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .padding(top = 5.dp)
+                        .fillMaxWidth(),
+                    style = MaterialTheme.typography.titleMedium,
+                )
+
+                Text(
+                    text = "You have earned a badge!", color = Color.Black,
+
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .padding(10.dp, 25.dp, 25.dp, 25.dp)
+                        .fillMaxWidth(),
+                    style = MaterialTheme.typography.bodyMedium
+
+                )
+
+
+            }
+            /** Buttons*/
+            Row(
+                Modifier
+                    .padding(top = 10.dp)
+                    .fillMaxWidth()
+                    .background(MaterialTheme.colorScheme.background),
+                horizontalArrangement = Arrangement.SpaceAround
+            ) {
+                //     TextButton(onClick = { openDialog.value = false }) {
+                //          Text(
+                //             text = "Not now", fontWeight = FontWeight.Bold, color = Color.White,
+                //                modifier = Modifier.padding(top = 5.dp, bottom = 5.dp)
+                //           )
+                //       }
+
+                TextButton(onClick = { openDialog.value = false }) {
+                    Text(
+                        text = "Thanks!!", fontWeight = FontWeight.Bold, color = Color.White,
+                        modifier = Modifier.padding(top = 5.dp, bottom = 5.dp)
+                    )
+                }
+
+            }
+
+
+        }
+
+
+    }
+
+}
 
