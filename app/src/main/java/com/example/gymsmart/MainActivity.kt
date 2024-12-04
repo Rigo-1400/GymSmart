@@ -1,7 +1,7 @@
-package com.example.caloriecalculator_dataflair
+package com.example.gymsmart
 
-import HomePage
 import WorkoutDetailsPage
+import com.example.gymsmart.components.pages.HomePage
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -11,11 +11,11 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
 import com.example.gymsmart.components.pages.*
 import com.example.gymsmart.firebase.FirebaseAuthHelper
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
+import androidx.navigation.navArgument
 import com.example.gymsmart.DarkColorScheme
 import com.example.gymsmart.LightColorScheme
 import com.example.gymsmart.components.pages.workouts.UserWorkoutsPage
@@ -23,7 +23,7 @@ import com.example.gymsmart.components.pages.workouts.WorkoutCreatorPage
 import com.example.gymsmart.components.pages.workouts.WorkoutVideoPage
 import com.example.gymsmart.firebase.WorkoutData
 import com.google.gson.Gson
-import com.example.gymsmart.components.pages.CalorieCalculatorPage // Import CalorieCalculatorPage
+import com.example.gymsmart.components.pages.CalorieCalculatorPage
 
 class MainActivity : ComponentActivity() {
 
@@ -57,10 +57,14 @@ class MainActivity : ComponentActivity() {
                     }
 
                     // Workout Creator Page
-                    composable("workoutCreator") { WorkoutCreatorPage(navController, firebaseAuthHelper) }
+                    composable("workoutCreator") {
+                        WorkoutCreatorPage(navController, firebaseAuthHelper)
+                    }
 
                     // User Workouts Page
-                    composable("workouts") { UserWorkoutsPage(navController) }
+                    composable("workouts") {
+                        UserWorkoutsPage(navController)
+                    }
 
                     // Workout Video Page
                     composable("workoutVideo") {
@@ -85,8 +89,9 @@ class MainActivity : ComponentActivity() {
 
                     // Calorie Calculator Page
                     composable("calorieCalculator") {
-                        CalorieCalculatorPage()
+                        CalorieCalculatorPage(navController = navController)
                     }
+
                 }
             }
         }
@@ -102,4 +107,3 @@ class MainActivity : ComponentActivity() {
             }
         }
 }
-
