@@ -247,5 +247,6 @@ fun RowScope.CounterSection(
     ) {
         Icon(Lucide.Plus, contentDescription = "Increase $label", tint = Color.White)
     }
+
 }
 
