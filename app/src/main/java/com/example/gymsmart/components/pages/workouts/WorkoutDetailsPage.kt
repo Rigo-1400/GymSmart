@@ -281,6 +281,7 @@ fun WorkoutDetailsPage(workoutData: WorkoutData?, navController: NavController, 
         )
     }
  //Original end bracket here
+    //
 
 
 
