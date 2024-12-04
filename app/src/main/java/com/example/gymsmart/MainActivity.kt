@@ -51,6 +51,7 @@ import com.example.gymsmart.components.pages.AttachmentsPage
 
 import com.example.gymsmart.components.pages.LoginPage
 import com.example.gymsmart.components.pages.UserSettingsPage
+import com.example.gymsmart.components.pages.workouts.EditWorkoutPage
 import com.example.gymsmart.components.pages.workouts.UserWorkoutsPage
 import com.example.gymsmart.components.pages.workouts.WorkoutCreatorPage
 import com.example.gymsmart.components.pages.workouts.WorkoutVideoPage
@@ -82,8 +83,8 @@ class MainActivity : ComponentActivity() {
 
             val isDarkTheme = isSystemInDarkTheme()
 
-            MyCustomDialog()
-            
+       //     MyCustomDialog()
+
             MaterialTheme(colorScheme = if(isDarkTheme) DarkColorScheme else LightColorScheme) {
                 // Set up NavHost for navigation
                 NavHost(navController = navController, startDestination = "login") {
@@ -113,8 +114,21 @@ class MainActivity : ComponentActivity() {
                             firebaseAuthHelper = firebaseAuthHelper
                         )
                     }
+                    // Edit Workout Details Page
+                    composable(
+                        route = "editWorkout/{userId}/{workoutId}",
+                        arguments = listOf(
+                            navArgument("userId") { type = NavType.StringType },
+                            navArgument("workoutId") { type = NavType.StringType }
+                        )
+                    ) { backStackEntry ->
+                        val userId = backStackEntry.arguments?.getString("userId") ?: ""
+                        val workoutId = backStackEntry.arguments?.getString("workoutId")
+                        EditWorkoutPage(navController, userId, workoutId, firebaseAuthHelper)
+                    }
 
-                        // Workout Details Page
+
+                    // Workout Details Page
                     composable(
                         route = "workoutDetails/{workoutJson}",
                         arguments = listOf(navArgument("workoutJson") { type = NavType.StringType })
@@ -126,10 +140,14 @@ class MainActivity : ComponentActivity() {
                     // User Settings Page
                     composable("settings") { UserSettingsPage(navController, firebaseAuthHelper) }
 
+                    // Attachment Page
+                    composable("attachments") { AttachmentsPage(navController) }
 
-                    composable("attachments") { AttachmentsPage( navController) }
-                    
-                  
+
+
+                //    composable("attachments") { AttachmentsPage( navController) }
+
+
                 }
             }
         }

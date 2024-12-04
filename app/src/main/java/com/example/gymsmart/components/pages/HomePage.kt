@@ -1,4 +1,3 @@
-import android.os.Bundle
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -79,8 +78,7 @@ fun HomePage(navController: NavController, firebaseAuthHelper: FirebaseAuthHelpe
                     Text(
                         "GymSmart",
                         fontWeight = FontWeight.Bold,
-                        fontSize = 22.sp,
-                        color = Color.White
+                        fontSize = 22.sp
                     )
                 },
                 actions = {
@@ -89,8 +87,7 @@ fun HomePage(navController: NavController, firebaseAuthHelper: FirebaseAuthHelpe
                         firebaseAuthHelper = firebaseAuthHelper,
                         navController
                     )
-                },
-                colors = TopAppBarDefaults.topAppBarColors(Color(0xFF1c1c1c)),
+                }
             )
         },
         bottomBar = {
@@ -122,8 +119,7 @@ fun HomePage(navController: NavController, firebaseAuthHelper: FirebaseAuthHelpe
 
                 Card(
                     modifier = Modifier.fillMaxWidth(),
-                    elevation = CardDefaults.cardElevation(6.dp),
-                    colors = CardDefaults.cardColors(containerColor = Color(0xFF1E1E1E))
+                    elevation = CardDefaults.cardElevation(6.dp)
                 ) {
                     Column(
                         modifier = Modifier.padding(16.dp)
@@ -131,16 +127,14 @@ fun HomePage(navController: NavController, firebaseAuthHelper: FirebaseAuthHelpe
                         Text(
                             text = "$greeting, ${UserSession.userName ?: "Guest"}!",
                             fontSize = 26.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = Color.White
+                            fontWeight = FontWeight.Bold
                         )
                         Spacer(modifier = Modifier.height(4.dp))
                         Text(
                             text = SimpleDateFormat("EEEE, dd MMMM yyyy", Locale.getDefault())
                                 .format(Calendar.getInstance().time),
                             fontSize = 16.sp,
-                            fontWeight = FontWeight.Medium,
-                            color = Color.Gray
+                            fontWeight = FontWeight.Medium
                         )
                     }
                 }
@@ -148,8 +142,7 @@ fun HomePage(navController: NavController, firebaseAuthHelper: FirebaseAuthHelpe
                 // Daily Motivational Quote
                 Card(
                     modifier = Modifier.fillMaxWidth(),
-                    elevation = CardDefaults.cardElevation(6.dp),
-                    colors = CardDefaults.cardColors(containerColor = Color(0xFF1E1E1E))
+                    elevation = CardDefaults.cardElevation(6.dp)
                 ) {
                     Column(
                         modifier = Modifier.padding(16.dp),
@@ -158,15 +151,13 @@ fun HomePage(navController: NavController, firebaseAuthHelper: FirebaseAuthHelpe
                         Text(
                             text = dailyQuote,
                             fontSize = 18.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = Color.White
+                            fontWeight = FontWeight.Bold
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(
                             text = "Stay motivated and crush your goals!",
                             fontSize = 14.sp,
-                            fontWeight = FontWeight.Light,
-                            color = Color.Gray
+                            fontWeight = FontWeight.Light
                         )
                     }
                 }
@@ -175,8 +166,7 @@ fun HomePage(navController: NavController, firebaseAuthHelper: FirebaseAuthHelpe
                 mostRecentWorkout?.let { workout ->
                     Card(
                         modifier = Modifier.fillMaxWidth(),
-                        elevation = CardDefaults.cardElevation(12.dp),
-                        colors = CardDefaults.cardColors(containerColor = Color(0xFF1E1E1E))
+                        elevation = CardDefaults.cardElevation(12.dp)
                     ) {
                         Column(
                             modifier = Modifier.padding(24.dp),
@@ -191,18 +181,15 @@ fun HomePage(navController: NavController, firebaseAuthHelper: FirebaseAuthHelpe
                             )
                             Text(
                                 text = "Name: ${workout.name}",
-                                fontSize = 16.sp,
-                                color = Color.LightGray
+                                fontSize = 16.sp
                             )
                             Text(
                                 text = "Muscle Group: ${workout.muscleGroup}",
-                                fontSize = 16.sp,
-                                color = Color.LightGray
+                                fontSize = 16.sp
                             )
                             Text(
                                 text = "Date: ${workout.dateAdded.toDate().toString()}",
-                                fontSize = 14.sp,
-                                color = Color.Gray
+                                fontSize = 14.sp
                             )
                             Text(
                                 text = "💪 Keep pushing forward! ",
@@ -216,7 +203,6 @@ fun HomePage(navController: NavController, firebaseAuthHelper: FirebaseAuthHelpe
                 } ?: Text(
                     text = "No recent workouts found.",
                     fontSize = 16.sp,
-                    color = Color.Gray,
                     modifier = Modifier.align(Alignment.CenterHorizontally)
                 )
 

@@ -1,3 +1,4 @@
+import android.content.Intent
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -23,7 +24,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -52,7 +52,11 @@ import androidx.compose.ui.window.Dialog
 import com.example.gymsmart.R
 import com.example.gymsmart.components.pages.workouts.CustomDialogUI
 import com.example.gymsmart.components.pages.workouts.CustomUI
+import androidx.compose.ui.platform.LocalContext
+import com.composables.icons.lucide.Pencil
+import com.composables.icons.lucide.Share
 import com.example.gymsmart.firebase.deleteWorkout
+import com.google.firebase.auth.FirebaseAuth
 
 
 /**
@@ -64,6 +68,7 @@ import com.example.gymsmart.firebase.deleteWorkout
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WorkoutDetailsPage(workoutData: WorkoutData?, navController: NavController, firebaseAuthHelper: FirebaseAuthHelper) {
+    val context = LocalContext.current
     val apiKey = BuildConfig.GOOGLE_API_KEY
     Log.w("WorkoutDetailsPageAPIKEY", apiKey)
 
@@ -100,7 +105,7 @@ fun WorkoutDetailsPage(workoutData: WorkoutData?, navController: NavController, 
         topBar = {
             TopAppBar(
                 title = {
-                    Text("GymSmart", fontWeight = FontWeight.Bold, fontSize = 20.sp, color = Color.White)
+                    Text("GymSmart", fontWeight = FontWeight.Bold, fontSize = 20.sp)
                 },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
@@ -113,8 +118,7 @@ fun WorkoutDetailsPage(workoutData: WorkoutData?, navController: NavController, 
                         firebaseAuthHelper = firebaseAuthHelper,
                         navController
                     )
-                },
-                colors = TopAppBarDefaults.topAppBarColors(Color(0xFF1c1c1c)),
+                }
             )
         }
     ) { innerPadding ->
@@ -140,6 +144,46 @@ fun WorkoutDetailsPage(workoutData: WorkoutData?, navController: NavController, 
                     )
 
                     Row {
+                        IconButton(onClick = {
+                            workoutData.let {
+                                val shareIntent = Intent(Intent.ACTION_SEND).apply {
+                                    type = "text/plain"
+                                    putExtra(Intent.EXTRA_SUBJECT, "Check out my workout on GymSmart!")
+                                    putExtra(
+                                        Intent.EXTRA_TEXT,
+                                        """
+                                        🏋️ Workout Details 🏋️
+                                        Name: ${it.name}
+                                        Sets: ${it.sets}
+                                        Reps: ${it.reps}
+                                        Weight: ${it.weight}Lbs
+                                        Muscle Group: ${it.muscleGroup}
+                                        ${if (it.isPR) "🎉 New PR achieved! PR Details: ${it.prDetails}" else ""}
+                                        Video: https://www.youtube.com/watch?v=${videoIds[0]}
+                                        """.trimIndent()
+                                    )
+                                }
+                                context.startActivity(Intent.createChooser(shareIntent, "Share your workout via"))
+                            }
+                        }) {
+                            Icon(
+                                imageVector = Lucide.Share,
+                                contentDescription = "Share Workout"
+                            )
+                        }
+                        IconButton(
+                            onClick = {
+                                val userId = FirebaseAuth.getInstance().currentUser?.uid
+                                workoutData.id.let { workoutId ->
+                                    navController.navigate("editWorkout/$userId/$workoutId")
+                                }
+                            }
+                        ) {
+                            Icon(
+                                imageVector = Lucide.Pencil,
+                                contentDescription = "Edit Workout"
+                            )
+                        }
                         IconButton(onClick = { showDeleteDialog = true }) {
                             Icon(
                                 imageVector = Lucide.Trash,
@@ -147,8 +191,10 @@ fun WorkoutDetailsPage(workoutData: WorkoutData?, navController: NavController, 
                                 tint = Color.Red
                             )
                         }
+
                     }
                 }
+
 
                 Card(Modifier.fillMaxWidth()) {
                     Column(Modifier.padding(16.dp)) {
