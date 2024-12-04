@@ -10,24 +10,21 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Outline
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage // Import this for AsyncImage support
-import com.composables.icons.lucide.Cog
 import com.composables.icons.lucide.Dumbbell
 import com.composables.icons.lucide.LogOut
 import com.composables.icons.lucide.MoveLeft
 import com.composables.icons.lucide.Lucide
 import com.example.gymsmart.firebase.FirebaseAuthHelper
-import com.example.gymsmart.R
 import com.example.gymsmart.firebase.UserSession
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.sp
+import com.composables.icons.lucide.Calculator
+import com.example.gymsmart.R
 
 /**
  * User Settings Page
@@ -63,6 +60,8 @@ fun UserSettingsPage(
                     .padding(16.dp),
                 verticalArrangement = Arrangement.spacedBy(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
+
+
             ) {
                 // Profile picture
 
@@ -81,10 +80,10 @@ fun UserSettingsPage(
                     color = Color.Gray
                 )
 
-                Divider(
-                    color = Color.White,
+                HorizontalDivider(
+                    modifier = Modifier.padding(vertical = 8.dp),
                     thickness = 1.dp,
-                    modifier = Modifier.padding(vertical = 8.dp)
+                    color = Color.White
                 )
 
 
@@ -99,19 +98,51 @@ fun UserSettingsPage(
                         .size(125.dp)
                         .clip(CircleShape)
                 )
+                //Part for badges here
+                Column {
+                    Row {
+                        Image(painter = painterResource(id = R.drawable.image1), contentDescription = null,
+                            modifier = Modifier
+                                .alignByBaseline()
+                                .size(50.dp))
+
+                        Image(painter = painterResource(id = R.drawable.image3), contentDescription =null,
+                            modifier = Modifier
+                                .alignByBaseline()
+                                .size(50.dp))
+                        Image(painter = painterResource(id = R.drawable.image2), contentDescription = null,
+                            modifier = Modifier
+                                .alignByBaseline()
+                                .size(50.dp))
+                        Image(painter = painterResource(id = R.drawable.image4), contentDescription = null,
+                            modifier = Modifier
+                                .alignByBaseline()
+                                .size(50.dp))
+                        Image(painter = painterResource(id = R.drawable.image5), contentDescription = null,
+                            modifier = Modifier
+                                .alignByBaseline()
+                                .size(50.dp))
+                    }
+                }
+                HorizontalDivider(
+                    modifier = Modifier.padding(vertical = 8.dp),
+                    thickness = 1.dp,
+                    color = Color.White
+                )
+
 
                 // List items for user settings
                 SettingsListItem(
                     text = "Accessories",
                     description = "View or edit your gym accessories",
                     icon = Lucide.Dumbbell,
-                    onClick = { navController.navigate("attatchements") }
+                    onClick = { navController.navigate("attachments") }
                 )
                 SettingsListItem(
-                    text = "Gym Machine Settings",
-                    description = "View or edit your gym machine settings",
-                    icon = Lucide.Cog,
-                    onClick = { navController.navigate("machine_settings") }
+                    text = "Maintenance Calories Calculator",
+                    description = "View your maintenance calories",
+                    icon = Lucide.Calculator,
+                    onClick = { navController.navigate("calorieCalculator") }
                 )
                 SettingsListItem(
                     text = "Logout",
@@ -119,7 +150,7 @@ fun UserSettingsPage(
                     icon = Lucide.LogOut,
                     onClick = {
                         firebaseAuthHelper.signOut()
-                        navController.navigate("logout")
+                        navController.navigate("login")
                     }
                 )
             }
