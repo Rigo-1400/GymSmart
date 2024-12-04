@@ -15,9 +15,10 @@ import com.example.gymsmart.components.pages.*
 import com.example.gymsmart.firebase.FirebaseAuthHelper
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
-import androidx.navigation.navArgument
-import com.example.gymsmart.DarkColorScheme
-import com.example.gymsmart.LightColorScheme
+import com.example.gymsmart.components.pages.AttachmentsPage
+import com.example.gymsmart.components.pages.LoginPage
+import com.example.gymsmart.components.pages.UserSettingsPage
+import com.example.gymsmart.components.pages.workouts.EditWorkoutPage
 import com.example.gymsmart.components.pages.workouts.UserWorkoutsPage
 import com.example.gymsmart.components.pages.workouts.WorkoutCreatorPage
 import com.example.gymsmart.components.pages.workouts.WorkoutVideoPage
@@ -25,11 +26,20 @@ import com.example.gymsmart.firebase.WorkoutData
 import com.google.gson.Gson
 import com.example.gymsmart.components.pages.CalorieCalculatorPage
 
+
+/**
+ * Main activity
+ *
+ * @constructor Create empty Main activity
+ */
 class MainActivity : ComponentActivity() {
 
     private lateinit var firebaseAuthHelper: FirebaseAuthHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
+
+
         super.onCreate(savedInstanceState)
 
         setContent {
@@ -53,6 +63,7 @@ class MainActivity : ComponentActivity() {
 
                     // Home Page
                     composable("home") {
+                        // Home Screen
                         HomePage(navController, firebaseAuthHelper)
                     }
 
@@ -70,6 +81,19 @@ class MainActivity : ComponentActivity() {
                     composable("workoutVideo") {
                         WorkoutVideoPage(navController = navController, firebaseAuthHelper = firebaseAuthHelper)
                     }
+                    // Edit Workout Details Page
+                    composable(
+                        route = "editWorkout/{userId}/{workoutId}",
+                        arguments = listOf(
+                            navArgument("userId") { type = NavType.StringType },
+                            navArgument("workoutId") { type = NavType.StringType }
+                        )
+                    ) { backStackEntry ->
+                        val userId = backStackEntry.arguments?.getString("userId") ?: ""
+                        val workoutId = backStackEntry.arguments?.getString("workoutId")
+                        EditWorkoutPage(navController, userId, workoutId, firebaseAuthHelper)
+                    }
+
 
                     // Workout Details Page
                     composable(
@@ -84,8 +108,9 @@ class MainActivity : ComponentActivity() {
                     // User Settings Page
                     composable("settings") { UserSettingsPage(navController, firebaseAuthHelper) }
 
-                    // Attachments Page
-                    composable("attachments") { AttachmentsPage(navController) }
+
+                    composable("attachments") { AttachmentsPage( navController) }
+
 
                     // Calorie Calculator Page
                     composable("calorieCalculator") {
@@ -101,6 +126,7 @@ class MainActivity : ComponentActivity() {
     private val signInLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == RESULT_OK) {
+                // Handle the result using the com.example.gymsmart.firebase.FirebaseAuthHelper
                 firebaseAuthHelper.handleSignInResult(result.data)
             } else {
                 Log.w("MainActivity", "Google sign-in canceled or failed")

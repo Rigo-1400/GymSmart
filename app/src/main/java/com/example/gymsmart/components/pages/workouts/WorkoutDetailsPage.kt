@@ -16,7 +16,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -38,8 +37,10 @@ import com.example.gymsmart.components.ui.UserSettingsDropdownMenu
 import com.example.gymsmart.firebase.FirebaseAuthHelper
 import androidx.compose.material3.TextButton
 import androidx.compose.ui.platform.LocalContext
+import com.composables.icons.lucide.Pencil
 import com.composables.icons.lucide.Share
 import com.example.gymsmart.firebase.deleteWorkout
+import com.google.firebase.auth.FirebaseAuth
 
 
 /**
@@ -51,6 +52,7 @@ import com.example.gymsmart.firebase.deleteWorkout
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WorkoutDetailsPage(workoutData: WorkoutData?, navController: NavController, firebaseAuthHelper: FirebaseAuthHelper) {
+    val context = LocalContext.current
     val apiKey = BuildConfig.GOOGLE_API_KEY
     Log.w("WorkoutDetailsPageAPIKEY", apiKey)
 
@@ -59,7 +61,6 @@ fun WorkoutDetailsPage(workoutData: WorkoutData?, navController: NavController, 
 
     var videoIds by remember { mutableStateOf<List<String>>(emptyList()) }
     var showDeleteDialog by remember { mutableStateOf(false) } // State for dialog visibility
-    val context = LocalContext.current
 
     // Fetch video based on exercise/workout name
     LaunchedEffect(workoutData?.name) {
@@ -87,7 +88,7 @@ fun WorkoutDetailsPage(workoutData: WorkoutData?, navController: NavController, 
         topBar = {
             TopAppBar(
                 title = {
-                    Text("GymSmart", fontWeight = FontWeight.Bold, fontSize = 20.sp, color = Color.White)
+                    Text("GymSmart", fontWeight = FontWeight.Bold, fontSize = 20.sp)
                 },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
@@ -100,8 +101,7 @@ fun WorkoutDetailsPage(workoutData: WorkoutData?, navController: NavController, 
                         firebaseAuthHelper = firebaseAuthHelper,
                         navController
                     )
-                },
-                colors = TopAppBarDefaults.topAppBarColors(Color(0xFF1c1c1c)),
+                }
             )
         }
     ) { innerPadding ->
@@ -127,13 +127,6 @@ fun WorkoutDetailsPage(workoutData: WorkoutData?, navController: NavController, 
                     )
 
                     Row {
-                        IconButton(onClick = { showDeleteDialog = true }) {
-                            Icon(
-                                imageVector = Lucide.Trash,
-                                contentDescription = "Delete Icon",
-                                tint = Color.Red
-                            )
-                        }
                         IconButton(onClick = {
                             workoutData.let {
                                 val shareIntent = Intent(Intent.ACTION_SEND).apply {
@@ -149,6 +142,7 @@ fun WorkoutDetailsPage(workoutData: WorkoutData?, navController: NavController, 
                                         Weight: ${it.weight}Lbs
                                         Muscle Group: ${it.muscleGroup}
                                         ${if (it.isPR) "🎉 New PR achieved! PR Details: ${it.prDetails}" else ""}
+                                        Video: https://www.youtube.com/watch?v=${videoIds[0]}
                                         """.trimIndent()
                                     )
                                 }
@@ -160,8 +154,30 @@ fun WorkoutDetailsPage(workoutData: WorkoutData?, navController: NavController, 
                                 contentDescription = "Share Workout"
                             )
                         }
+                        IconButton(
+                            onClick = {
+                                val userId = FirebaseAuth.getInstance().currentUser?.uid
+                                workoutData.id.let { workoutId ->
+                                    navController.navigate("editWorkout/$userId/$workoutId")
+                                }
+                            }
+                        ) {
+                            Icon(
+                                imageVector = Lucide.Pencil,
+                                contentDescription = "Edit Workout"
+                            )
+                        }
+                        IconButton(onClick = { showDeleteDialog = true }) {
+                            Icon(
+                                imageVector = Lucide.Trash,
+                                contentDescription = "Delete Icon",
+                                tint = Color.Red
+                            )
+                        }
+
                     }
                 }
+
 
                 Card(Modifier.fillMaxWidth()) {
                     Column(Modifier.padding(16.dp)) {

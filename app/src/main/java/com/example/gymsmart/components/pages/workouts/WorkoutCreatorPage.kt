@@ -77,7 +77,7 @@ fun WorkoutCreatorPage(navController: NavController, firebaseAuthHelper: Firebas
         modifier = Modifier.fillMaxSize(),
         topBar = {
             TopAppBar(
-                title = { Text("GymSmart", fontWeight = FontWeight.Bold, fontSize = 20.sp, color = Color.White) },
+                title = { Text("GymSmart", fontWeight = FontWeight.Bold, fontSize = 20.sp) },
                 navigationIcon = {
                     IconButton(onClick = {
                         if (hasUnsavedChanges) {
@@ -95,8 +95,7 @@ fun WorkoutCreatorPage(navController: NavController, firebaseAuthHelper: Firebas
                         firebaseAuthHelper = firebaseAuthHelper,
                         navController
                     )
-                },
-                colors = TopAppBarDefaults.topAppBarColors(Color(0xFF1c1c1c)),
+                }
             )
         },
         content = { innerPadding ->
@@ -239,15 +238,6 @@ fun RowScope.CounterSection(
         textStyle = MaterialTheme.typography.bodyLarge.copy(
             fontSize = 20.sp, // Larger font size
             textAlign = TextAlign.Center // Center the text inside the text field
-        ),
-        colors = TextFieldDefaults.colors(
-            focusedContainerColor = Color(0xFF2C2C2C), // Darker background color when focused
-            unfocusedContainerColor = Color(0xFF2C2C2C), // Darker background color when not focused
-            focusedTextColor = MaterialTheme.colorScheme.onSurface,
-            unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
-            focusedIndicatorColor = MaterialTheme.colorScheme.primary, // Focused border color
-            unfocusedIndicatorColor = Color.Transparent, // Removes border when not focused
-            cursorColor = MaterialTheme.colorScheme.primary // Cursor color
         )
     )
     IconButton(

@@ -77,8 +77,7 @@ fun HomePage(navController: NavController, firebaseAuthHelper: FirebaseAuthHelpe
                     Text(
                         "GymSmart",
                         fontWeight = FontWeight.Bold,
-                        fontSize = 22.sp,
-                        color = Color.White
+                        fontSize = 22.sp
                     )
                 },
                 actions = {
@@ -87,8 +86,7 @@ fun HomePage(navController: NavController, firebaseAuthHelper: FirebaseAuthHelpe
                         firebaseAuthHelper = firebaseAuthHelper,
                         navController
                     )
-                },
-                colors = TopAppBarDefaults.topAppBarColors(Color(0xFF1c1c1c)),
+                }
             )
         },
         bottomBar = {
@@ -121,116 +119,94 @@ fun HomePage(navController: NavController, firebaseAuthHelper: FirebaseAuthHelpe
                         }
                     }
 
-
-                    Card(
-                        modifier = Modifier.fillMaxWidth(),
-                        elevation = CardDefaults.cardElevation(6.dp),
-                        colors = CardDefaults.cardColors(containerColor = Color(0xFF1E1E1E))
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    elevation = CardDefaults.cardElevation(6.dp)
+                ) {
+                    Column(
+                        modifier = Modifier.padding(16.dp)
                     ) {
-                        Column(modifier = Modifier.padding(16.dp)) {
-                            Text(
-                                text = "$greeting, ${UserSession.userName ?: "Guest"}!",
-                                fontSize = 26.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = Color.White
-                            )
-                            Spacer(modifier = Modifier.height(4.dp))
-                            Text(
-                                text = SimpleDateFormat("EEEE, dd MMMM yyyy", Locale.getDefault())
-                                    .format(Calendar.getInstance().time),
-                                fontSize = 16.sp,
-                                fontWeight = FontWeight.Medium,
-                                color = Color.Gray
-                            )
-                        }
+                        Text(
+                            text = "$greeting, ${UserSession.userName ?: "Guest"}!",
+                            fontSize = 26.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                        Spacer(modifier = Modifier.height(4.dp))
+                        Text(
+                            text = SimpleDateFormat("EEEE, dd MMMM yyyy", Locale.getDefault())
+                                .format(Calendar.getInstance().time),
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Medium
+                        )
                     }
+                }
+
+                // Daily Motivational Quote
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    elevation = CardDefaults.cardElevation(6.dp)
+                ) {
+                    Column(
+                        modifier = Modifier.padding(16.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            text = dailyQuote,
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Text(
+                            text = "Stay motivated and crush your goals!",
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.Light
+                        )
+                    }
+                }
 
 
-                    // Daily Motivational Quote
+                mostRecentWorkout?.let { workout ->
                     Card(
                         modifier = Modifier.fillMaxWidth(),
-                        elevation = CardDefaults.cardElevation(6.dp),
-                        colors = CardDefaults.cardColors(containerColor = Color(0xFF1E1E1E))
+                        elevation = CardDefaults.cardElevation(12.dp)
                     ) {
                         Column(
-                            modifier = Modifier.padding(16.dp),
-                            horizontalAlignment = Alignment.CenterHorizontally
+                            modifier = Modifier.padding(24.dp),
+                            verticalArrangement = Arrangement.spacedBy(12.dp)
                         ) {
                             Text(
-                                text = dailyQuote,
-                                fontSize = 18.sp,
+                                text = "Most Recent Workout",
+                                fontSize = 22.sp,
                                 fontWeight = FontWeight.Bold,
-                                color = Color.White
+                                color = Color(0xFFCE93D8), // Lighter purple color
+                                modifier = Modifier.align(Alignment.CenterHorizontally)
                             )
-                            Spacer(modifier = Modifier.height(8.dp))
                             Text(
-                                text = "Stay motivated and crush your goals!",
-                                fontSize = 14.sp,
-                                fontWeight = FontWeight.Light,
-                                color = Color.Gray
+                                text = "Name: ${workout.name}",
+                                fontSize = 16.sp
+                            )
+                            Text(
+                                text = "Muscle Group: ${workout.muscleGroup}",
+                                fontSize = 16.sp
+                            )
+                            Text(
+                                text = "Date: ${workout.dateAdded.toDate().toString()}",
+                                fontSize = 14.sp
+                            )
+                            Text(
+                                text = "💪 Keep pushing forward! ",
+                                fontSize = 18.sp,
+                                fontWeight = FontWeight.SemiBold,
+                                color = Color(0xFFCE93D8), // Lighter purple color,
+                                modifier = Modifier.align(Alignment.CenterHorizontally)
                             )
                         }
                     }
-
-
-                    mostRecentWorkout?.let { workout ->
-                        Card(
-                            modifier = Modifier.fillMaxWidth(),
-                            elevation = CardDefaults.cardElevation(12.dp),
-                            colors = CardDefaults.cardColors(containerColor = Color(0xFF1E1E1E))
-                        ) {
-                            Column(
-                                modifier = Modifier.padding(24.dp),
-                                verticalArrangement = Arrangement.spacedBy(12.dp)
-                            ) {
-                                Text(
-                                    text = "Most Recent Workout",
-                                    fontSize = 22.sp,
-                                    fontWeight = FontWeight.Bold,
-                                    color = Color(0xFFCE93D8),
-                                    modifier = Modifier.align(Alignment.CenterHorizontally)
-                                )
-                                Text(
-                                    text = "Name: ${workout.name}",
-                                    fontSize = 16.sp,
-                                    color = Color.LightGray
-                                )
-                                Text(
-                                    text = "Muscle Group: ${workout.muscleGroup}",
-                                    fontSize = 16.sp,
-                                    color = Color.LightGray
-                                )
-                                Text(
-                                    text = "Date: ${workout.dateAdded.toDate().toString()}",
-                                    fontSize = 14.sp,
-                                    color = Color.Gray
-                                )
-                                Text(
-                                    text = "💪 Keep pushing forward! ",
-                                    fontSize = 18.sp,
-                                    fontWeight = FontWeight.SemiBold,
-                                    color = Color(0xFFCE93D8),
-                                    modifier = Modifier.align(Alignment.CenterHorizontally)
-                                )
-                            }
-                        }
-                    } ?: Text(
-                        text = "No recent workouts found.",
-                        fontSize = 16.sp,
-                        color = Color.Gray,
-                        modifier = Modifier.align(Alignment.CenterHorizontally)
-                    )
-                }
-
-
-                // Calorie Calculator Navigation Button
-                Button(
-                    onClick = { navController.navigate("calorieCalculator") },
-                    modifier = Modifier.fillMaxWidth(),
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFCE93D8))
-                ) {
-                    Text("Open Calorie Calculator", color = Color.White)
-                }
+                } ?: Text(
+                    text = "No recent workouts found.",
+                    fontSize = 16.sp,
+                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                )
             }
         }
     }
