@@ -171,21 +171,16 @@ fun WorkoutDetailsPage(workoutData: WorkoutData?, navController: NavController, 
                         Text("Weight: ${it.weight}Lbs")
                         Text("Muscle Group: ${it.muscleGroup}")
 
-                        if (workoutData.isPR&&!openAlert.value)
-                        {
-                            openAlert.value
-                        }
-                        if(openAlert.value)
+                        if (workoutData.isPR&&openAlert.value)
                         {
                             CustomDialogUI(openAlert)
-                        openAlert.value=false
+                           // openAlert.value=false
                         }
-                        openAlert.value=false
+
                     }
-                    openAlert.value=true
 
                 }
-
+               // openAlert.value=true
                 HorizontalDivider()
 
                 // Display the spinner while loading multiple videos
@@ -211,8 +206,11 @@ fun WorkoutDetailsPage(workoutData: WorkoutData?, navController: NavController, 
                         Text("No videos found for this exercise!")
                     }
                 }
+
             }
+            openAlert.value=false
         }
+        openAlert.value=true
     }
 
     // Delete confirmation dialog
@@ -245,6 +243,7 @@ fun WorkoutDetailsPage(workoutData: WorkoutData?, navController: NavController, 
  fun CustomDialogUI(openDialogBox: MutableState<Boolean>) {
     Dialog(onDismissRequest = { openDialogBox.value = false }) {
         CustomUI(openDialogBox)
+
     }
 
 
