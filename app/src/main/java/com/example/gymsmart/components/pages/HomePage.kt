@@ -35,7 +35,8 @@ fun HomePage(navController: NavController, firebaseAuthHelper: FirebaseAuthHelpe
         "What seems impossible today will become your warm-up tomorrow.",
         "Believe in yourself and all that you are."
     )
-    val dailyQuote = remember { quotes[Calendar.getInstance().get(Calendar.DAY_OF_YEAR) % quotes.size] }
+    val dailyQuote =
+        remember { quotes[Calendar.getInstance().get(Calendar.DAY_OF_YEAR) % quotes.size] }
 
 
     LaunchedEffect(Unit) {
@@ -119,94 +120,95 @@ fun HomePage(navController: NavController, firebaseAuthHelper: FirebaseAuthHelpe
                         }
                     }
 
-                Card(
-                    modifier = Modifier.fillMaxWidth(),
-                    elevation = CardDefaults.cardElevation(6.dp)
-                ) {
-                    Column(
-                        modifier = Modifier.padding(16.dp)
-                    ) {
-                        Text(
-                            text = "$greeting, ${UserSession.userName ?: "Guest"}!",
-                            fontSize = 26.sp,
-                            fontWeight = FontWeight.Bold
-                        )
-                        Spacer(modifier = Modifier.height(4.dp))
-                        Text(
-                            text = SimpleDateFormat("EEEE, dd MMMM yyyy", Locale.getDefault())
-                                .format(Calendar.getInstance().time),
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.Medium
-                        )
-                    }
-                }
-
-                // Daily Motivational Quote
-                Card(
-                    modifier = Modifier.fillMaxWidth(),
-                    elevation = CardDefaults.cardElevation(6.dp)
-                ) {
-                    Column(
-                        modifier = Modifier.padding(16.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Text(
-                            text = dailyQuote,
-                            fontSize = 18.sp,
-                            fontWeight = FontWeight.Bold
-                        )
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Text(
-                            text = "Stay motivated and crush your goals!",
-                            fontSize = 14.sp,
-                            fontWeight = FontWeight.Light
-                        )
-                    }
-                }
-
-
-                mostRecentWorkout?.let { workout ->
                     Card(
                         modifier = Modifier.fillMaxWidth(),
-                        elevation = CardDefaults.cardElevation(12.dp)
+                        elevation = CardDefaults.cardElevation(6.dp)
                     ) {
                         Column(
-                            modifier = Modifier.padding(24.dp),
-                            verticalArrangement = Arrangement.spacedBy(12.dp)
+                            modifier = Modifier.padding(16.dp)
                         ) {
                             Text(
-                                text = "Most Recent Workout",
-                                fontSize = 22.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = Color(0xFFCE93D8), // Lighter purple color
-                                modifier = Modifier.align(Alignment.CenterHorizontally)
+                                text = "$greeting, ${UserSession.userName ?: "Guest"}!",
+                                fontSize = 26.sp,
+                                fontWeight = FontWeight.Bold
                             )
+                            Spacer(modifier = Modifier.height(4.dp))
                             Text(
-                                text = "Name: ${workout.name}",
-                                fontSize = 16.sp
-                            )
-                            Text(
-                                text = "Muscle Group: ${workout.muscleGroup}",
-                                fontSize = 16.sp
-                            )
-                            Text(
-                                text = "Date: ${workout.dateAdded.toDate().toString()}",
-                                fontSize = 14.sp
-                            )
-                            Text(
-                                text = "💪 Keep pushing forward! ",
-                                fontSize = 18.sp,
-                                fontWeight = FontWeight.SemiBold,
-                                color = Color(0xFFCE93D8), // Lighter purple color,
-                                modifier = Modifier.align(Alignment.CenterHorizontally)
+                                text = SimpleDateFormat("EEEE, dd MMMM yyyy", Locale.getDefault())
+                                    .format(Calendar.getInstance().time),
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.Medium
                             )
                         }
                     }
-                } ?: Text(
-                    text = "No recent workouts found.",
-                    fontSize = 16.sp,
-                    modifier = Modifier.align(Alignment.CenterHorizontally)
-                )
+
+                    // Daily Motivational Quote
+                    Card(
+                        modifier = Modifier.fillMaxWidth(),
+                        elevation = CardDefaults.cardElevation(6.dp)
+                    ) {
+                        Column(
+                            modifier = Modifier.padding(16.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text(
+                                text = dailyQuote,
+                                fontSize = 18.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                            Spacer(modifier = Modifier.height(8.dp))
+                            Text(
+                                text = "Stay motivated and crush your goals!",
+                                fontSize = 14.sp,
+                                fontWeight = FontWeight.Light
+                            )
+                        }
+                    }
+
+
+                    mostRecentWorkout?.let { workout ->
+                        Card(
+                            modifier = Modifier.fillMaxWidth(),
+                            elevation = CardDefaults.cardElevation(12.dp)
+                        ) {
+                            Column(
+                                modifier = Modifier.padding(24.dp),
+                                verticalArrangement = Arrangement.spacedBy(12.dp)
+                            ) {
+                                Text(
+                                    text = "Most Recent Workout",
+                                    fontSize = 22.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = Color(0xFFCE93D8), // Lighter purple color
+                                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                                )
+                                Text(
+                                    text = "Name: ${workout.name}",
+                                    fontSize = 16.sp
+                                )
+                                Text(
+                                    text = "Muscle Group: ${workout.muscleGroup}",
+                                    fontSize = 16.sp
+                                )
+                                Text(
+                                    text = "Date: ${workout.dateAdded.toDate().toString()}",
+                                    fontSize = 14.sp
+                                )
+                                Text(
+                                    text = "💪 Keep pushing forward! ",
+                                    fontSize = 18.sp,
+                                    fontWeight = FontWeight.SemiBold,
+                                    color = Color(0xFFCE93D8), // Lighter purple color,
+                                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                                )
+                            }
+                        }
+                    } ?: Text(
+                        text = "No recent workouts found.",
+                        fontSize = 16.sp,
+                        modifier = Modifier.align(Alignment.CenterHorizontally)
+                    )
+                }
             }
         }
     }

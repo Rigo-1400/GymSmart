@@ -15,6 +15,7 @@ import com.example.gymsmart.components.pages.*
 import com.example.gymsmart.firebase.FirebaseAuthHelper
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
+import androidx.navigation.navArgument
 import com.example.gymsmart.components.pages.AttachmentsPage
 import com.example.gymsmart.components.pages.LoginPage
 import com.example.gymsmart.components.pages.UserSettingsPage

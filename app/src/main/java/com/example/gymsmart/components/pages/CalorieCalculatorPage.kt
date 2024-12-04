@@ -1,5 +1,6 @@
 package com.example.gymsmart.components.pages
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -13,7 +14,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.composables.icons.lucide.Lucide
+import com.composables.icons.lucide.MoveLeft
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CalorieCalculatorPage(navController: NavController) {
@@ -27,137 +31,152 @@ fun CalorieCalculatorPage(navController: NavController) {
 
     val genders = listOf("Male", "Female")
     var expanded by remember { mutableStateOf(false) }
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(
-            text = "Calorie Calculator",
-            style = MaterialTheme.typography.titleLarge,
-            color = Color.White
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        OutlinedTextField(
-            value = weight,
-            onValueChange = { weight = it },
-            label = { Text("Weight (kg)") },
-            keyboardOptions = KeyboardOptions.Default.copy(
-                imeAction = ImeAction.Next
-            ),
-            keyboardActions = KeyboardActions.Default
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        OutlinedTextField(
-            value = height,
-            onValueChange = { height = it },
-            label = { Text("Height (cm)") },
-            keyboardOptions = KeyboardOptions.Default.copy(
-                imeAction = ImeAction.Next
-            ),
-            keyboardActions = KeyboardActions.Default
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        OutlinedTextField(
-            value = age,
-            onValueChange = { age = it },
-            label = { Text("Age") },
-            keyboardOptions = KeyboardOptions.Default.copy(
-                imeAction = ImeAction.Done
-            ),
-            keyboardActions = KeyboardActions.Default
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        ExposedDropdownMenuBox(
-            expanded = expanded,
-            onExpandedChange = { expanded = !expanded }
-        ) {
-            OutlinedTextField(
-                value = gender,
-                onValueChange = { gender = it },
-                label = { Text("Gender") },
-                readOnly = true,
-                trailingIcon = {
-                    Icon(
-                        imageVector = Icons.Default.ArrowDropDown,
-                        contentDescription = null
-                    )
-                },
-                modifier = Modifier.fillMaxWidth().menuAnchor()
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text("Maintenance Calories Calculator") },
+                navigationIcon = {
+                    IconButton(onClick = { navController.popBackStack() }) {
+                        Icon(
+                            imageVector = Lucide.MoveLeft,
+                            contentDescription = "Move Back to Previous Page"
+                        )
+                    }
+                }
             )
-            ExposedDropdownMenu(
+        }
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = "Calorie Calculator",
+                style = MaterialTheme.typography.titleLarge,
+                color = Color.White
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            OutlinedTextField(
+                value = weight,
+                onValueChange = { weight = it },
+                label = { Text("Weight (kg)") },
+                keyboardOptions = KeyboardOptions.Default.copy(
+                    imeAction = ImeAction.Next
+                ),
+                keyboardActions = KeyboardActions.Default
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            OutlinedTextField(
+                value = height,
+                onValueChange = { height = it },
+                label = { Text("Height (cm)") },
+                keyboardOptions = KeyboardOptions.Default.copy(
+                    imeAction = ImeAction.Next
+                ),
+                keyboardActions = KeyboardActions.Default
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            OutlinedTextField(
+                value = age,
+                onValueChange = { age = it },
+                label = { Text("Age") },
+                keyboardOptions = KeyboardOptions.Default.copy(
+                    imeAction = ImeAction.Done
+                ),
+                keyboardActions = KeyboardActions.Default
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            ExposedDropdownMenuBox(
                 expanded = expanded,
-                onDismissRequest = { expanded = false }
+                onExpandedChange = { expanded = !expanded }
             ) {
-                genders.forEach { genderOption ->
-                    DropdownMenuItem(
-                        text = { Text(genderOption) },
-                        onClick = {
-                            gender = genderOption
-                            expanded = false
-                        }
-                    )
+                OutlinedTextField(
+                    value = gender,
+                    onValueChange = { gender = it },
+                    label = { Text("Gender") },
+                    readOnly = true,
+                    trailingIcon = {
+                        Icon(
+                            imageVector = Icons.Default.ArrowDropDown,
+                            contentDescription = null
+                        )
+                    },
+                    modifier = Modifier.fillMaxWidth().menuAnchor()
+                )
+                ExposedDropdownMenu(
+                    expanded = expanded,
+                    onDismissRequest = { expanded = false }
+                ) {
+                    genders.forEach { genderOption ->
+                        DropdownMenuItem(
+                            text = { Text(genderOption) },
+                            onClick = {
+                                gender = genderOption
+                                expanded = false
+                            }
+                        )
+                    }
                 }
             }
-        }
 
-        Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(8.dp))
 
-        Text("Activity Level: ${String.format("%.1f", activityLevel)}", color = Color.White)
-        Slider(
-            value = activityLevel,
-            onValueChange = { activityLevel = it },
-            valueRange = 1f..2f,
-            steps = 4
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        Button(onClick = {
-            val weightValue = weight.toFloatOrNull()
-            val heightValue = height.toFloatOrNull()
-            val ageValue = age.toIntOrNull()
-
-            if (weightValue == null || heightValue == null || ageValue == null) {
-                errorMessage = "Please enter valid numbers for weight, height, and age."
-            } else {
-                val calculatedCalories = calculateCalories(
-                    weight = weightValue,
-                    height = heightValue,
-                    age = ageValue,
-                    gender = gender,
-                    activityLevel = activityLevel
-                )
-                result = calculatedCalories
-                errorMessage = null
-            }
-        }) {
-            Text("Calculate")
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        if (errorMessage != null) {
-            Text(
-                text = errorMessage ?: "",
-                color = MaterialTheme.colorScheme.error,
-                style = MaterialTheme.typography.bodyMedium
+            Text("Activity Level: ${String.format("%.1f", activityLevel)}", color = Color.White)
+            Slider(
+                value = activityLevel,
+                onValueChange = { activityLevel = it },
+                valueRange = 1f..2f,
+                steps = 4
             )
-        }
 
-        // Displaying the result directly below the button
-        Text("Calories Needed: $result", color = Color.White)
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Button(onClick = {
+                val weightValue = weight.toFloatOrNull()
+                val heightValue = height.toFloatOrNull()
+                val ageValue = age.toIntOrNull()
+
+                if (weightValue == null || heightValue == null || ageValue == null) {
+                    errorMessage = "Please enter valid numbers for weight, height, and age."
+                } else {
+                    val calculatedCalories = calculateCalories(
+                        weight = weightValue,
+                        height = heightValue,
+                        age = ageValue,
+                        gender = gender,
+                        activityLevel = activityLevel
+                    )
+                    result = calculatedCalories
+                    errorMessage = null
+                }
+            }) {
+                Text("Calculate")
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            if (errorMessage != null) {
+                Text(
+                    text = errorMessage ?: "",
+                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            }
+
+            // Displaying the result directly below the button
+            Text("Calories Needed: $result", color = Color.White)
+        }
     }
 }
 
