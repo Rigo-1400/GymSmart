@@ -23,6 +23,7 @@ import com.example.gymsmart.firebase.UserSession
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.sp
+import com.composables.icons.lucide.Calculator
 import com.example.gymsmart.R
 
 /**
@@ -104,7 +105,7 @@ fun UserSettingsPage(
                             modifier = Modifier
                                 .alignByBaseline()
                                 .size(50.dp))
-                        
+
                         Image(painter = painterResource(id = R.drawable.image3), contentDescription =null,
                             modifier = Modifier
                                 .alignByBaseline()
@@ -136,6 +137,12 @@ fun UserSettingsPage(
                     description = "View or edit your gym accessories",
                     icon = Lucide.Dumbbell,
                     onClick = { navController.navigate("attachments") }
+                )
+                SettingsListItem(
+                    text = "Maintenance Calories Calculator",
+                    description = "View your maintenance calories",
+                    icon = Lucide.Calculator,
+                    onClick = { navController.navigate("calorieCalculator") }
                 )
                 SettingsListItem(
                     text = "Logout",
